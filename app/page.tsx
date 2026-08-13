@@ -11,32 +11,66 @@ export default function Home() {
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // This runs every time the selectedDate changes
-  useEffect(() => {
-    async function fetchEvents() {
-      if (!selectedDate) return;
-      setLoading(true);
-      
-      // Format the clicked date to YYYY-MM-DD so Supabase understands it
-      const formattedDate = format(selectedDate, "yyyy-MM-dd");
-      
-      // Fetch events from Supabase that match the clicked date
-      const { data, error } = await supabase
-        .from("events")
-        .select("*")
-        .eq("event_date", formattedDate);
-        
-      if (error) console.error("Error fetching events:", error);
-      else setEvents(data || []);
-      
-      setLoading(false);
-    }
+  // Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newEventTitle, setNewEventTitle] = useState("");
+  const [newEventTime, setNewEventTime] = useState("10:00");
+  const [newEventType, setNewEventType] = useState("exam");
 
+  // Fetch Events
+  const fetchEvents = async () => {
+    if (!selectedDate) return;
+    setLoading(true);
+    
+    const formattedDate = format(selectedDate, "yyyy-MM-dd");
+    
+    const { data, error } = await supabase
+      .from("events")
+      .select("*")
+      .eq("event_date", formattedDate);
+      
+    if (error) console.error("Error fetching events:", error);
+    else setEvents(data || []);
+    
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchEvents();
   }, [selectedDate]);
 
+  // Insert New Event
+  const handleAddEvent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedDate) return;
+
+    const formattedDate = format(selectedDate, "yyyy-MM-dd");
+
+    const { error } = await supabase.from("events").insert([
+      {
+        calendar_id: "11111111-1111-1111-1111-111111111111", // Our test calendar ID
+        title: newEventTitle,
+        event_date: formattedDate,
+        event_time: `${newEventTime}:00`, // Supabase expects HH:MM:SS
+        event_type: newEventType,
+      },
+    ]);
+
+    if (error) {
+      console.error("Error adding event:", error);
+      alert("Failed to add event");
+    } else {
+      // Reset form, close modal, and refresh the events list
+      setNewEventTitle("");
+      setNewEventTime("10:00");
+      setNewEventType("exam");
+      setIsModalOpen(false);
+      fetchEvents(); 
+    }
+  };
+
   return (
-    <main className="max-w-6xl mx-auto p-8 md:p-16">
+    <main className="max-w-6xl mx-auto p-8 md:p-16 relative">
       <header className="flex justify-between items-end mb-12 border-b border-gray-800 pb-6">
         <div>
           <h1 className="text-3xl font-light tracking-tight text-white mb-1">
@@ -44,7 +78,10 @@ export default function Home() {
           </h1>
           <p className="text-sm text-gray-400">CS101 Cohort & Study Group</p>
         </div>
-        <button className="text-sm px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-colors">
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="text-sm px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-colors"
+        >
           + Add Event
         </button>
       </header>
@@ -101,16 +138,16 @@ export default function Home() {
               ) : (
                 events.map((event) => (
                   <div key={event.id} className="flex items-center group p-4 rounded-xl bg-transparent hover:bg-[#1A1B26] border border-transparent hover:border-gray-800/50 transition-all cursor-pointer">
-                    {/* Conditionally color the dot based on event_type */}
                     <div className={`w-2.5 h-2.5 rounded-full mr-6 ${
                       event.event_type === 'exam' 
                         ? 'bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.5)]' 
-                        : 'bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.5)]'
+                        : event.event_type === 'quiz' 
+                        ? 'bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.5)]'
+                        : 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]'
                     }`}></div>
                     
                     <div className="flex-1">
                       <h3 className="text-base text-gray-100 font-medium">{event.title}</h3>
-                      {/* Formatting the time to remove seconds if present */}
                       <p className="text-sm text-gray-500 mt-0.5 capitalize">{event.event_type}</p>
                     </div>
                     
@@ -125,6 +162,71 @@ export default function Home() {
           </div>
         </section>
       </div>
+
+      {/* Basic Functional Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-[#1A1B26] p-6 rounded-2xl border border-gray-800 w-full max-w-md">
+            <h2 className="text-xl font-medium text-white mb-4">Add Event</h2>
+            <form onSubmit={handleAddEvent} className="space-y-4">
+              
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Title</label>
+                <input 
+                  type="text" 
+                  required 
+                  value={newEventTitle}
+                  onChange={(e) => setNewEventTitle(e.target.value)}
+                  className="w-full bg-black/50 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-gray-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Time</label>
+                  <input 
+                    type="time" 
+                    required 
+                    value={newEventTime}
+                    onChange={(e) => setNewEventTime(e.target.value)}
+                    className="w-full bg-black/50 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-gray-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Type</label>
+                  <select 
+                    value={newEventType}
+                    onChange={(e) => setNewEventType(e.target.value)}
+                    className="w-full bg-black/50 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-gray-500"
+                  >
+                    <option value="exam">Exam</option>
+                    <option value="quiz">Quiz</option>
+                    <option value="study">Study Session</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 mt-6">
+                <button 
+                  type="button" 
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 text-sm text-gray-400 hover:text-white"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="px-4 py-2 text-sm bg-white text-black rounded-lg font-medium hover:bg-gray-200"
+                >
+                  Save Event
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      )}
+
     </main>
   );
 }
