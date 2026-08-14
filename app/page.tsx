@@ -3,19 +3,35 @@
 import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("10:00");
   const [newEventType, setNewEventType] = useState("exam");
+
+  // Check if user is logged in
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/login");
+      } else {
+        setIsAuthChecking(false);
+      }
+    };
+    checkSession();
+  }, [router]);
 
   // Fetch Events
   const fetchEvents = async () => {
@@ -36,8 +52,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchEvents();
-  }, [selectedDate]);
+    if (!isAuthChecking) {
+      fetchEvents();
+    }
+  }, [selectedDate, isAuthChecking]);
 
   // Insert New Event
   const handleAddEvent = async (e: React.FormEvent) => {
@@ -48,10 +66,10 @@ export default function Home() {
 
     const { error } = await supabase.from("events").insert([
       {
-        calendar_id: "11111111-1111-1111-1111-111111111111", // Our test calendar ID
+        calendar_id: "11111111-1111-1111-1111-111111111111", // Still using test calendar for now
         title: newEventTitle,
         event_date: formattedDate,
-        event_time: `${newEventTime}:00`, // Supabase expects HH:MM:SS
+        event_time: `${newEventTime}:00`,
         event_type: newEventType,
       },
     ]);
@@ -60,7 +78,6 @@ export default function Home() {
       console.error("Error adding event:", error);
       alert("Failed to add event");
     } else {
-      // Reset form, close modal, and refresh the events list
       setNewEventTitle("");
       setNewEventTime("10:00");
       setNewEventType("exam");
@@ -68,6 +85,15 @@ export default function Home() {
       fetchEvents(); 
     }
   };
+
+  // Handle Sign Out
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
+  // Prevent flashing the dashboard before redirecting
+  if (isAuthChecking) return <div className="min-h-screen bg-[#121212]"></div>;
 
   return (
     <main className="max-w-6xl mx-auto p-8 md:p-16 relative">
@@ -78,12 +104,21 @@ export default function Home() {
           </h1>
           <p className="text-sm text-gray-400">CS101 Cohort & Study Group</p>
         </div>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="text-sm px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-colors"
-        >
-          + Add Event
-        </button>
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="text-sm px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-colors"
+          >
+            + Add Event
+          </button>
+          <button 
+            onClick={handleSignOut}
+            className="p-2 text-gray-500 hover:text-white transition-colors"
+            title="Sign Out"
+          >
+            <LogOut size={20} />
+          </button>
+        </div>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-12">
@@ -163,7 +198,6 @@ export default function Home() {
         </section>
       </div>
 
-      {/* Basic Functional Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-[#1A1B26] p-6 rounded-2xl border border-gray-800 w-full max-w-md">
@@ -226,7 +260,6 @@ export default function Home() {
           </div>
         </div>
       )}
-
     </main>
   );
 }
