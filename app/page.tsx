@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
-import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "next/navigation";
+import { ChevronLeft, ChevronRight, LogOut, Trash2 } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
@@ -37,17 +37,17 @@ export default function Home() {
   const fetchEvents = async () => {
     if (!selectedDate) return;
     setLoading(true);
-    
+
     const formattedDate = format(selectedDate, "yyyy-MM-dd");
-    
+
     const { data, error } = await supabase
       .from("events")
       .select("*")
       .eq("event_date", formattedDate);
-      
+
     if (error) console.error("Error fetching events:", error);
     else setEvents(data || []);
-    
+
     setLoading(false);
   };
 
@@ -62,15 +62,19 @@ export default function Home() {
     e.preventDefault();
     if (!selectedDate) return;
 
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
     const formattedDate = format(selectedDate, "yyyy-MM-dd");
 
     const { error } = await supabase.from("events").insert([
       {
-        calendar_id: "11111111-1111-1111-1111-111111111111", // Still using test calendar for now
+        calendar_id: "11111111-1111-1111-1111-111111111111",
         title: newEventTitle,
         event_date: formattedDate,
         event_time: `${newEventTime}:00`,
         event_type: newEventType,
+        created_by: user.id,
       },
     ]);
 
@@ -82,7 +86,19 @@ export default function Home() {
       setNewEventTime("10:00");
       setNewEventType("exam");
       setIsModalOpen(false);
-      fetchEvents(); 
+      fetchEvents();
+    }
+  };
+
+  // Delete an Event
+  const handleDeleteEvent = async (eventId: string) => {
+    const { error } = await supabase.from("events").delete().eq("id", eventId);
+
+    if (error) {
+      console.error("Error deleting event:", error);
+      alert("Failed to delete event");
+    } else {
+      fetchEvents();
     }
   };
 
@@ -105,13 +121,13 @@ export default function Home() {
           <p className="text-sm text-gray-400">CS101 Cohort & Study Group</p>
         </div>
         <div className="flex items-center space-x-4">
-          <button 
+          <button
             onClick={() => setIsModalOpen(true)}
             className="text-sm px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-colors"
           >
             + Add Event
           </button>
-          <button 
+          <button
             onClick={handleSignOut}
             className="p-2 text-gray-500 hover:text-white transition-colors"
             title="Sign Out"
@@ -164,7 +180,7 @@ export default function Home() {
             <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-6">
               {selectedDate ? format(selectedDate, "EEEE, MMM d") : "Select a date"}
             </h2>
-            
+
             <div className="space-y-2">
               {loading ? (
                 <p className="text-sm text-gray-500">Loading events...</p>
@@ -174,26 +190,34 @@ export default function Home() {
                 events.map((event) => (
                   <div key={event.id} className="flex items-center group p-4 rounded-xl bg-transparent hover:bg-[#1A1B26] border border-transparent hover:border-gray-800/50 transition-all cursor-pointer">
                     <div className={`w-2.5 h-2.5 rounded-full mr-6 ${
-                      event.event_type === 'exam' 
-                        ? 'bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.5)]' 
-                        : event.event_type === 'quiz' 
+                      event.event_type === 'exam'
+                        ? 'bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.5)]'
+                        : event.event_type === 'quiz'
                         ? 'bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.5)]'
                         : 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]'
                     }`}></div>
-                    
+
                     <div className="flex-1">
                       <h3 className="text-base text-gray-100 font-medium">{event.title}</h3>
                       <p className="text-sm text-gray-500 mt-0.5 capitalize">{event.event_type}</p>
                     </div>
-                    
+
                     <div className="text-sm text-gray-400 font-mono bg-gray-900/50 px-3 py-1 rounded-md">
                       {event.event_time.slice(0, 5)}
                     </div>
+
+                    <button
+                      onClick={() => handleDeleteEvent(event.id)}
+                      className="ml-3 p-2 text-gray-600 opacity-0 group-hover:opacity-100 hover:text-red-400 transition-all"
+                      title="Delete event"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                 ))
               )}
             </div>
-            
+
           </div>
         </section>
       </div>
@@ -203,12 +227,12 @@ export default function Home() {
           <div className="bg-[#1A1B26] p-6 rounded-2xl border border-gray-800 w-full max-w-md">
             <h2 className="text-xl font-medium text-white mb-4">Add Event</h2>
             <form onSubmit={handleAddEvent} className="space-y-4">
-              
+
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Title</label>
-                <input 
-                  type="text" 
-                  required 
+                <input
+                  type="text"
+                  required
                   value={newEventTitle}
                   onChange={(e) => setNewEventTitle(e.target.value)}
                   className="w-full bg-black/50 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-gray-500"
@@ -218,9 +242,9 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Time</label>
-                  <input 
-                    type="time" 
-                    required 
+                  <input
+                    type="time"
+                    required
                     value={newEventTime}
                     onChange={(e) => setNewEventTime(e.target.value)}
                     className="w-full bg-black/50 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-gray-500"
@@ -228,7 +252,7 @@ export default function Home() {
                 </div>
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Type</label>
-                  <select 
+                  <select
                     value={newEventType}
                     onChange={(e) => setNewEventType(e.target.value)}
                     className="w-full bg-black/50 border border-gray-700 rounded-lg p-2 text-white focus:outline-none focus:border-gray-500"
@@ -241,15 +265,15 @@ export default function Home() {
               </div>
 
               <div className="flex justify-end space-x-3 mt-6">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={() => setIsModalOpen(false)}
                   className="px-4 py-2 text-sm text-gray-400 hover:text-white"
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="px-4 py-2 text-sm bg-white text-black rounded-lg font-medium hover:bg-gray-200"
                 >
                   Save Event
