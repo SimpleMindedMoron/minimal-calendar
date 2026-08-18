@@ -1,0 +1,5 @@
+.dashboard { max-width: 72rem; margin: 0 auto; padding: 2rem; position: relative; }
+.contentGrid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+.loadingScreen { min-height: 100vh; background: #121212; }
+@media (min-width: 768px) { .dashboard { padding: 4rem; } }
+@media (min-width: 1024px) { .contentGrid { grid-template-columns: 400px minmax(0, 1fr); } }

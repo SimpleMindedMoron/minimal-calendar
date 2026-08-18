@@ -1,0 +1,1 @@
+.events { margin-top:.5rem; }.heading { margin:0 0 1.5rem; color:#6b7280; font-size:.75rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; }.list { display:grid; gap:.5rem; }.message { margin:0; color:#6b7280; font-size:.875rem; } @media (min-width:1024px) { .events { margin-top:0; } }
