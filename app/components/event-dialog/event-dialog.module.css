@@ -1,1 +1,84 @@
-.backdrop { display:flex; position:fixed; z-index:50; inset:0; align-items:center; justify-content:center; padding:1rem; background:rgb(0 0 0 / .6); }.dialog { width:100%; max-width:28rem; padding:1.5rem; border:1px solid #1f2937; border-radius:1rem; background:#1a1b26; }.title { margin:0 0 1rem; color:#fff; font-size:1.25rem; font-weight:500; }.form { display:grid; gap:1rem; }.field { display:grid; gap:.25rem; color:#9ca3af; font-size:.875rem; }.field input,.field select { width:100%; box-sizing:border-box; padding:.5rem; border:1px solid #374151; border-radius:.5rem; outline:0; background:rgb(0 0 0 / .5); color:#fff; font:inherit; }.field input:focus,.field select:focus { border-color:#6b7280; }.fieldRow { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:1rem; }.actions { display:flex; justify-content:flex-end; gap:.75rem; margin-top:.5rem; }.cancelButton,.saveButton { padding:.5rem 1rem; border:0; font-size:.875rem; cursor:pointer; }.cancelButton { background:transparent; color:#9ca3af; }.cancelButton:hover { color:#fff; }.saveButton { border-radius:.5rem; background:#fff; color:#000; font-weight:500; }.saveButton:hover { background:#e5e7eb; }
+.backdrop {
+  display: flex;
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(0 0 0 / 0.6);
+}
+.dialog {
+  width: 100%;
+  max-width: 28rem;
+  padding: 1.5rem;
+  border: 1px solid #1f2937;
+  border-radius: 1rem;
+  background: #1a1b26;
+}
+.title {
+  margin: 0 0 1rem;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+.form {
+  display: grid;
+  gap: 1rem;
+}
+.field {
+  display: grid;
+  gap: 0.25rem;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+.field input,
+.field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  outline: 0;
+  background: rgb(0 0 0 / 0.5);
+  color: #fff;
+  font: inherit;
+}
+.field input:focus,
+.field select:focus {
+  border-color: #6b7280;
+}
+.fieldRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.cancelButton,
+.saveButton {
+  padding: 0.5rem 1rem;
+  border: 0;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.cancelButton {
+  background: transparent;
+  color: #9ca3af;
+}
+.cancelButton:hover {
+  color: #fff;
+}
+.saveButton {
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #000;
+  font-weight: 500;
+}
+.saveButton:hover {
+  background: #e5e7eb;
+}

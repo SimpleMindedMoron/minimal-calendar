@@ -1,1 +1,52 @@
-.header { display:flex; justify-content:space-between; align-items:end; gap:1rem; margin-bottom:3rem; padding-bottom:1.5rem; border-bottom:1px solid #1f2937; }.title { margin:0 0 .25rem; color:#fff; font-size:1.875rem; font-weight:300; letter-spacing:-.025em; }.subtitle { margin:0; color:#9ca3af; font-size:.875rem; }.actions { display:flex; align-items:center; gap:1rem; }.addButton { padding:.5rem 1rem; border:0; border-radius:9999px; background:#fff; color:#000; font-size:.875rem; font-weight:500; cursor:pointer; transition:background-color .2s; }.addButton:hover { background:#e5e7eb; }.signOutButton { display:grid; padding:.5rem; border:0; background:transparent; color:#6b7280; cursor:pointer; transition:color .2s; }.signOutButton:hover { color:#fff; }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #1f2937;
+}
+.title {
+  margin: 0 0 0.25rem;
+  color: #fff;
+  font-size: 1.875rem;
+  font-weight: 300;
+  letter-spacing: -0.025em;
+}
+.subtitle {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.addButton {
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 9999px;
+  background: #fff;
+  color: #000;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.addButton:hover {
+  background: #e5e7eb;
+}
+.signOutButton {
+  display: grid;
+  padding: 0.5rem;
+  border: 0;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.signOutButton:hover {
+  color: #fff;
+}
