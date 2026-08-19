@@ -1,25 +1,42 @@
 .dashboard {
-  max-width: 72rem;
+  max-width: 64rem; /* Slightly narrower for an elegant reading width */
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem 1.5rem;
   position: relative;
 }
+
 .contentGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 3rem;
+  gap: 2rem;
+  align-items: start;
 }
-.loadingScreen {
-  min-height: 100vh;
-  background: #121212;
-}
-@media (min-width: 768px) {
-  .dashboard {
-    padding: 4rem;
-  }
-}
+
 @media (min-width: 1024px) {
   .contentGrid {
-    grid-template-columns: 400px minmax(0, 1fr);
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 4rem;
+  }
+}
+
+.loadingScreen {
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  animation: pulse 2s var(--ease-cinematic) infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
   }
 }

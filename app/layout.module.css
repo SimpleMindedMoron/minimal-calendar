@@ -1,7 +1,36 @@
 .body {
+  position: relative;
   min-height: 100vh;
-  background: #121212;
-  color: #d1d5db;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow-x: hidden;
+  isolation: isolate;
+}
+
+/* Dynamic, slow-breathing cinematic spotlight (No Glassmorphism) */
+.body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(circle at 15% 0%, var(--gold-dim) 0%, transparent 40%),
+    radial-gradient(
+      circle at 85% 100%,
+      rgba(255, 255, 255, 0.02) 0%,
+      transparent 40%
+    );
+  animation: ambientLight 15s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes ambientLight {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.1) translateY(-2%);
+    opacity: 1;
+  }
 }

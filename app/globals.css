@@ -1,26 +1,110 @@
-@import "tailwindcss";
+@font-face {
+  font-family: Tanker;
+  src: url(../public/fonts/Tanker-Regular.otf);
+}
+
+@font-face {
+  font-family: Erode-Bold;
+  src: url(../public/fonts/Erode-Bold.otf);
+}
+
+@font-face {
+  font-family: Erode-BoldItalic;
+  src: url(../public/fonts/Erode-BoldItalic.otf);
+}
+
+@font-face {
+  font-family: Erode-Italic;
+  src: url(../public/fonts/Erode-Italic.otf);
+}
+
+@font-face {
+  font-family: Erode-Light;
+  src: url(../public/fonts/Erode-Light.otf);
+}
+
+@font-face {
+  font-family: Erode-LightItalic;
+  src: url(../public/fonts/Erode-LightItalic.otf);
+}
+
+@font-face {
+  font-family: Erode-Medium;
+  src: url(../public/fonts/Erode-Medium.otf);
+}
+
+@font-face {
+  font-family: Erode-MediumItalic;
+  src: url(../public/fonts/Erode-MediumItalic.otf);
+}
+
+@font-face {
+  font-family: Erode-Regular;
+  src: url(../public/fonts/Erode-Regular.otf);
+}
+
+@font-face {
+  font-family: Erode-Semibold;
+  src: url(../public/fonts/Erode-Semibold.otf);
+}
+
+@font-face {
+  font-family: Erode-SemiboldItalic;
+  src: url(../public/fonts/Erode-SemiboldItalic.otf);
+}
+
+/* font face change : Tanker Regular for headings and all that */
+/* Erode for the rest */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Michelin-Star Editorial Palette */
+  --bg-dark: #000000;
+  --surface: #0c0c0c;
+  --surface-hover: #141414;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --gold: #c5a059;
+  --gold-dim: rgba(197, 160, 89, 0);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --text-main: #f3f3f3;
+  --text-muted: #888888;
+  --border: rgba(255, 255, 255, 0.08);
+
+  /* Refined Event Colors */
+  --event-exam: #7a1f1f; /* Deep Bordeaux */
+  --event-quiz: #3a536b; /* Muted Sapphire */
+  --event-study: #8c6e46; /* Soft Bronze */
+
+  --font-tanker: Tanker, serif;
+  --font-erode-bold: Erode-Bold, serif;
+  --font-erode-bold-italic: Erode-BoldItalic, serif;
+  --font-erode-italic: Erode-Italic, serif;
+  --font-erode-light: Erode-Light, serif;
+  --font-erode-light-italic: Erode-LightItalic, serif;
+  --font-erode-medium: Erode-Medium, serif;
+  --font-erode-medium-italic: Erode-MediumItalic, serif;
+  --font-erode-regular: Erode-Regular, serif;
+  --font-erode-semibold: Erode-Semibold, serif;
+  --font-erode-semibold-italic: Erode-SemiboldItalic, serif;
+
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
 }
