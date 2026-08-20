@@ -1,104 +1,104 @@
-# Minimal Calendar App
+# Minimal Shared Calendar
 
-A clean, modern, clutter-free shared calendar web application designed for cohorts, study groups, and teams. Built with a default dark-mode aesthetic, it strips away traditional calendar bloat to focus purely on upcoming agendas, exams, and milestones.
+A high-performance, multi-tenant shared calendar application built for study groups, cohorts, and teams. Users can create private rooms, invite peers via unique UUIDs, and manage shared schedules with granular access control.
 
-## 🚀 Features (Currently Implemented)
+## 🚀 Features
 
-- **Minimalist UI:** Default dark-mode interface with zero visual clutter.
-- **Interactive Calendar Grid:** Headless calendar integration using `react-day-picker`.
-- **Dynamic Agenda View:** Click any date to instantly filter and view events.
-- **Real-time Database:** Fetches and inserts events instantly using Supabase.
-- **Categorized Events:** Visual color-coded indicators for Exams (Red), Quizzes (Blue), and Study Sessions (Green).
-- **Quick Add Modal:** Clean UI for inserting new events on the fly.
+*   **Multi-Tenant Rooms:** Create distinct calendars ("Rooms") and join existing ones using a secure invite code.
+*   **Aggregated Dashboard:** View all upcoming events across every room you have joined in a single, unified view, or filter by a specific room.
+*   **Zero-Flash Authentication:** Utilizes Next.js Middleware and `@supabase/ssr` for seamless server-side route protection, eliminating client-side loading flashes.
+*   **Production-Grade Security:** Fully locked down with Supabase Row Level Security (RLS). Users can only view, create, or delete events within rooms they have explicitly joined. Admins retain exclusive deletion rights for the rooms they create.
+*   **Event Categorization:** Classify calendar events seamlessly (e.g., Exams, Quizzes, Study Sessions).
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-- **Frontend:** Next.js (App Router), React, TypeScript
-- **Styling:** Tailwind CSS, `next-themes` (Dark Mode)
-- **Components:** `react-day-picker`, `lucide-react` (Icons), `date-fns` (Date formatting)
-- **Backend & Database:** Supabase (PostgreSQL)
+*   **Framework:** Next.js (App Router)
+*   **Backend & Auth:** Supabase (PostgreSQL, Supabase Auth, `@supabase/ssr`)
+*   **Styling:** CSS Modules
+*   **Components:** `react-day-picker` (Calendar logic), `lucide-react` (Icons)
+*   **Utilities:** `date-fns`
 
 ---
 
 ## 💻 Getting Started
 
-### 1. Clone the repository
+### Prerequisites
+*   Node.js 18+ installed
+*   A [Supabase](https://supabase.com/) account and project
 
-```bash
-git clone [https://github.com/YOUR-USERNAME/minimal-calendar.git](https://github.com/YOUR-USERNAME/minimal-calendar.git)
-cd minimal-calendar
-```
-
-### 2. Install dependencies
-
+### 1. Installation
+Clone the repository and install the dependencies:
 ```bash
 npm install
 ```
 
-### 3. Set up environment variables
-
-Create a `.env.local` file in the root directory and add your Supabase keys:
-
+### 2. Environment Variables
+Create a `.env.local` file in the root directory and add your Supabase credentials:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-### 4. Run the development server
+### 3. Database Setup
+Execute the following SQL script in your Supabase SQL Editor to generate the necessary tables and enforce Row Level Security (RLS):
 
+```sql
+-- Create Tables
+CREATE TABLE calendars (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+CREATE TABLE calendar_members (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  calendar_id UUID REFERENCES calendars(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID NOT NULL,
+  role TEXT NOT NULL CHECK (role IN ('admin', 'contributor', 'viewer')),
+  joined_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  UNIQUE(calendar_id, user_id)
+);
+
+CREATE TABLE events (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  calendar_id UUID REFERENCES calendars(id) ON DELETE CASCADE NOT NULL,
+  title TEXT NOT NULL,
+  event_date DATE NOT NULL,
+  event_time TIME NOT NULL,
+  event_type TEXT NOT NULL,
+  created_by UUID NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- Enable Row Level Security
+ALTER TABLE calendars ENABLE ROW LEVEL SECURITY;
+ALTER TABLE calendar_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE events ENABLE ROW LEVEL SECURITY;
+
+-- Apply Policies
+CREATE POLICY "Anyone can create calendars" ON calendars FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "Anyone can view calendars" ON calendars FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Admins can delete calendars" ON calendars FOR DELETE TO authenticated USING (
+  EXISTS (SELECT 1 FROM calendar_members WHERE calendar_id = calendars.id AND user_id = auth.uid() AND role = 'admin')
+);
+
+CREATE POLICY "Users can view members" ON calendar_members FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Users can join calendars" ON calendar_members FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Members can view events" ON events FOR SELECT TO authenticated USING (
+  EXISTS (SELECT 1 FROM calendar_members WHERE calendar_id = events.calendar_id AND user_id = auth.uid())
+);
+CREATE POLICY "Members can insert events" ON events FOR INSERT TO authenticated WITH CHECK (
+  EXISTS (SELECT 1 FROM calendar_members WHERE calendar_id = events.calendar_id AND user_id = auth.uid())
+);
+CREATE POLICY "Members can delete events" ON events FOR DELETE TO authenticated USING (
+  EXISTS (SELECT 1 FROM calendar_members WHERE calendar_id = events.calendar_id AND user_id = auth.uid())
+);
+```
+
+### 4. Run the Development Server
+Start the local server:
 ```bash
 npm run dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
-
----
-
-## 🗄️ Database Setup (Supabase)
-
-To make this app work, you need to execute the following SQL in your Supabase SQL Editor to build the schema:
-
-```sql
--- Create the Calendars table
-CREATE TABLE calendars (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
-);
-
--- Create the Members table (Handles who can see/edit the shared calendar)
-CREATE TABLE calendar_members (
-  calendar_id UUID REFERENCES calendars(id) ON DELETE CASCADE,
-  user_id UUID NOT NULL,
-  role TEXT CHECK (role IN ('admin', 'contributor', 'viewer')) DEFAULT 'viewer',
-  PRIMARY KEY (calendar_id, user_id)
-);
-
--- Create the Events table (Your agendas, exams, and quizzes)
-CREATE TABLE events (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  calendar_id UUID REFERENCES calendars(id) ON DELETE CASCADE,
-  title TEXT NOT NULL,
-  event_date DATE NOT NULL,
-  event_time TIME,
-  event_type TEXT NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
-);
-
--- TEMPORARY RULES FOR DEVELOPMENT TESTING:
-CREATE POLICY "Allow public read access" ON events FOR SELECT USING (true);
-CREATE POLICY "Allow public insert access" ON events FOR INSERT WITH CHECK (true);
-
--- Insert a test calendar
-INSERT INTO calendars (id, name)
-VALUES ('11111111-1111-1111-1111-111111111111', 'Testing Cohort');
-```
-
----
-
-## 🗺️ Roadmap (Next Steps)
-
-- [ ] Implement Supabase User Authentication.
-- [ ] Replace public database rules with strict Row Level Security (RLS).
-- [ ] Allow users to create and join multiple distinct shared calendars.
-- [ ] Set up automated email reminders via Cron Jobs and Resend API.
+Navigate to `http://localhost:3000` to view the application.
