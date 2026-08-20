@@ -2,35 +2,58 @@
   width: 100%;
   max-width: 26rem;
   padding: 3rem 2.5rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--surface);
+  border: 1px solid #565656;
+  border-radius: 15px;
+  background: #1a312c;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .title {
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.5rem;
   color: var(--text-main);
-  font-family: var(--font-serif);
-  font-size: 2.25rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-family: var(--font-tanker);
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
 }
 
-.subtitle {
-  margin: 0 0 2.5rem;
-  color: var(--gold);
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
-  font-style: italic;
+.tabs {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 0 0 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-erode-bold);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-cinematic);
+}
+
+.tab:hover {
+  color: var(--text-main);
+}
+
+.activeTab {
+  color: #89d7b7;
+  border-bottom: 1px solid #89d7b7;
+  margin-bottom: -1px;
 }
 
 .message {
   padding: 0.75rem 1rem;
   margin-bottom: 1.5rem;
   border-left: 2px solid;
+  font-family: var(--font-erode-regular);
   font-size: 0.8rem;
-  font-weight: 500;
 }
 
 .error {
@@ -40,9 +63,9 @@
 }
 
 .success {
-  border-color: var(--gold);
-  background: var(--gold-dim);
-  color: var(--gold);
+  border-color: #89d7b7;
+  background: rgba(137, 215, 183, 0.1);
+  color: #89d7b7;
 }
 
 .form {
@@ -54,8 +77,8 @@
   display: grid;
   gap: 0.5rem;
   color: var(--text-muted);
+  font-family: var(--font-erode-bold);
   font-size: 0.7rem;
-  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -70,57 +93,37 @@
   outline: 0;
   background: transparent;
   color: var(--text-main);
-  font: inherit;
-  font-size: 0.85rem;
+  font-family: var(--font-erode-regular);
+  font-size: 0.9rem;
   transition: all 0.3s var(--ease-cinematic);
 }
 
 .field input:focus {
-  border-color: var(--gold);
+  border-color: #89d7b7;
 }
 
-.actions {
-  display: grid;
-  gap: 1rem;
-  padding-top: 1.5rem;
-}
-
-.signIn,
-.signUp {
+.submitButton {
   width: 100%;
-  padding: 0.75rem;
-  border-radius: 4px;
+  margin-top: 1rem;
+  padding: 0.85rem;
+  border: 1px solid #89d7b7;
+  border-radius: 8px;
+  background: #89d7b7;
+  color: #000;
+  font-family: var(--font-erode-bold);
   font-size: 0.75rem;
-  font-weight: 500;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s var(--ease-cinematic);
 }
 
-.signIn {
-  border: 1px solid var(--gold);
-  background: var(--gold);
-  color: var(--bg-dark);
-}
-
-.signIn:hover:not(:disabled) {
+.submitButton:hover:not(:disabled) {
   background: transparent;
-  color: var(--gold);
+  color: #89d7b7;
 }
 
-.signUp {
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--text-muted);
-}
-
-.signUp:hover:not(:disabled) {
-  color: var(--text-main);
-}
-
-.signIn:disabled,
-.signUp:disabled {
-  opacity: 0.4;
+.submitButton:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }

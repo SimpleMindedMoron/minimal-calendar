@@ -9,13 +9,50 @@ type Props = {
   onSignIn: (email: string, password: string) => Promise<void>;
   onSignUp: (email: string, password: string) => Promise<void>;
 };
+
 export function LoginForm({ loading, message, onSignIn, onSignUp }: Props) {
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (mode === "signin") {
+      void onSignIn(email, password);
+    } else {
+      void onSignUp(email, password);
+    }
+  };
+
   return (
     <div className={styles.card}>
-      <h1 className={styles.title}>Welcome back</h1>
-      <p className={styles.subtitle}>Sign in to your minimal calendar</p>
+      <h1 className={styles.title}>Welcome</h1>
+
+      <div className={styles.tabs}>
+        <button
+          type="button"
+          className={`${styles.tab} ${mode === "signin" ? styles.activeTab : ""}`}
+          onClick={() => {
+            setMode("signin");
+            setEmail("");
+            setPassword("");
+          }}
+        >
+          Sign In
+        </button>
+        <button
+          type="button"
+          className={`${styles.tab} ${mode === "signup" ? styles.activeTab : ""}`}
+          onClick={() => {
+            setMode("signup");
+            setEmail("");
+            setPassword("");
+          }}
+        >
+          Create Account
+        </button>
+      </div>
+
       {message && (
         <div
           className={`${styles.message} ${message.type === "error" ? styles.error : styles.success}`}
@@ -23,7 +60,8 @@ export function LoginForm({ loading, message, onSignIn, onSignUp }: Props) {
           {message.text}
         </div>
       )}
-      <form className={styles.form}>
+
+      <form onSubmit={handleSubmit} className={styles.form}>
         <label className={styles.field}>
           Email
           <input
@@ -44,24 +82,18 @@ export function LoginForm({ loading, message, onSignIn, onSignUp }: Props) {
             placeholder="••••••••"
           />
         </label>
-        <div className={styles.actions}>
-          <button
-            type="button"
-            disabled={loading}
-            onClick={() => void onSignIn(email, password)}
-            className={styles.signIn}
-          >
-            {loading ? "Loading..." : "Sign In"}
-          </button>
-          <button
-            type="button"
-            disabled={loading}
-            onClick={() => void onSignUp(email, password)}
-            className={styles.signUp}
-          >
-            Create Account
-          </button>
-        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className={styles.submitButton}
+        >
+          {loading
+            ? "Processing..."
+            : mode === "signin"
+              ? "Sign In"
+              : "Create Account"}
+        </button>
       </form>
     </div>
   );
