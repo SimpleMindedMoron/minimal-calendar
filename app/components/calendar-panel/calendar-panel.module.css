@@ -1,5 +1,7 @@
 /* ── Wrapper ─────────────────────────────────────────────────────────── */
-.calendarSection { width: 100%; }
+.calendarSection {
+  width: 100%;
+}
 
 .panel {
   width: 100%;
@@ -7,18 +9,27 @@
   background: var(--surface-1);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
+  position: relative; /* nav buttons positioned relative to this */
 }
 
-/* ── Month layout ────────────────────────────────────────────────────── */
-.months, .month { display: flex; width: 100%; }
-.month { flex-direction: column; gap: 0.5rem; }
+/* ── Month layout ──────────────────────────────────────────────────────── */
+.months {
+  display: flex;
+  width: 100%;
+}
+.month {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
 
-/* ── Caption ─────────────────────────────────────────────────────────── */
+/* ── Caption: centered month label ─────────────────────────────────────── */
 .caption {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding-bottom: 0.65rem;
+  justify-content: center;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -28,34 +39,66 @@
   font-size: 1rem;
   font-weight: 400;
   letter-spacing: 0.01em;
+  user-select: none;
 }
 
-.nav { display: flex; gap: 0.25rem; }
+/* ── Nav: absolute overlay spanning the ENTIRE panel card ──────────────── */
+/* pointer-events:none lets clicks pass through to the calendar days;       */
+/* only the two small buttons re-enable pointer-events                       */
+.nav {
+  position: absolute;
+  inset: 0; /* stretch to all 4 edges of .panel */
+  display: flex;
+  align-items: flex-start; /* vertically centred in the full card */
+  justify-content: space-between; /* ‹ on left edge, › on right edge */
+  padding: 0 0.5rem; /* small inset from the card border */
+  pointer-events: none;
+  z-index: 2;
+  top: 15px;
+}
 
+/* ── Buttons ────────────────────────────────────────────────────────────── */
 .previousButton,
 .nextButton {
+  pointer-events: all;
   display: grid;
-  width: 1.65rem;
-  height: 1.65rem;
+  width: 1.6rem;
+  height: 1.6rem;
   place-items: center;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xs);
-  background: transparent;
+  background: var(--surface-2);
   color: var(--text-muted);
-  transition: background 160ms var(--ease-soft), color 160ms var(--ease-soft), border-color 160ms var(--ease-soft);
+  transition:
+    background 160ms var(--ease-soft),
+    color 160ms var(--ease-soft),
+    border-color 160ms var(--ease-soft),
+    transform 180ms var(--ease-out);
 }
 .previousButton:hover,
 .nextButton:hover {
   background: var(--accent-dim);
   color: var(--accent-light);
   border-color: var(--accent);
+  transform: scale(1.1);
 }
 
-/* ── Grid ────────────────────────────────────────────────────────────── */
-.table { width: 100%; border-collapse: collapse; }
-.headRow, .row { display: flex; width: 100%; }
-.headRow { margin: 0.4rem 0 0.2rem; }
-.row { margin-top: 0.06rem; }
+/* ── Grid ───────────────────────────────────────────────────────────────── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.headRow,
+.row {
+  display: flex;
+  width: 100%;
+}
+.headRow {
+  margin: 0.4rem 0 0.2rem;
+}
+.row {
+  margin-top: 0.06rem;
+}
 
 .headCell,
 .cell {
@@ -73,7 +116,9 @@
   text-transform: uppercase;
 }
 
-.cell { padding: 0.04rem 0; }
+.cell {
+  padding: 0.04rem 0;
+}
 
 /* ── Day button ──────────────────────────────────────────────────────── */
 .day {
@@ -91,14 +136,19 @@
   color: var(--text-secondary);
   font-size: 0.82rem;
   line-height: 1;
-  transition: background 160ms var(--ease-soft), color 160ms var(--ease-soft), transform 200ms var(--ease-out);
+  transition:
+    background 160ms var(--ease-soft),
+    color 160ms var(--ease-soft),
+    transform 200ms var(--ease-out);
 }
 .day:hover:not([disabled]) {
   background: var(--surface-2);
   color: var(--text-primary);
   transform: scale(1.08);
 }
-.day:active { transform: scale(0.91); }
+.day:active {
+  transform: scale(0.91);
+}
 
 /* ── Event dot ───────────────────────────────────────────────────────── */
 .eventDot {
@@ -108,9 +158,13 @@
   border-radius: 50%;
   background: var(--accent);
   flex-shrink: 0;
-  transition: transform 160ms var(--ease-out), opacity 160ms var(--ease-soft);
+  transition:
+    transform 160ms var(--ease-out),
+    opacity 160ms var(--ease-soft);
 }
-.day:hover .eventDot { transform: scale(1.4); }
+.day:hover .eventDot {
+  transform: scale(1.4);
+}
 
 /* ── States ──────────────────────────────────────────────────────────── */
 .selected .day {
@@ -120,7 +174,10 @@
   transform: scale(1.07);
   box-shadow: 0 2px 12px rgba(199, 143, 87, 0.45);
 }
-.selected .eventDot { background: var(--accent-ink); opacity: 0.65; }
+.selected .eventDot {
+  background: var(--accent-ink);
+  opacity: 0.65;
+}
 
 .today:not(.selected) .day {
   background: var(--accent-dim);
@@ -128,6 +185,15 @@
   font-weight: 600;
 }
 
-.outside .day { color: var(--text-faint); opacity: 0.38; }
-.disabled .day { color: var(--text-faint); opacity: 0.25; cursor: not-allowed; }
-.hidden { visibility: hidden; }
+.outside .day {
+  color: var(--text-faint);
+  opacity: 0.38;
+}
+.disabled .day {
+  color: var(--text-faint);
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+.hidden {
+  visibility: hidden;
+}
