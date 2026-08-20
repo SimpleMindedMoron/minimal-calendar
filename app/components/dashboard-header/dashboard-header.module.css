@@ -26,6 +26,46 @@
   letter-spacing: 0.02em;
 }
 
+.roomControls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.roomSelector {
+  padding: 0.35rem 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--gold);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.roomSelector option {
+  background: var(--bg-dark);
+  color: var(--text-main);
+}
+
+.textButton {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: color 0.3s var(--ease-cinematic);
+}
+
+.textButton:hover {
+  color: var(--gold);
+}
+
 .actions {
   display: flex;
   align-items: center;

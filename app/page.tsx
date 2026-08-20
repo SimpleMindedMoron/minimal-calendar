@@ -9,46 +9,190 @@ import { EventList } from "./components/event-list/event-list";
 import { CalendarPanel } from "./components/calendar-panel/calendar-panel";
 import styles from "./page.module.css";
 import { supabase } from "../lib/supabase";
-import type { CalendarEvent, EventType } from "./types/calendar";
+import type { CalendarEvent, EventType, Room } from "./types/calendar";
+import { RoomDialog } from "./components/room-dialog/room-dialog";
 
 export default function Home() {
   const router = useRouter();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  // Room State
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [activeRoom, setActiveRoom] = useState<Room | null>(null);
+  const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
+
+  // Calendar State
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date(),
+  );
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  useEffect(() => {
+    void (async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/login");
+      } else {
+        setUserId(session.user.id);
+        await fetchRooms(session.user.id);
+        setIsAuthChecking(false);
+      }
+    })();
+  }, [router]);
+
+  const fetchRooms = async (currentUserId: string) => {
+    const { data, error } = await supabase
+      .from("calendar_members")
+      .select(`role, calendars(id, name)`)
+      .eq("user_id", currentUserId);
+
+    if (error) {
+      console.error("Error fetching rooms:", error);
+      return;
+    }
+
+    if (data) {
+      type SupabaseRoomResponse = {
+        role: "admin" | "contributor" | "viewer";
+        calendars: { id: string; name: string };
+      };
+      const formattedRooms: Room[] = (
+        data as unknown as SupabaseRoomResponse[]
+      ).map((item) => ({
+        id: item.calendars.id,
+        name: item.calendars.name,
+        role: item.role,
+      }));
+      setRooms(formattedRooms);
+    }
+  };
+
   const fetchEvents = useCallback(async () => {
-    if (!selectedDate) return;
+    if (!selectedDate || rooms.length === 0) {
+      setEvents([]);
+      return;
+    }
+
     setLoading(true);
-    const { data, error } = await supabase.from("events").select("*").eq("event_date", format(selectedDate, "yyyy-MM-dd"));
+    const formattedDate = format(selectedDate, "yyyy-MM-dd");
+
+    let query = supabase
+      .from("events")
+      .select("*")
+      .eq("event_date", formattedDate);
+
+    if (activeRoom) {
+      query = query.eq("calendar_id", activeRoom.id);
+    } else {
+      const roomIds = rooms.map((r) => r.id);
+      query = query.in("calendar_id", roomIds);
+    }
+
+    const { data, error } = await query.order("event_time", {
+      ascending: true,
+    });
+
     if (error) console.error("Error fetching events:", error);
     else setEvents((data ?? []) as CalendarEvent[]);
+
     setLoading(false);
-  }, [selectedDate]);
+  }, [selectedDate, activeRoom, rooms]);
 
-  useEffect(() => { void (async () => { const { data: { session } } = await supabase.auth.getSession(); if (!session) router.push("/login"); else setIsAuthChecking(false); })(); }, [router]);
-  // The selected date is external query input; this effect synchronizes its results with local UI state.
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { if (!isAuthChecking) void fetchEvents(); }, [fetchEvents, isAuthChecking]);
+  useEffect(() => {
+    if (!isAuthChecking) void fetchEvents();
+  }, [fetchEvents, isAuthChecking]);
 
-  const handleAddEvent = async (title: string, time: string, type: EventType) => {
-    if (!selectedDate) return false;
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return false;
-    const { error } = await supabase.from("events").insert([{ calendar_id: "11111111-1111-1111-1111-111111111111", title, event_date: format(selectedDate, "yyyy-MM-dd"), event_time: `${time}:00`, event_type: type, created_by: user.id }]);
-    if (error) { console.error("Error adding event:", error); alert("Failed to add event"); return false; }
+  const handleAddEvent = async (
+    title: string,
+    time: string,
+    type: EventType,
+  ) => {
+    if (!selectedDate || !userId) return false;
+
+    // Default to the active room, or the first available room if "All Rooms" is selected
+    const targetRoomId = activeRoom ? activeRoom.id : rooms[0]?.id || null;
+
+    if (!targetRoomId) {
+      alert("You must join or create a room first.");
+      return false;
+    }
+
+    const { error } = await supabase.from("events").insert([
+      {
+        calendar_id: targetRoomId,
+        title,
+        event_date: format(selectedDate, "yyyy-MM-dd"),
+        event_time: `${time}:00`,
+        event_type: type,
+      },
+    ]);
+
+    if (error) {
+      console.error("Error adding event:", error);
+      alert("Failed to add event");
+      return false;
+    }
+
     await fetchEvents();
     return true;
   };
-  const handleDeleteEvent = async (id: string) => { const { error } = await supabase.from("events").delete().eq("id", id); if (error) { console.error("Error deleting event:", error); alert("Failed to delete event"); } else await fetchEvents(); };
-  const handleSignOut = async () => { await supabase.auth.signOut(); router.push("/login"); };
 
-  if (isAuthChecking) return <div className={styles.loadingScreen} />;
-  return <main className={styles.dashboard}>
-    <DashboardHeader onAddEvent={() => setIsModalOpen(true)} onSignOut={handleSignOut} />
-    <div className={styles.contentGrid}><CalendarPanel selectedDate={selectedDate} onSelectDate={setSelectedDate} /><EventList selectedDate={selectedDate} events={events} isLoading={loading} onDeleteEvent={handleDeleteEvent} /></div>
-    <EventDialog isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleAddEvent} />
-  </main>;
+  const handleDeleteEvent = async (id: string) => {
+    const { error } = await supabase.from("events").delete().eq("id", id);
+    if (error) {
+      console.error("Error deleting event:", error);
+      alert("Failed to delete event");
+    } else {
+      await fetchEvents();
+    }
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
+  if (isAuthChecking)
+    return <div className={styles.loadingScreen}>Loading...</div>;
+
+  return (
+    <main className={styles.dashboard}>
+      <DashboardHeader
+        rooms={rooms}
+        activeRoom={activeRoom}
+        onSelectRoom={setActiveRoom}
+        onAddEvent={() => setIsModalOpen(true)}
+        onManageRooms={() => setIsRoomModalOpen(true)}
+        onSignOut={handleSignOut}
+      />
+      <div className={styles.contentGrid}>
+        <CalendarPanel
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+        />
+        <EventList
+          selectedDate={selectedDate}
+          events={events}
+          isLoading={loading}
+          onDeleteEvent={handleDeleteEvent}
+        />
+      </div>
+      <EventDialog
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleAddEvent}
+      />
+      <RoomDialog
+        isOpen={isRoomModalOpen}
+        onClose={() => setIsRoomModalOpen(false)}
+        onSuccess={() => fetchRooms(userId!)}
+        userId={userId}
+      />
+    </main>
+  );
 }

@@ -1,13 +1,63 @@
 import { LogOut } from "lucide-react";
+import type { Room } from "../../types/calendar";
 import styles from "./dashboard-header.module.css";
 
-type Props = { onAddEvent: () => void; onSignOut: () => void };
-export function DashboardHeader({ onAddEvent, onSignOut }: Props) {
+type Props = {
+  rooms: Room[];
+  activeRoom: Room | null;
+  onSelectRoom: (room: Room | null) => void;
+  onAddEvent: () => void;
+  onManageRooms: () => void;
+  onSignOut: () => void;
+};
+
+export function DashboardHeader({
+  rooms,
+  activeRoom,
+  onSelectRoom,
+  onAddEvent,
+  onManageRooms,
+  onSignOut,
+}: Props) {
+  const handleCopyCode = () => {
+    if (activeRoom) {
+      navigator.clipboard.writeText(activeRoom.id);
+      alert("Invite code copied to clipboard!");
+    }
+  };
+
   return (
     <header className={styles.header}>
       <div>
         <h1 className={styles.title}>Dashboard</h1>
-        <p className={styles.subtitle}>CS101 Cohort &amp; Study Group</p>
+        <div className={styles.roomControls}>
+          <select
+            className={styles.roomSelector}
+            value={activeRoom?.id || "all"}
+            onChange={(e) => {
+              if (e.target.value === "all") onSelectRoom(null);
+              else {
+                const selected = rooms.find((r) => r.id === e.target.value);
+                if (selected) onSelectRoom(selected);
+              }
+            }}
+          >
+            <option value="all">All Rooms</option>
+            {rooms.map((room) => (
+              <option key={room.id} value={room.id}>
+                {room.name}
+              </option>
+            ))}
+          </select>
+          <button onClick={onManageRooms} className={styles.textButton}>
+            Manage Rooms
+          </button>
+          {activeRoom && (
+            <button onClick={handleCopyCode} className={styles.textButton}>
+              Copy Invite Code
+            </button>
+          )}
+        </div>
       </div>
       <div className={styles.actions}>
         <button type="button" onClick={onAddEvent} className={styles.addButton}>
@@ -20,7 +70,7 @@ export function DashboardHeader({ onAddEvent, onSignOut }: Props) {
           title="Sign Out"
           aria-label="Sign Out"
         >
-          <LogOut size={20} />
+          <LogOut size={16} />
         </button>
       </div>
     </header>
