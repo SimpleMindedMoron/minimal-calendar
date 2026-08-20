@@ -5,12 +5,12 @@ import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { DashboardHeader } from "./components/dashboard-header/dashboard-header";
 import { EventDialog } from "./components/event-dialog/event-dialog";
+import { RoomDialog } from "./components/room-dialog/room-dialog";
 import { EventList } from "./components/event-list/event-list";
 import { CalendarPanel } from "./components/calendar-panel/calendar-panel";
 import styles from "./page.module.css";
 import { supabase } from "../lib/supabase";
 import type { CalendarEvent, EventType, Room } from "./types/calendar";
-import { RoomDialog } from "./components/room-dialog/room-dialog";
 
 export default function Home() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function Home() {
   );
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
   useEffect(() => {
     void (async () => {
@@ -114,7 +114,6 @@ export default function Home() {
   ) => {
     if (!selectedDate || !userId) return false;
 
-    // Default to the active room, or the first available room if "All Rooms" is selected
     const targetRoomId = activeRoom ? activeRoom.id : rooms[0]?.id || null;
 
     if (!targetRoomId) {
@@ -152,6 +151,29 @@ export default function Home() {
     }
   };
 
+  const handleDeleteRoom = async () => {
+    if (!activeRoom || activeRoom.role !== "admin") return;
+
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${activeRoom.name}"? This action cannot be undone and will delete all associated events.`,
+    );
+
+    if (!confirmed) return;
+
+    const { error } = await supabase
+      .from("calendars")
+      .delete()
+      .eq("id", activeRoom.id);
+
+    if (error) {
+      console.error("Error deleting room:", error);
+      alert("Failed to delete room.");
+    } else {
+      setActiveRoom(null); // Reset to "All Rooms" view
+      if (userId) await fetchRooms(userId); // Refresh the room list
+    }
+  };
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     router.push("/login");
@@ -166,8 +188,9 @@ export default function Home() {
         rooms={rooms}
         activeRoom={activeRoom}
         onSelectRoom={setActiveRoom}
-        onAddEvent={() => setIsModalOpen(true)}
+        onAddEvent={() => setIsEventModalOpen(true)}
         onManageRooms={() => setIsRoomModalOpen(true)}
+        onDeleteRoom={handleDeleteRoom}
         onSignOut={handleSignOut}
       />
       <div className={styles.contentGrid}>
@@ -182,11 +205,13 @@ export default function Home() {
           onDeleteEvent={handleDeleteEvent}
         />
       </div>
+
       <EventDialog
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isEventModalOpen}
+        onClose={() => setIsEventModalOpen(false)}
         onSave={handleAddEvent}
       />
+
       <RoomDialog
         isOpen={isRoomModalOpen}
         onClose={() => setIsRoomModalOpen(false)}

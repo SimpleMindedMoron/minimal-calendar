@@ -8,6 +8,7 @@ type Props = {
   onSelectRoom: (room: Room | null) => void;
   onAddEvent: () => void;
   onManageRooms: () => void;
+  onDeleteRoom: () => void;
   onSignOut: () => void;
 };
 
@@ -17,6 +18,7 @@ export function DashboardHeader({
   onSelectRoom,
   onAddEvent,
   onManageRooms,
+  onDeleteRoom,
   onSignOut,
 }: Props) {
   const handleCopyCode = () => {
@@ -52,9 +54,20 @@ export function DashboardHeader({
           <button onClick={onManageRooms} className={styles.textButton}>
             Manage Rooms
           </button>
+
           {activeRoom && (
             <button onClick={handleCopyCode} className={styles.textButton}>
               Copy Invite Code
+            </button>
+          )}
+
+          {/* Only render Delete button if the user is an admin of the active room */}
+          {activeRoom?.role === "admin" && (
+            <button
+              onClick={onDeleteRoom}
+              className={`${styles.textButton} ${styles.deleteTextButton}`}
+            >
+              Delete Room
             </button>
           )}
         </div>
@@ -70,7 +83,7 @@ export function DashboardHeader({
           title="Sign Out"
           aria-label="Sign Out"
         >
-          <LogOut size={16} />
+          <LogOut size={20} />
         </button>
       </div>
     </header>

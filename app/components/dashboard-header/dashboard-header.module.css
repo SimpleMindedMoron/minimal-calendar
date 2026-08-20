@@ -109,3 +109,6 @@
   border-color: var(--text-main);
   color: var(--text-main);
 }
+.deleteTextButton:hover {
+  color: var(--event-exam); /* Deep Bordeaux Red */
+}
