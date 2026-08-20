@@ -1,7 +1,133 @@
-.card { width: min(100%, 27rem); padding: clamp(1.5rem, 6vw, 3rem); border: 0; border-radius: var(--radius-lg); background: var(--surface); animation: card-in 500ms var(--ease-out) both; }
-.title { margin: 0 0 1.65rem; color: var(--text-main); font-family: var(--font-tanker); font-size: clamp(2.6rem, 9vw, 3.6rem); font-weight: 400; letter-spacing: -0.04em; line-height: 0.95; }
-.tabs { display: flex; gap: 0.5rem; margin-bottom: 1.75rem; }.tab { padding: 0.42rem 0.7rem; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-muted); font-size: 0.86rem; transition: color 180ms var(--ease-soft), background-color 180ms var(--ease-soft); }.tab:hover { color: var(--text-soft); }.activeTab { background: var(--primary-dim); color: var(--primary-strong); }
-.message { margin-bottom: 1.25rem; padding: 0.75rem; border: 0; border-radius: var(--radius-sm); font-size: 0.86rem; }.error { background: var(--event-exam-dim); color: #f2c3c4; }.success { background: var(--event-study-dim); color: #d5e6cb; }
-.form { display: grid; gap: 1.15rem; }.field { display: grid; gap: 0.42rem; color: var(--text-muted); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }.field input { width: 100%; min-height: 2.85rem; padding: 0.65rem 0.75rem; border: 0; border-radius: var(--radius-sm); background: var(--bg-deep); color: var(--text-main); font-size: 0.96rem; transition: background-color 180ms var(--ease-soft); }.field input:hover, .field input:focus { background: var(--surface-quiet); outline: none; }
-.submitButton { width: 100%; min-height: 2.9rem; margin-top: 0.25rem; border: 0; border-radius: var(--radius-sm); background: var(--primary); color: var(--primary-ink); font-size: 0.88rem; font-weight: 600; transition: background-color 180ms var(--ease-soft), transform 180ms var(--ease-out), opacity 180ms var(--ease-soft); }.submitButton:hover:not(:disabled) { background: var(--primary-strong); transform: translateY(-1px); }.submitButton:active:not(:disabled) { transform: scale(0.98); }.submitButton:disabled { cursor: not-allowed; opacity: 0.5; }
-@keyframes card-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.card {
+  width: min(100%, 27rem);
+  padding: clamp(1.5rem, 6vw, 3rem);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  animation: card-in 500ms var(--ease-out) both;
+}
+
+.title {
+  margin: 0 0 1.65rem;
+  color: var(--text-main);
+  font-family: var(--font-tanker);
+  font-size: clamp(2.6rem, 9vw, 3.6rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.tab {
+  padding: 0.42rem 0.7rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  transition: color 180ms var(--ease-soft), background-color 180ms var(--ease-soft);
+}
+
+.tab:hover {
+  color: var(--text-soft);
+}
+
+.activeTab {
+  background: var(--primary-dim);
+  color: var(--primary-strong);
+}
+
+.message {
+  margin-bottom: 1.25rem;
+  padding: 0.75rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  font-size: 0.86rem;
+}
+
+.error {
+  background: var(--event-exam-dim);
+  color: #f2c3c4;
+}
+
+.success {
+  background: var(--event-study-dim);
+  color: #d5e6cb;
+}
+
+.form {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.42rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field input {
+  width: 100%;
+  min-height: 2.85rem;
+  padding: 0.65rem 0.75rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--bg-deep);
+  color: var(--text-main);
+  font-size: 0.96rem;
+  transition: background-color 180ms var(--ease-soft);
+}
+
+.field input:hover,
+.field input:focus {
+  background: var(--surface-quiet);
+  outline: none;
+}
+
+.submitButton {
+  width: 100%;
+  min-height: 2.9rem;
+  margin-top: 0.25rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: var(--primary-ink);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: background-color 180ms var(--ease-soft), transform 180ms var(--ease-out), opacity 180ms var(--ease-soft);
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--primary-strong);
+  transform: translateY(-1px);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

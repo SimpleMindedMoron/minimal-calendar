@@ -1,5 +1,40 @@
-.dashboard { width: min(100%, 76rem); margin: 0 auto; padding: clamp(1.5rem, 4vw, 4rem) clamp(1rem, 4vw, 3rem) 4rem; animation: enter 560ms var(--ease-out) both; }
-.contentGrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1.5rem, 3vw, 3rem); align-items: start; }
-.loadingScreen { display: grid; min-height: 100vh; place-items: center; color: var(--text-muted); }
-@keyframes enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-@media (min-width: 960px) { .contentGrid { grid-template-columns: minmax(19rem, 0.78fr) minmax(0, 1.22fr); } }
+/* ── App shell ───────────────────────────────────────────────────────── */
+.appShell {
+  display: flex;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--bg-app);
+  animation: appear 400ms var(--ease-out) both;
+}
+
+@keyframes appear {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Main content (right of the two panels) ──────────────────────────── */
+.main {
+  flex: 1;
+  min-width: 0;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-app);
+}
+
+/* ── Mobile fallback ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .appShell {
+    flex-direction: column;
+    height: auto;
+    min-height: 100dvh;
+    overflow: auto;
+  }
+
+  .main {
+    height: auto;
+    flex: none;
+    overflow: visible;
+  }
+}

@@ -1,4 +1,168 @@
-.events { width: 100%; }
-.heading { margin: 0 0 1rem; padding-bottom: 0.2rem; color: var(--text-main); font-family: var(--font-tanker); font-size: 1.45rem; font-weight: 400; }
-.list { display: grid; gap: 0.65rem; }
-.message { margin: 0; padding: 3.5rem 1rem; border-radius: var(--radius-lg); background: var(--surface-quiet); color: var(--text-muted); font-size: 0.96rem; font-style: italic; text-align: center; }
+/* ── Wrapper ─────────────────────────────────────────────────────────── */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2.25rem 2.5rem 1.5rem;
+  flex-shrink: 0;
+}
+
+.headerLeft { display: flex; flex-direction: column; gap: 0.1rem; }
+
+.greeting {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.1rem;
+}
+
+.dayHeading {
+  font-family: var(--font-tanker);
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.dateLine {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+  padding-bottom: 0.5rem;
+}
+
+.todayBadge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 99px;
+  background: var(--accent-dim);
+  color: var(--accent-light);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.1rem;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 10px rgba(199, 143, 87, 0.28);
+  transition: background 200ms var(--ease-soft), transform 200ms var(--ease-out), box-shadow 200ms var(--ease-soft);
+  white-space: nowrap;
+}
+.addBtn:hover {
+  background: var(--accent-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(199, 143, 87, 0.38);
+}
+.addBtn:active { transform: scale(0.97); box-shadow: none; }
+
+/* ── Divider ─────────────────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  margin: 0 2.5rem;
+  background: var(--border-subtle);
+  flex-shrink: 0;
+}
+
+/* ── Events section ──────────────────────────────────────────────────── */
+.eventsSection {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 2.5rem 2rem;
+}
+
+.eventGrid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* ── Empty / Loading states ──────────────────────────────────────────── */
+.stateBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  min-height: 14rem;
+  text-align: center;
+}
+
+.emptyGlyph {
+  font-size: 2.5rem;
+  color: var(--border-default);
+  line-height: 1;
+}
+
+.stateText {
+  color: var(--text-faint);
+  font-size: 0.9rem;
+  font-style: italic;
+  max-width: 24ch;
+  line-height: 1.6;
+}
+
+.emptyAddBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  transition: background 150ms var(--ease-soft), color 150ms var(--ease-soft), border-color 150ms var(--ease-soft);
+}
+.emptyAddBtn:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent-light);
+}
+
+/* ── Spinner ─────────────────────────────────────────────────────────── */
+.spinner {
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 2px solid var(--border-subtle);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .header { padding: 1.5rem 1.25rem 1rem; }
+  .divider { margin: 0 1.25rem; }
+  .eventsSection { padding: 1.25rem 1.25rem 2rem; }
+}

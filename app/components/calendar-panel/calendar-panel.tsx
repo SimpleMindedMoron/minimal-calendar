@@ -1,12 +1,17 @@
 import { DayPicker } from "react-day-picker";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { format } from "date-fns";
 import styles from "./calendar-panel.module.css";
 
 type Props = {
   selectedDate: Date | undefined;
   onSelectDate: (date: Date | undefined) => void;
+  eventDates?: string[]; // yyyy-MM-dd strings that have at least one event
 };
-export function CalendarPanel({ selectedDate, onSelectDate }: Props) {
+
+export function CalendarPanel({ selectedDate, onSelectDate, eventDates = [] }: Props) {
+  const eventDateSet = new Set(eventDates);
+
   return (
     <section className={styles.calendarSection} aria-label="Calendar">
       <div className={styles.panel}>
@@ -38,14 +43,26 @@ export function CalendarPanel({ selectedDate, onSelectDate }: Props) {
           components={{
             PreviousMonthButton: (props) => (
               <button {...props}>
-                <ChevronLeft size={16} />
+                <ChevronLeft size={12} />
               </button>
             ),
             NextMonthButton: (props) => (
               <button {...props}>
-                <ChevronRight size={16} />
+                <ChevronRight size={12} />
               </button>
             ),
+            DayButton: ({ day, modifiers, ...props }) => {
+              const dateStr = format(day.date, "yyyy-MM-dd");
+              const hasEvent = eventDateSet.has(dateStr);
+              return (
+                <button {...props}>
+                  {day.date.getDate()}
+                  {hasEvent && (
+                    <span className={styles.eventDot} aria-hidden="true" />
+                  )}
+                </button>
+              );
+            },
           }}
         />
       </div>

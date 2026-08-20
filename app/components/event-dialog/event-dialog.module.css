@@ -1,13 +1,139 @@
-.backdrop { position: fixed; z-index: 50; inset: 0; width: 100vw; height: 100dvh; display: grid; place-items: center; padding: 1rem; background: rgb(18 19 17 / 82%); animation: fade-in 180ms var(--ease-soft) both; }
-.dialog { width: min(100%, 31rem); padding: clamp(1.4rem, 4vw, 2.25rem); border: 0; border-radius: var(--radius-lg); background: var(--surface); animation: dialog-in 280ms var(--ease-out) both; }
-.title { margin: 0 0 1.6rem; color: var(--text-main); font-family: var(--font-tanker); font-size: 2rem; font-weight: 400; }
-.form { display: grid; gap: 1.15rem; } .fieldRow { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
-.field { display: grid; gap: 0.42rem; color: var(--text-muted); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
-.field input { width: 100%; min-height: 2.75rem; padding: 0.65rem 0.75rem; border: 0; border-radius: var(--radius-sm); background: var(--bg-deep); color: var(--text-main); font-size: 0.96rem; transition: background-color 180ms var(--ease-soft); }
-.field input:hover, .field input:focus { background: var(--surface-quiet); outline: none; }
-.actions { display: flex; justify-content: flex-end; gap: 0.65rem; margin-top: 0.6rem; }
-.cancelButton, .saveButton { min-height: 2.65rem; padding: 0.55rem 1rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; transition: background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out); }
-.cancelButton { border: 0; background: transparent; color: var(--text-muted); } .cancelButton:hover { background: var(--surface-raised); color: var(--text-main); }
-.saveButton { border: 0; background: var(--primary); color: var(--primary-ink); } .saveButton:hover { background: var(--primary-strong); transform: translateY(-1px); } .saveButton:active { transform: scale(0.97); }
-@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } } @keyframes dialog-in { from { opacity: 0; transform: translateY(12px) scale(0.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@media (max-width: 420px) { .fieldRow { grid-template-columns: 1fr; } }
+.backdrop {
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgb(18 19 17 / 82%);
+  animation: fade-in 180ms var(--ease-soft) both;
+}
+
+.dialog {
+  width: min(100%, 31rem);
+  padding: clamp(1.4rem, 4vw, 2.25rem);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  animation: dialog-in 280ms var(--ease-out) both;
+}
+
+.title {
+  margin: 0 0 1.6rem;
+  color: var(--text-main);
+  font-family: var(--font-tanker);
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.form {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.42rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--bg-deep);
+  color: var(--text-main);
+  font-size: 0.96rem;
+  transition: background-color 180ms var(--ease-soft);
+}
+
+.field input:hover,
+.field input:focus {
+  background: var(--surface-quiet);
+  outline: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-top: 0.6rem;
+}
+
+.cancelButton,
+.saveButton {
+  min-height: 2.65rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out);
+}
+
+.cancelButton {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.cancelButton:hover {
+  background: var(--surface-raised);
+  color: var(--text-main);
+}
+
+.saveButton {
+  border: 0;
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+
+.saveButton:hover {
+  background: var(--primary-strong);
+  transform: translateY(-1px);
+}
+
+.saveButton:active {
+  transform: scale(0.97);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 420px) {
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
+}

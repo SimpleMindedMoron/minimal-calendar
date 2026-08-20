@@ -1,1 +1,7 @@
-.page { display: grid; min-height: 100vh; place-items: center; padding: 1.25rem; background: var(--bg-dark); }
+.page {
+    display: grid;
+    min-height: 100vh;
+    place-items: center;
+    padding: 1.25rem;
+    background: var(--bg-dark);
+}

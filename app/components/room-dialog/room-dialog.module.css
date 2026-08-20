@@ -1,9 +1,186 @@
-.backdrop { position: fixed; z-index: 50; inset: 0; width: 100vw; height: 100dvh; display: grid; place-items: center; padding: 1rem; background: rgb(18 19 17 / 82%); animation: fade-in 180ms var(--ease-soft) both; }
-.dialog { width: min(100%, 29rem); padding: clamp(1.4rem, 4vw, 2.25rem); border: 0; border-radius: var(--radius-lg); background: var(--surface); animation: dialog-in 280ms var(--ease-out) both; }
-.dialogHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }.title { margin: 0; color: var(--text-main); font-family: var(--font-tanker); font-size: 2rem; font-weight: 400; }.intro { margin: 0.35rem 0 0; color: var(--text-muted); font-size: 0.86rem; }.closeButton { display: grid; width: 2.15rem; height: 2.15rem; place-items: center; border: 0; border-radius: 50%; background: var(--surface-quiet); color: var(--text-muted); transition: background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out); }.closeButton:hover { background: var(--surface-raised); color: var(--text-main); transform: rotate(4deg); }
-.tabs { display: flex; gap: 1.2rem; margin-bottom: 1.5rem; }
-.tab { padding: 0.42rem 0.7rem; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-muted); font-size: 0.82rem; font-weight: 600; transition: color 180ms var(--ease-soft), background-color 180ms var(--ease-soft); } .tab:hover { color: var(--text-soft); } .activeTab { background: var(--primary-dim); color: var(--primary-strong); }
-.form { display: grid; gap: 1.15rem; } .field { display: grid; gap: 0.42rem; color: var(--text-muted); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
-.field input { width: 100%; min-height: 2.75rem; padding: 0.65rem 0.75rem; border: 0; border-radius: var(--radius-sm); background: var(--bg-deep); color: var(--text-main); font-size: 0.96rem; transition: background-color 180ms var(--ease-soft); } .field input:hover, .field input:focus { background: var(--surface-quiet); outline: none; }
-.actions { display: flex; justify-content: flex-end; gap: 0.65rem; margin-top: 0.6rem; }.cancelButton, .submitButton { min-height: 2.65rem; padding: 0.55rem 1rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; transition: background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out); }.cancelButton { border: 0; background: transparent; color: var(--text-muted); }.cancelButton:hover { background: var(--surface-raised); color: var(--text-main); }.submitButton { border: 0; background: var(--primary); color: var(--primary-ink); }.submitButton:hover:not(:disabled) { background: var(--primary-strong); transform: translateY(-1px); }.submitButton:disabled { cursor: not-allowed; opacity: 0.45; }
-@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } } @keyframes dialog-in { from { opacity: 0; transform: translateY(12px) scale(0.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.backdrop {
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgb(18 19 17 / 82%);
+  animation: fade-in 180ms var(--ease-soft) both;
+}
+
+.dialog {
+  width: min(100%, 29rem);
+  padding: clamp(1.4rem, 4vw, 2.25rem);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  animation: dialog-in 280ms var(--ease-out) both;
+}
+
+.dialogHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  margin: 0;
+  color: var(--text-main);
+  font-family: var(--font-tanker);
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.intro {
+  margin: 0.35rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+.closeButton {
+  display: grid;
+  width: 2.15rem;
+  height: 2.15rem;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-quiet);
+  color: var(--text-muted);
+  transition: background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out);
+}
+
+.closeButton:hover {
+  background: var(--surface-raised);
+  color: var(--text-main);
+  transform: rotate(4deg);
+}
+
+.tabs {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  padding: 0.42rem 0.7rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: color 180ms var(--ease-soft), background-color 180ms var(--ease-soft);
+}
+
+.tab:hover {
+  color: var(--text-soft);
+}
+
+.activeTab {
+  background: var(--primary-dim);
+  color: var(--primary-strong);
+}
+
+.form {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.42rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--bg-deep);
+  color: var(--text-main);
+  font-size: 0.96rem;
+  transition: background-color 180ms var(--ease-soft);
+}
+
+.field input:hover,
+.field input:focus {
+  background: var(--surface-quiet);
+  outline: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-top: 0.6rem;
+}
+
+.cancelButton,
+.submitButton {
+  min-height: 2.65rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out);
+}
+
+.cancelButton {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.cancelButton:hover {
+  background: var(--surface-raised);
+  color: var(--text-main);
+}
+
+.submitButton {
+  border: 0;
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--primary-strong);
+  transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

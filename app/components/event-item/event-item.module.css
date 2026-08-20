@@ -1,12 +1,117 @@
-.item { display: flex; align-items: center; min-height: 5.25rem; padding: 1rem 1.1rem; border: 0; border-radius: var(--radius-md); background: var(--surface-quiet); transition: background-color 220ms var(--ease-soft), transform 220ms var(--ease-out); }
-.item:hover { background: var(--surface-raised); transform: translateX(3px); }
-.indicator { width: 0.58rem; height: 0.58rem; margin-right: 0.9rem; border-radius: 50%; flex: 0 0 auto; }
-.exam { background: var(--event-exam); } .quiz { background: var(--event-quiz); } .study { background: var(--event-study); } .custom { background: var(--blue); }
-.details { min-width: 0; flex: 1; }
-.title { overflow: hidden; margin: 0; color: var(--text-main); font-size: 1.02rem; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
-.type { margin: 0.12rem 0 0; color: var(--text-muted); font-size: 0.73rem; letter-spacing: 0.07em; text-transform: uppercase; }
-.time { margin-right: 0.55rem; color: var(--text-soft); font-size: 0.78rem; font-variant-numeric: tabular-nums; }
-.deleteButton { display: grid; width: 2rem; height: 2rem; place-items: center; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--text-muted); opacity: 0; transition: opacity 180ms var(--ease-soft), background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out); }
-.item:hover .deleteButton, .deleteButton:focus-visible { opacity: 1; }
-.deleteButton:hover { background: var(--event-exam-dim); color: var(--event-exam); transform: scale(1.08); }
-@media (hover: none) { .deleteButton { opacity: 1; } }
+/* ── Card ────────────────────────────────────────────────────────────── */
+.card {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  min-height: 5rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  position: relative;
+  transition:
+    background 220ms var(--ease-soft),
+    border-color 220ms var(--ease-soft),
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-soft);
+}
+
+.card:hover {
+  background: var(--bg-color, var(--surface-2));
+  border-color: var(--bar-color, var(--border-default));
+  transform: translateX(4px);
+  box-shadow: -2px 0 0 0 var(--bar-color, transparent),
+              0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Coloured left bar ───────────────────────────────────────────────── */
+.bar {
+  display: block;
+  width: 4px;
+  background: var(--bar-color, var(--border-default));
+  flex-shrink: 0;
+  border-radius: 0;
+  transition: width 220ms var(--ease-out);
+}
+.card:hover .bar { width: 5px; }
+
+/* ── Content body ────────────────────────────────────────────────────── */
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+  padding: 1rem 1rem 1rem 1.1rem;
+}
+
+/* ── Top row: title + time ───────────────────────────────────────────── */
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.time {
+  font-size: 0.82rem;
+  font-family: var(--font-mono, monospace);
+  font-variant-numeric: tabular-nums;
+  color: var(--bar-color, var(--text-muted));
+  flex-shrink: 0;
+  padding-top: 0.05rem;
+  opacity: 0.85;
+  transition: opacity 200ms var(--ease-soft);
+}
+.card:hover .time { opacity: 1; }
+
+/* ── Bottom row: type chip ───────────────────────────────────────────── */
+.bottomRow { display: flex; align-items: center; gap: 0.5rem; }
+
+.chip {
+  display: inline-block;
+  padding: 0.18rem 0.55rem;
+  border-radius: 99px;
+  background: var(--chip-bg, var(--surface-2));
+  color: var(--chip-text, var(--text-muted));
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-family: var(--font-sans, system-ui);
+}
+
+/* ── Delete button ───────────────────────────────────────────────────── */
+.deleteBtn {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-faint);
+  opacity: 0;
+  transition: opacity 180ms var(--ease-soft), background 180ms var(--ease-soft), color 180ms var(--ease-soft);
+}
+
+.card:hover .deleteBtn,
+.deleteBtn:focus-visible { opacity: 1; }
+
+.deleteBtn:hover {
+  background: var(--danger-dim);
+  color: var(--danger);
+}
+
+@media (hover: none) { .deleteBtn { opacity: 1; } }
