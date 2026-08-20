@@ -1,83 +1,12 @@
-.item {
-  display: flex;
-  align-items: center;
-  padding: 1rem 1.25rem;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  background: var(--surface);
-  cursor: pointer;
-  transition: all 0.4s var(--ease-cinematic);
-}
-
-.item:hover {
-  border-color: var(--border);
-  background: var(--surface-hover);
-  transform: translateX(4px);
-}
-
-.indicator {
-  width: 0.5rem;
-  height: 0.5rem;
-  flex: none;
-  margin-right: 1.25rem;
-  border-radius: 50%;
-}
-
-.exam {
-  background: var(--event-exam);
-}
-.quiz {
-  background: var(--event-quiz);
-}
-.study {
-  background: var(--event-study);
-}
-
-.details {
-  flex: 1;
-  min-width: 0;
-}
-
-.title {
-  margin: 0;
-  color: var(--text-main);
-  font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-}
-
-.type {
-  margin: 0.2rem 0 0;
-  color: var(--text-muted);
-  font-size: 0.7rem;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.time {
-  padding: 0 0.5rem;
-  color: var(--gold);
-  font-family: var(--font-serif);
-  font-size: 1.1rem;
-  font-style: italic;
-}
-
-.deleteButton {
-  padding: 0.5rem;
-  margin-left: 0.75rem;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  opacity: 0;
-  cursor: pointer;
-  transition: all 0.3s var(--ease-cinematic);
-}
-
-.item:hover .deleteButton {
-  opacity: 1;
-}
-
-.deleteButton:hover {
-  color: var(--event-exam);
-}
+.item { display: flex; align-items: center; min-height: 5.25rem; padding: 1rem 1.1rem; border: 0; border-radius: var(--radius-md); background: var(--surface-quiet); transition: background-color 220ms var(--ease-soft), transform 220ms var(--ease-out); }
+.item:hover { background: var(--surface-raised); transform: translateX(3px); }
+.indicator { width: 0.58rem; height: 0.58rem; margin-right: 0.9rem; border-radius: 50%; flex: 0 0 auto; }
+.exam { background: var(--event-exam); } .quiz { background: var(--event-quiz); } .study { background: var(--event-study); } .custom { background: var(--blue); }
+.details { min-width: 0; flex: 1; }
+.title { overflow: hidden; margin: 0; color: var(--text-main); font-size: 1.02rem; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.type { margin: 0.12rem 0 0; color: var(--text-muted); font-size: 0.73rem; letter-spacing: 0.07em; text-transform: uppercase; }
+.time { margin-right: 0.55rem; color: var(--text-soft); font-size: 0.78rem; font-variant-numeric: tabular-nums; }
+.deleteButton { display: grid; width: 2rem; height: 2rem; place-items: center; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--text-muted); opacity: 0; transition: opacity 180ms var(--ease-soft), background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out); }
+.item:hover .deleteButton, .deleteButton:focus-visible { opacity: 1; }
+.deleteButton:hover { background: var(--event-exam-dim); color: var(--event-exam); transform: scale(1.08); }
+@media (hover: none) { .deleteButton { opacity: 1; } }

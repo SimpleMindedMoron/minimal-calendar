@@ -1,110 +1,31 @@
-@font-face {
-  font-family: Tanker;
-  src: url(../public/fonts/Tanker-Regular.otf);
-}
-
-@font-face {
-  font-family: Erode-Bold;
-  src: url(../public/fonts/Erode-Bold.otf);
-}
-
-@font-face {
-  font-family: Erode-BoldItalic;
-  src: url(../public/fonts/Erode-BoldItalic.otf);
-}
-
-@font-face {
-  font-family: Erode-Italic;
-  src: url(../public/fonts/Erode-Italic.otf);
-}
-
-@font-face {
-  font-family: Erode-Light;
-  src: url(../public/fonts/Erode-Light.otf);
-}
-
-@font-face {
-  font-family: Erode-LightItalic;
-  src: url(../public/fonts/Erode-LightItalic.otf);
-}
-
-@font-face {
-  font-family: Erode-Medium;
-  src: url(../public/fonts/Erode-Medium.otf);
-}
-
-@font-face {
-  font-family: Erode-MediumItalic;
-  src: url(../public/fonts/Erode-MediumItalic.otf);
-}
-
-@font-face {
-  font-family: Erode-Regular;
-  src: url(../public/fonts/Erode-Regular.otf);
-}
-
-@font-face {
-  font-family: Erode-Semibold;
-  src: url(../public/fonts/Erode-Semibold.otf);
-}
-
-@font-face {
-  font-family: Erode-SemiboldItalic;
-  src: url(../public/fonts/Erode-SemiboldItalic.otf);
-}
-
-/* font face change : Tanker Regular for headings and all that */
-/* Erode for the rest */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@font-face { font-family: "Tanker"; src: url("/fonts/Tanker-Regular.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Erode"; src: url("/fonts/Erode-Light.otf") format("opentype"); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: "Erode"; src: url("/fonts/Erode-Regular.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Erode"; src: url("/fonts/Erode-Italic.otf") format("opentype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Erode"; src: url("/fonts/Erode-Medium.otf") format("opentype"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Erode"; src: url("/fonts/Erode-MediumItalic.otf") format("opentype"); font-weight: 500; font-style: italic; font-display: swap; }
+@font-face { font-family: "Erode"; src: url("/fonts/Erode-Semibold.otf") format("opentype"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Erode"; src: url("/fonts/Erode-SemiboldItalic.otf") format("opentype"); font-weight: 600; font-style: italic; font-display: swap; }
+@font-face { font-family: "Erode"; src: url("/fonts/Erode-Bold.otf") format("opentype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Erode"; src: url("/fonts/Erode-BoldItalic.otf") format("opentype"); font-weight: 700; font-style: italic; font-display: swap; }
 
 :root {
-  /* Michelin-Star Editorial Palette */
-  --bg-dark: #0d0d0d;
-  --surface: #0c0c0c;
-  --surface-hover: #141414;
-
-  --gold: #c5a059;
-  --gold-dim: rgba(197, 160, 89, 0);
-
-  --text-main: #f3f3f3;
-  --text-muted: #888888;
-  --border: rgba(255, 255, 255, 0.08);
-
-  /* Refined Event Colors */
-  --event-exam: #7a1f1f; /* Deep Bordeaux */
-  --event-quiz: #3a536b; /* Muted Sapphire */
-  --event-study: #8c6e46; /* Soft Bronze */
-
-  --font-tanker: Tanker, serif;
-  --font-erode-bold: Erode-Bold, serif;
-  --font-erode-bold-italic: Erode-BoldItalic, serif;
-  --font-erode-italic: Erode-Italic, serif;
-  --font-erode-light: Erode-Light, serif;
-  --font-erode-light-italic: Erode-LightItalic, serif;
-  --font-erode-medium: Erode-Medium, serif;
-  --font-erode-medium-italic: Erode-MediumItalic, serif;
-  --font-erode-regular: Erode-Regular, serif;
-  --font-erode-semibold: Erode-Semibold, serif;
-  --font-erode-semibold-italic: Erode-SemiboldItalic, serif;
-
-  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --font-tanker: "Tanker", Georgia, serif;
+  --font-erode: "Erode", Georgia, serif;
+  --font-erode-light: var(--font-erode); --font-erode-regular: var(--font-erode); --font-erode-medium: var(--font-erode); --font-erode-semibold: var(--font-erode); --font-erode-bold: var(--font-erode);
+  --font-erode-italic: var(--font-erode); --font-erode-light-italic: var(--font-erode); --font-erode-medium-italic: var(--font-erode); --font-erode-semibold-italic: var(--font-erode); --font-erode-bold-italic: var(--font-erode);
+  --bg-dark: #20211f; --bg-deep: #191a18; --surface: #292b28; --surface-raised: #30322e; --surface-quiet: #252724; --border: #454842; --border-subtle: #383a36;
+  --text-main: #f0eee6; --text-soft: #d1d0c7; --text-muted: #a7a99f; --primary: #b8c7a3; --primary-strong: #d1dfc0; --primary-ink: #273022; --primary-dim: #3d4936; --peach: #dfb6a6; --blue: #afc4d5;
+  --event-exam: #dc9d9f; --event-exam-dim: #4a3333; --event-study: #b9ccab; --event-study-dim: #384435; --event-quiz: #d7c28e;
+  --radius-sm: 0.55rem; --radius-md: 0.85rem; --radius-lg: 1.25rem; --ease-out: cubic-bezier(0.22, 1, 0.36, 1); --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-body {
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-button,
-input,
-select,
-textarea {
-  font-family: inherit;
-}
+* { box-sizing: border-box; }
+html { background: var(--bg-deep); }
+body { min-width: 320px; margin: 0; background: var(--bg-dark); color: var(--text-main); font-family: var(--font-erode); font-weight: 400; line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+button, input, select, textarea { font: inherit; }
+button, select { -webkit-tap-highlight-color: transparent; }
+button:not(:disabled), select:not(:disabled) { cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--primary-strong); outline-offset: 3px; }
+::selection { background: var(--primary); color: var(--primary-ink); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; } }

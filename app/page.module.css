@@ -1,42 +1,5 @@
-.dashboard {
-  max-width: 64rem; /* Slightly narrower for an elegant reading width */
-  margin: 0 auto;
-  padding: 3rem 1.5rem;
-  position: relative;
-}
-
-.contentGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  align-items: start;
-}
-
-@media (min-width: 1024px) {
-  .contentGrid {
-    grid-template-columns: 340px minmax(0, 1fr);
-    gap: 4rem;
-  }
-}
-
-.loadingScreen {
-  min-height: 100vh;
-  background-color: var(--bg-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--gold);
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-style: italic;
-  animation: pulse 2s var(--ease-cinematic) infinite alternate;
-}
-
-@keyframes pulse {
-  from {
-    opacity: 0.5;
-  }
-  to {
-    opacity: 1;
-  }
-}
+.dashboard { width: min(100%, 76rem); margin: 0 auto; padding: clamp(1.5rem, 4vw, 4rem) clamp(1rem, 4vw, 3rem) 4rem; animation: enter 560ms var(--ease-out) both; }
+.contentGrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1.5rem, 3vw, 3rem); align-items: start; }
+.loadingScreen { display: grid; min-height: 100vh; place-items: center; color: var(--text-muted); }
+@keyframes enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (min-width: 960px) { .contentGrid { grid-template-columns: minmax(19rem, 0.78fr) minmax(0, 1.22fr); } }

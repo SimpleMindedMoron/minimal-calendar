@@ -1,4 +1,4 @@
-import { LogOut } from "lucide-react";
+import { Copy, FolderCog, LogOut, Plus, Trash2 } from "lucide-react";
 import type { Room } from "../../types/calendar";
 import styles from "./dashboard-header.module.css";
 
@@ -51,13 +51,13 @@ export function DashboardHeader({
               </option>
             ))}
           </select>
-          <button onClick={onManageRooms} className={styles.textButton}>
-            Manage Rooms
+          <button onClick={onManageRooms} className={styles.iconButton} title="Manage rooms" aria-label="Manage rooms">
+            <FolderCog size={17} />
           </button>
 
           {activeRoom && (
-            <button onClick={handleCopyCode} className={styles.textButton}>
-              Copy Invite Code
+            <button onClick={handleCopyCode} className={styles.iconButton} title="Copy invite code" aria-label="Copy invite code">
+              <Copy size={16} />
             </button>
           )}
 
@@ -65,16 +65,18 @@ export function DashboardHeader({
           {activeRoom?.role === "admin" && (
             <button
               onClick={onDeleteRoom}
-              className={`${styles.textButton} ${styles.deleteTextButton}`}
+              className={`${styles.iconButton} ${styles.deleteTextButton}`}
+              title="Delete room"
+              aria-label="Delete room"
             >
-              Delete Room
+              <Trash2 size={16} />
             </button>
           )}
         </div>
       </div>
       <div className={styles.actions}>
         <button type="button" onClick={onAddEvent} className={styles.addButton}>
-          + Add Event
+          <Plus size={17} /> Add event
         </button>
         <button
           type="button"

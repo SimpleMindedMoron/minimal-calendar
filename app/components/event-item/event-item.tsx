@@ -9,9 +9,11 @@ export function EventItem({
   event: CalendarEvent;
   onDelete: (id: string) => void;
 }) {
+  const eventStyle = styles[event.event_type.toLowerCase()] ?? styles.custom;
+
   return (
     <article className={styles.item}>
-      <span className={`${styles.indicator} ${styles[event.event_type]}`} />
+      <span className={`${styles.indicator} ${eventStyle}`} />
       <div className={styles.details}>
         <h3 className={styles.title}>{event.title}</h3>
         <p className={styles.type}>{event.event_type}</p>

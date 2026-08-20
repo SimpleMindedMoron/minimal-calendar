@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { LoginForm } from "../components/login-form/login-form";
 import styles from "./page.module.css";
 import { supabase } from "../../lib/supabase";
-import { RoomDialog } from "./components/room-dialog/room-dialog";
 
 type Message = { text: string; type: "error" | "success" } | null;
 

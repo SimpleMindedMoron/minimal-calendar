@@ -1,4 +1,4 @@
-export type EventType = "exam" | "quiz" | "study";
+export type EventType = string;
 
 export type Room = {
   id: string;

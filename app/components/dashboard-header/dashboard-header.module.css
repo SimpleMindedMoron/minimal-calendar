@@ -1,114 +1,17 @@
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 1rem;
-  margin-bottom: 3.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.title {
-  margin: 0 0 0.25rem;
-  color: var(--text-main);
-  font-family: var(--font-serif);
-  font-size: 2.25rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-.subtitle {
-  margin: 0;
-  color: var(--gold);
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
-  font-style: italic;
-  letter-spacing: 0.02em;
-}
-
-.roomControls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.75rem;
-}
-
-.roomSelector {
-  padding: 0.35rem 0;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--gold);
-  color: var(--text-main);
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
-  cursor: pointer;
-  outline: none;
-}
-
-.roomSelector option {
-  background: var(--bg-dark);
-  color: var(--text-main);
-}
-
-.textButton {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 0.65rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-  transition: color 0.3s var(--ease-cinematic);
-}
-
-.textButton:hover {
-  color: var(--gold);
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.addButton {
-  padding: 0.5rem 1.25rem;
-  border: 1px solid var(--gold);
-  border-radius: 4px;
-  background: transparent;
-  color: var(--gold);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.4s var(--ease-cinematic);
-}
-
-.addButton:hover {
-  background: var(--gold);
-  color: var(--bg-dark);
-}
-
-.signOutButton {
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  padding: 0;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: var(--surface);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.4s var(--ease-cinematic);
-}
-
-.signOutButton:hover {
-  border-color: var(--text-main);
-  color: var(--text-main);
-}
-.deleteTextButton:hover {
-  color: var(--event-exam); /* Deep Bordeaux Red */
-}
+.header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; margin-bottom: clamp(2rem, 5vw, 4rem); padding-bottom: 1.5rem; }
+.title { margin: 0 0 0.25rem; color: var(--text-main); font-family: var(--font-tanker); font-size: clamp(2.35rem, 6vw, 4.25rem); font-weight: 400; letter-spacing: -0.035em; line-height: 0.95; }
+.subtitle { margin: 0; color: var(--text-muted); font-size: 0.95rem; }
+.roomControls, .actions { display: flex; align-items: center; gap: 0.65rem; }
+.roomControls { margin-top: 1rem; flex-wrap: wrap; }
+.roomSelector { max-width: 14rem; padding: 0.6rem 2rem 0.6rem 0.8rem; border: 0; border-radius: var(--radius-sm); background: var(--surface-quiet); color: var(--text-soft); font-size: 0.85rem; transition: background-color 180ms var(--ease-soft); }
+.roomSelector:hover { background: var(--surface-raised); }
+.roomSelector option { background: var(--surface); color: var(--text-main); }
+.iconButton { display: grid; width: 2.3rem; height: 2.3rem; place-items: center; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--text-muted); transition: background-color 160ms var(--ease-soft), color 160ms var(--ease-soft), transform 160ms var(--ease-out); }
+.iconButton:hover { background: var(--surface-raised); color: var(--primary-strong); transform: translateY(-1px); }
+.deleteTextButton:hover { color: var(--event-exam); }
+.addButton { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.72rem 1rem; border: 0; border-radius: var(--radius-sm); background: var(--primary); color: var(--primary-ink); font-size: 0.84rem; font-weight: 600; transition: background-color 180ms var(--ease-soft), transform 180ms var(--ease-out); }
+.addButton:hover { background: var(--primary-strong); transform: translateY(-2px); }
+.addButton:active { transform: translateY(0) scale(0.97); }
+.signOutButton { display: grid; width: 2.55rem; height: 2.55rem; place-items: center; padding: 0; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-muted); transition: background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out); }
+.signOutButton:hover { background: var(--surface-raised); color: var(--text-main); transform: translateY(-1px); }
+@media (max-width: 650px) { .header { align-items: flex-start; flex-direction: column; } .actions { width: 100%; justify-content: space-between; } }

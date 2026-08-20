@@ -11,14 +11,14 @@ type Props = {
 export function EventDialog({ isOpen, onClose, onSave }: Props) {
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("10:00");
-  const [type, setType] = useState<EventType>("exam");
+  const [type, setType] = useState<EventType>("General");
   if (!isOpen) return null;
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (await onSave(title, time, type)) {
       setTitle("");
       setTime("10:00");
-      setType("exam");
+      setType("General");
       onClose();
     }
   };
@@ -55,14 +55,13 @@ export function EventDialog({ isOpen, onClose, onSave }: Props) {
             </label>
             <label className={styles.field}>
               Type
-              <select
+              <input
+                type="text"
+                required
+                placeholder="e.g. Lecture"
                 value={type}
-                onChange={(event) => setType(event.target.value as EventType)}
-              >
-                <option value="exam">Exam</option>
-                <option value="quiz">Quiz</option>
-                <option value="study">Study Session</option>
-              </select>
+                onChange={(event) => setType(event.target.value)}
+              />
             </label>
           </div>
           <div className={styles.actions}>
