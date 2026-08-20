@@ -15,7 +15,6 @@ import type { CalendarEvent, EventType, Room } from "./types/calendar";
 export default function Home() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
 
   // Room State
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -30,20 +29,18 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
+  // Fetch the user (guaranteed to exist by Middleware) and their rooms
   useEffect(() => {
     void (async () => {
       const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session) {
-        router.push("/login");
-      } else {
-        setUserId(session.user.id);
-        await fetchRooms(session.user.id);
-        setIsAuthChecking(false);
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+        await fetchRooms(user.id);
       }
     })();
-  }, [router]);
+  }, []);
 
   const fetchRooms = async (currentUserId: string) => {
     const { data, error } = await supabase
@@ -103,9 +100,10 @@ export default function Home() {
     setLoading(false);
   }, [selectedDate, activeRoom, rooms]);
 
+  // Refetch events whenever the date, active room, or room list changes
   useEffect(() => {
-    if (!isAuthChecking) void fetchEvents();
-  }, [fetchEvents, isAuthChecking]);
+    if (userId) void fetchEvents();
+  }, [fetchEvents, userId]);
 
   const handleAddEvent = async (
     title: string,
@@ -169,8 +167,8 @@ export default function Home() {
       console.error("Error deleting room:", error);
       alert("Failed to delete room.");
     } else {
-      setActiveRoom(null); // Reset to "All Rooms" view
-      if (userId) await fetchRooms(userId); // Refresh the room list
+      setActiveRoom(null);
+      if (userId) await fetchRooms(userId);
     }
   };
 
@@ -179,8 +177,9 @@ export default function Home() {
     router.push("/login");
   };
 
-  if (isAuthChecking)
-    return <div className={styles.loadingScreen}>Loading...</div>;
+  // We only render the UI once we have verified the user on the client
+  // (Middleware handles the actual hard redirect, this just prevents rendering errors)
+  if (!userId) return null;
 
   return (
     <main className={styles.dashboard}>
@@ -215,7 +214,7 @@ export default function Home() {
       <RoomDialog
         isOpen={isRoomModalOpen}
         onClose={() => setIsRoomModalOpen(false)}
-        onSuccess={() => fetchRooms(userId!)}
+        onSuccess={() => fetchRooms(userId)}
         userId={userId}
       />
     </main>
