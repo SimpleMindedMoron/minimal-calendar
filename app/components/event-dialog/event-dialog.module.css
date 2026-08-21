@@ -23,7 +23,7 @@
 .title {
   margin: 0 0 1.6rem;
   color: var(--text-main);
-  font-family: var(--font-tanker);
+  font-family: var(--font-pilcrow-rounded);
   font-size: 2rem;
   font-weight: 400;
 }

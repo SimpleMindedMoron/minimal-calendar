@@ -21,7 +21,7 @@
 }
 
 .appNameText {
-  font-family: var(--font-tanker);
+  font-family: var(--font-pilcrow-rounded);
   font-size: 1.3rem;
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -59,7 +59,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-faint);
-  font-family: var(--font-sans, system-ui);
+  font-family: var(--font-archivo);
 }
 
 /* ── Room actions ────────────────────────────────────────────────────── */

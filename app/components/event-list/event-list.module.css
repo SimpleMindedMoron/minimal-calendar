@@ -32,7 +32,7 @@
 }
 
 .dayHeading {
-  font-family: var(--font-tanker);
+  font-family: var(--font-pilcrow-rounded);
   font-size: clamp(2.8rem, 5vw, 4.5rem);
   font-weight: 400;
   line-height: 0.9;

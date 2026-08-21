@@ -35,7 +35,7 @@
 
 .captionLabel {
   color: var(--text-primary);
-  font-family: var(--font-tanker);
+  font-family: var(--font-pilcrow-rounded);
   font-size: 1rem;
   font-weight: 400;
   letter-spacing: 0.01em;
