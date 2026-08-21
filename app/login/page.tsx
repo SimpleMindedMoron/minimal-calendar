@@ -44,19 +44,19 @@ export default function Login() {
   };
 
   return (
-    <div className={styles.appShell}>
+    <div className={styles.appShell} style={{ minHeight: "100vh", alignItems: "center" }}>
       <div
         className={styles.page}
-        style={{ maxWidth: "600px", marginTop: "10vh" }}
+        style={{ maxWidth: "400px", width: "100%" }}
       >
         {/* Same Letterhead as the main app */}
-        <div className={styles.letterhead}>
+        <div className={styles.letterhead} style={{ justifyContent: "center", borderBottom: "none", marginBottom: "32px", paddingBottom: 0 }}>
           <div className={styles.mark}>
-            <div>
-              <div className={styles.roomSelectWrapper}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+              <div className={styles.roomSelectWrapper} style={{ justifyContent: "center" }}>
                 <h1>Align</h1>
               </div>
-              <div className={styles.sub}>
+              <div className={styles.sub} style={{ justifyContent: "center" }}>
                 <span>Shared calendar platform</span>
               </div>
             </div>

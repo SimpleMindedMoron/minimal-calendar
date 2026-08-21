@@ -5,8 +5,6 @@
   margin-bottom: 18px;
 }
 
-
-
 .nav {
   display: flex;
   align-items: center;
@@ -17,9 +15,9 @@
 }
 
 .nav button {
-  background: none;
-  border: 1px solid var(--rule);
-  color: var(--ink-dim);
+  background: var(--surface);
+  border: 2px solid var(--rule);
+  color: var(--ink);
   width: 24px;
   height: 24px;
   border-radius: 4px;
@@ -28,30 +26,35 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.1s;
+  box-shadow: 2px 2px 0px 0px var(--rule);
 }
 
 .nav button:hover {
   background: var(--surface-raised);
-  color: var(--ink);
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
 .addBtn {
   font-family: 'Archivo', sans-serif !important;
   font-size: 11px !important;
   letter-spacing: 0.04em;
-  color: var(--bg) !important;
+  color: var(--ink) !important;
   background: var(--gold) !important;
-  border: none !important;
+  border: 2px solid var(--rule) !important;
   padding: 8px 14px !important;
-  border-radius: 5px !important;
+  border-radius: 4px !important;
   cursor: pointer;
   width: auto !important;
   height: auto !important;
+  box-shadow: 2px 2px 0px 0px var(--rule);
+  transition: all 0.1s;
 }
 
 .addBtn:hover {
-  opacity: 0.9;
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
 .weekdays {
@@ -90,8 +93,8 @@
 }
 
 .cell {
-  border-top: 1px solid var(--rule-soft);
-  border-right: 1px solid var(--rule-soft);
+  border-top: 2px solid var(--rule);
+  border-right: 2px solid var(--rule);
   padding: 7px 8px;
   position: relative;
   cursor: pointer;
@@ -166,21 +169,25 @@
 .tabExam {
   background: var(--exam-dim);
   color: var(--exam);
+  border: 1px solid var(--rule);
 }
 
 .tabQuiz {
   background: var(--quiz-dim);
   color: var(--quiz);
+  border: 1px solid var(--rule);
 }
 
 .tabStudy {
   background: var(--study-dim);
   color: var(--study);
+  border: 1px solid var(--rule);
 }
 
 .tabGeneral {
-  background: var(--rule-soft);
+  background: var(--surface-raised);
   color: var(--ink);
+  border: 1px solid var(--rule);
 }
 
 .additionalDots {
@@ -282,15 +289,15 @@
   top: calc(100% + 8px);
   left: 0;
   background: var(--surface-raised, #1a1a1a);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
+  border: 2px solid var(--rule);
+  border-radius: 4px;
   padding: 8px;
   display: flex;
   flex-direction: column;
   gap: 0;
   width: 222px;
   z-index: 100;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: 4px 4px 0px 0px var(--rule);
   animation: dropdown-in 0.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
@@ -336,9 +343,9 @@
 }
 
 .backBtn {
-  background: none;
-  border: 1px solid var(--rule);
-  color: var(--ink-dim);
+  background: var(--surface);
+  border: 2px solid var(--rule);
+  color: var(--ink);
   width: 24px;
   height: 24px;
   border-radius: 4px;
@@ -347,15 +354,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.1s;
   flex-shrink: 0;
   width: 24px !important;
   height: 24px !important;
+  box-shadow: 2px 2px 0px 0px var(--rule);
 }
 
 .backBtn:hover {
-  background: rgba(203, 184, 158, 0.08);
-  color: var(--ink);
+  background: var(--surface-raised);
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
 .yearViewTitle {
@@ -395,8 +404,13 @@
   background: var(--rule);
 }
 
-.yearRail::before { top: calc(50% - 18px); }
-.yearRail::after  { top: calc(50% + 18px); }
+.yearRail::before {
+  top: calc(50% - 18px);
+}
+
+.yearRail::after {
+  top: calc(50% + 18px);
+}
 
 /* Gradient mask fades items above and below center */
 .yearWheel {
@@ -408,31 +422,30 @@
   overscroll-behavior: contain;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0,0,0,0.45) 20%,
-    black 36%,
-    black 64%,
-    rgba(0,0,0,0.45) 80%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0,0,0,0.45) 20%,
-    black 36%,
-    black 64%,
-    rgba(0,0,0,0.45) 80%,
-    transparent 100%
-  );
+  -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.45) 20%,
+      black 36%,
+      black 64%,
+      rgba(0, 0, 0, 0.45) 80%,
+      transparent 100%);
+  mask-image: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.45) 20%,
+      black 36%,
+      black 64%,
+      rgba(0, 0, 0, 0.45) 80%,
+      transparent 100%);
 }
 
-.yearWheel::-webkit-scrollbar { display: none; }
+.yearWheel::-webkit-scrollbar {
+  display: none;
+}
 
 /* Top & bottom spacers let the first/last year scroll to center */
 .yearSpacer {
-  height: 72px; /* 2 * ITEM_HEIGHT — keeps first/last items reachable */
+  height: 72px;
+  /* 2 * ITEM_HEIGHT — keeps first/last items reachable */
   flex-shrink: 0;
 }
 
@@ -480,6 +493,7 @@
     opacity: 0;
     transform: translateY(-4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -489,10 +503,10 @@
 .monthOption {
   font-family: 'Archivo', sans-serif;
   font-size: 10.5px;
-  color: var(--bg);
-  background: var(--gold);
-  border: 1px solid var(--gold);
-  border-radius: 5px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid transparent;
+  border-radius: 4px;
   padding: 6px 4px;
   cursor: pointer;
   text-align: center;
@@ -510,8 +524,8 @@
 
 .monthOptionActive {
   background: var(--gold);
-  border-color: var(--gold);
-  color: var(--bg);
+  border-color: var(--rule);
+  color: var(--ink);
   font-weight: 600;
-  box-shadow: 0 0 0 2px rgba(203, 184, 158, 0.35);
+  box-shadow: 2px 2px 0px 0px var(--rule);
 }

@@ -22,32 +22,32 @@
 /* ── Colour Tokens ───────────────────────────────────────────────────── */
 :root {
   /* Backgrounds */
-  --bg:            #0C0C0C;   /* Onyx */
-  --bg-warm:       #1D2530;   /* Midnight Blue */
-  --surface:       #1D2530;   /* Midnight Blue */
-  --surface-raised:#2F2320;   /* Umber */
+  --bg: #121212;
+  --bg-warm: #121212;
+  --surface: #1e1e1e;
+  --surface-raised: #2c2c2c;
 
   /* Ink */
-  --ink:           #CBB89E;   /* Champagne */
-  --ink-dim:       rgba(203, 184, 158, 0.7); /* Champagne dimmed */
-  --ink-faint:     rgba(203, 184, 158, 0.4); /* Champagne faint */
+  --ink: #f4f4f0;
+  --ink-dim: #a0a0a0;
+  --ink-faint: #666666;
 
-  /* Rules / borders - using translucent Champagne for visibility */
-  --rule:          rgba(203, 184, 158, 0.2); 
-  --rule-soft:     rgba(203, 184, 158, 0.1); 
+  /* Rules / borders */
+  --rule: #f4f4f0;
+  --rule-soft: #444444;
 
-  /* Event types - Brightened for legibility as text/icons */
-  --exam:          #E2878B;   /* Brightened Burgundy */
-  --exam-dim:      #6A2428;   /* Base Burgundy */
-  
-  --quiz:          #89B399;   /* Brightened Moss Green */
-  --quiz-dim:      #2B3D32;   /* Base Moss Green */
-  
-  --study:         #D99C8D;   /* Brightened Umber */
-  --study-dim:     #2F2320;   /* Base Umber */
+  /* Event types (Neobrutalism Pop Colors) */
+  --exam: #121212; /* Dark text for events */
+  --exam-dim: #ff90e8; /* Pink background */
+
+  --quiz: #121212;
+  --quiz-dim: #bde0fe; /* Mint background */
+
+  --study: #121212;
+  --study-dim: #ffc900; /* Yellow background */
 
   /* Accent */
-  --gold:          #CBB89E;   /* Champagne */
+  --gold: #ffc900; /* Yellow accent */
 }
 
 /* ══════════════════════════════════════════════════════════════════════
