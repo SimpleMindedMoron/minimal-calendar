@@ -15,14 +15,34 @@
   width: min(100%, 32rem);
   padding: clamp(1.4rem, 4vw, 2.25rem);
   border: 1px solid var(--rule);
-  border-radius: 24px;
+  border-radius: 12px;
   background: var(--surface);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(203, 184, 158, 0.05);
   animation: dialog-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .header {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.3rem;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid var(--rule);
+  color: var(--ink-dim);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  background: var(--surface-raised);
+  color: var(--ink);
 }
 
 .badge {
@@ -30,7 +50,7 @@
   align-items: center;
   gap: 6px;
   padding: 3px 8px;
-  border-radius: 8px;
+  border-radius: 4px;
   background: rgba(203, 184, 158, 0.1);
   border: 1px solid var(--rule);
   color: var(--gold);
@@ -58,14 +78,59 @@
   line-height: 1.5;
 }
 
-.body {
-  display: grid;
-  gap: 1.25rem;
+.roomTagBanner {
+  margin-top: 6px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 12px;
+  color: var(--ink-dim);
 }
 
-.roomSelectSection {
+.roomTagBanner strong {
+  color: var(--gold);
+}
+
+.body {
   display: grid;
-  gap: 0.4rem;
+  gap: 1.15rem;
+}
+
+/* Current Room Inline */
+.currentRoomInline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.currentRoomLabel {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.currentRoomBadge {
+  font-family: 'Pilcrow Rounded', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold);
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  padding: 3px 9px;
+  border-radius: 5px;
+  letter-spacing: 0.02em;
+}
+
+/* Code Section */
+.codeSection {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.codeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .label {
@@ -76,44 +141,6 @@
   text-transform: uppercase;
 }
 
-.select {
-  width: 100%;
-  min-height: 2.6rem;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'Archivo', sans-serif;
-  font-size: 13px;
-  cursor: pointer;
-  transition: border-color 0.2s, background-color 0.2s;
-}
-
-.select:focus {
-  outline: none;
-  border-color: var(--gold);
-  background: var(--surface-raised);
-}
-
-.codeSection {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.codeHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.roomTag {
-  font-family: 'Archivo', sans-serif;
-  font-size: 11px;
-  color: var(--gold);
-  font-weight: 500;
-}
-
 .codeBox {
   display: flex;
   align-items: center;
@@ -121,7 +148,7 @@
   gap: 10px;
   padding: 8px 10px 8px 14px;
   border: 1px solid var(--rule);
-  border-radius: 16px;
+  border-radius: 8px;
   background: var(--bg);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
 }
@@ -140,7 +167,7 @@
   align-items: center;
   gap: 6px;
   padding: 7px 12px;
-  border-radius: 12px;
+  border-radius: 5px;
   border: 1px solid var(--rule);
   background: var(--surface-raised);
   color: var(--ink);
@@ -159,17 +186,18 @@
   border-color: var(--gold);
 }
 
-.copyButton.copied {
-  background: var(--quiz-dim, #2B3D32);
-  color: var(--quiz, #89B399);
-  border-color: var(--quiz, #89B399);
+.copyButton.copied,
+.secondaryActionBtn.copied {
+  background: var(--quiz-dim, #2B3D32) !important;
+  color: var(--quiz, #89B399) !important;
+  border-color: var(--quiz, #89B399) !important;
 }
 
 .instructions {
   display: grid;
   gap: 0.6rem;
   padding: 12px 14px;
-  border-radius: 16px;
+  border-radius: 8px;
   background: rgba(203, 184, 158, 0.03);
   border: 1px solid var(--rule-soft);
 }
@@ -204,41 +232,288 @@
   margin-top: 1px;
 }
 
+/* Option Cards for View 2 */
+.optionCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--rule-soft);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.optionCard:hover {
+  background: var(--surface-raised);
+  border-color: var(--rule);
+}
+
+.optionCardColumn {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--rule-soft);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.optionCardColumn:hover {
+  border-color: var(--rule);
+}
+
+.optionCardToggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.optionInfo {
+  display: grid;
+  gap: 2px;
+}
+
+.optionTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.optionIcon {
+  color: var(--gold);
+}
+
+.optionTitle {
+  font-family: 'Archivo', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.optionDesc {
+  margin: 0;
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  color: var(--ink-dim);
+  line-height: 1.35;
+}
+
+.secondaryActionBtn,
+.expandBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: 1px solid var(--rule);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font-family: 'Archivo', sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.secondaryActionBtn:hover,
+.expandBtn:hover {
+  background: var(--gold);
+  color: var(--bg);
+  border-color: var(--gold);
+}
+
+/* Email Form Sub-section */
+.emailFormArea {
+  display: grid;
+  gap: 0.6rem;
+  padding: 12px 14px 14px;
+  border-top: 1px solid var(--rule-soft);
+  background: rgba(12, 12, 12, 0.5);
+  animation: fade-in 150ms ease-out both;
+}
+
+.emailTextarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Archivo', sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  resize: vertical;
+  min-height: 52px;
+}
+
+.emailTextarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: var(--surface-raised);
+}
+
+.emailActionsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gmailSendButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 5px;
+  border: none;
+  background: var(--gold);
+  color: var(--bg);
+  font-family: 'Archivo', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gmailSendButton:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.gmailSendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.emailSentNotice {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 11.5px;
+  color: var(--quiz, #89B399);
+}
+
+/* Access Control Box */
+.accessControlBox {
+  display: grid;
+  gap: 0.5rem;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(203, 184, 158, 0.03);
+  border: 1px solid var(--rule-soft);
+}
+
+.accessHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.toggleGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.toggleBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--ink-dim);
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toggleBtn:hover {
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+
+.toggleBtnActive {
+  background: var(--surface-raised);
+  border-color: var(--gold);
+  color: var(--gold);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--gold);
+}
+
+.accessDesc {
+  margin: 0;
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  color: var(--ink-dim);
+  line-height: 1.35;
+}
+
+/* Modal Action Footers */
 .actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 0.5rem;
-  flex-wrap: wrap;
+  margin-top: 0.3rem;
 }
 
-.secondaryButton {
+.sendInviteMainBtn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--gold);
+  background: var(--surface-raised);
+  color: var(--gold);
+  font-family: 'Archivo', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sendInviteMainBtn:hover {
+  background: var(--gold);
+  color: var(--bg);
+  transform: translateY(-1px);
+}
+
+.cancelBtn {
+  padding: 7px 14px;
+  border-radius: 6px;
   border: 1px solid var(--rule);
   background: transparent;
   color: var(--ink-dim);
-  border-radius: 12px;
   font-family: 'Archivo', sans-serif;
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.secondaryButton:hover {
+.cancelBtn:hover {
   background: var(--surface-raised);
   color: var(--ink);
 }
 
 .doneButton {
-  padding: 8px 18px;
+  padding: 8px 20px;
   border: none;
   background: var(--gold);
   color: var(--bg);
-  border-radius: 12px;
+  border-radius: 6px;
   font-family: 'Archivo', sans-serif;
   font-size: 13px;
   font-weight: 500;
