@@ -5,8 +5,6 @@
   margin-bottom: 18px;
 }
 
-<<<<<<< Updated upstream
-=======
 .monthNavGroup {
   display: flex;
   align-items: center;
@@ -33,7 +31,6 @@
   color: var(--ink);
 }
 
->>>>>>> Stashed changes
 .nav {
   display: flex;
   align-items: center;
@@ -43,7 +40,6 @@
   color: var(--ink-faint);
 }
 
-<<<<<<< Updated upstream
 .nav button {
   background: var(--surface);
   border: 2px solid var(--rule);
@@ -65,8 +61,6 @@
   transform: translate(2px, 2px);
   box-shadow: 0px 0px 0px 0px var(--rule);
 }
-=======
->>>>>>> Stashed changes
 
 .addBtn {
   font-family: 'Archivo', sans-serif !important;

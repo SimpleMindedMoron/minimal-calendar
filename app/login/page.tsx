@@ -22,9 +22,9 @@ export default function Login() {
       error
         ? { text: error.message, type: "error" }
         : {
-            text: "Success! Check your email to confirm your account.",
-            type: "success",
-          },
+          text: "Success! Check your email to confirm your account.",
+          type: "success",
+        },
     );
     setLoading(false);
   };
@@ -45,14 +45,10 @@ export default function Login() {
   };
 
   return (
-<<<<<<< Updated upstream
     <div className={styles.appShell} style={{ minHeight: "100vh", alignItems: "center" }}>
-=======
-    <div className={styles.appShell}>
       <Link href="/" className={styles.cornerLogo} title="Home">
         A
       </Link>
->>>>>>> Stashed changes
       <div
         className={styles.page}
         style={{ maxWidth: "400px", width: "100%" }}
