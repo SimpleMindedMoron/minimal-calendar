@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { LoginForm } from "../components/login-form/login-form";
 import styles from "../page.module.css";
 import { supabase } from "../../lib/supabase";
@@ -44,7 +45,14 @@ export default function Login() {
   };
 
   return (
+<<<<<<< Updated upstream
     <div className={styles.appShell} style={{ minHeight: "100vh", alignItems: "center" }}>
+=======
+    <div className={styles.appShell}>
+      <Link href="/" className={styles.cornerLogo} title="Home">
+        A
+      </Link>
+>>>>>>> Stashed changes
       <div
         className={styles.page}
         style={{ maxWidth: "400px", width: "100%" }}

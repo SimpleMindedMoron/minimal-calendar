@@ -3,10 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { format, addDays, startOfDay } from "date-fns";
 import { useRouter } from "next/navigation";
-import { LogOut, Plus, Settings, ChevronDown } from "lucide-react";
+import Link from "next/link";
+import { LogOut, Plus, Settings, ChevronDown, UserPlus } from "lucide-react";
 import { CalendarPanel } from "./components/calendar-panel/calendar-panel";
 import { EventDialog } from "./components/event-dialog/event-dialog";
 import { RoomDialog } from "./components/room-dialog/room-dialog";
+import { InviteDialog } from "./components/invite-dialog/invite-dialog";
 import { EventList } from "./components/event-list/event-list";
 import styles from "./page.module.css";
 import { supabase } from "../lib/supabase";
@@ -20,6 +22,7 @@ export default function Home() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [activeRoom, setActiveRoom] = useState<Room | null>(null);
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUpcomingExpanded, setIsUpcomingExpanded] = useState(false);
 
@@ -158,10 +161,17 @@ export default function Home() {
 
   return (
     <div className={styles.appShell}>
+      <Link 
+        href="/" 
+        className={styles.cornerLogo} 
+        onClick={() => setActiveRoom(null)}
+        title="Home"
+      >
+        A
+      </Link>
       <div className={styles.page}>
         <div className={styles.letterhead}>
           <div className={styles.mark}>
-            <div className={styles.markGlyph}>Lg</div>
             <div>
               <div 
                 className={styles.roomSelectWrapper} 
@@ -199,6 +209,9 @@ export default function Home() {
             </div>
           </div>
           <div className={styles.headerActions}>
+            <button className={styles.inviteBtn} onClick={() => setIsInviteModalOpen(true)}>
+              <UserPlus size={14} /> Invite
+            </button>
             <button className={styles.headerBtn} onClick={() => setIsRoomModalOpen(true)}>
               <Settings size={12} /> Manage
             </button>
@@ -283,6 +296,12 @@ export default function Home() {
         onClose={() => setIsRoomModalOpen(false)}
         onSuccess={() => fetchRooms(userId)}
         userId={userId}
+      />
+      <InviteDialog
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
+        activeRoom={activeRoom}
+        rooms={rooms}
       />
     </div>
   );

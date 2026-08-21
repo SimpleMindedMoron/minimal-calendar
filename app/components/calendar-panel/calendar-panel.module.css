@@ -1,10 +1,39 @@
 .panelHead {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   margin-bottom: 18px;
 }
 
+<<<<<<< Updated upstream
+=======
+.monthNavGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.arrowBtn {
+  background: none;
+  border: 1px solid var(--rule);
+  color: var(--ink-dim);
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.arrowBtn:hover {
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+
+>>>>>>> Stashed changes
 .nav {
   display: flex;
   align-items: center;
@@ -14,6 +43,7 @@
   color: var(--ink-faint);
 }
 
+<<<<<<< Updated upstream
 .nav button {
   background: var(--surface);
   border: 2px solid var(--rule);
@@ -35,6 +65,8 @@
   transform: translate(2px, 2px);
   box-shadow: 0px 0px 0px 0px var(--rule);
 }
+=======
+>>>>>>> Stashed changes
 
 .addBtn {
   font-family: 'Archivo', sans-serif !important;
