@@ -12,7 +12,7 @@
 
 .letterhead {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-end;
   padding-bottom: 22px;
   border-bottom: 1px solid var(--rule);
@@ -25,32 +25,19 @@
   gap: 14px;
 }
 
-.markGlyph {
-  width: 38px;
-  height: 38px;
-  border: 1px solid var(--gold);
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Fraunces', serif;
-  font-style: italic;
-  font-size: 19px;
-  color: var(--gold);
-}
-
 .letterhead h1 {
-  font-family: 'Fraunces', serif;
+  font-family: 'Pilcrow Rounded', sans-serif;
   font-weight: 500;
   font-size: 26px;
   letter-spacing: -0.01em;
   display: flex;
   align-items: center;
+  justify-self: center;
   gap: 12px;
 }
 
 .letterhead .sub {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Archivo', sans-serif;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -58,6 +45,7 @@
   margin-top: 4px;
   display: flex;
   align-items: center;
+  text-align: center;
   gap: 12px;
 }
 
@@ -78,7 +66,9 @@
   border: 1px solid var(--rule);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.03);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .sidebar {
@@ -92,11 +82,13 @@
   border: 1px solid var(--rule);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.03);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .upcomingTitle {
-  font-family: 'Fraunces', serif;
+  font-family: 'Pilcrow Rounded', sans-serif;
   font-style: italic;
   font-size: 20px;
   font-weight: 500;
@@ -119,7 +111,7 @@
 }
 
 .upcomingDate {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Archivo', sans-serif;
   font-size: 11px;
   color: var(--ink-dim);
   width: 45px;
@@ -131,20 +123,20 @@
 }
 
 .upcomingName {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 14px;
   color: var(--ink);
   font-weight: 500;
 }
 
 .upcomingTime {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Archivo', sans-serif;
   font-size: 11px;
   color: var(--ink-faint);
 }
 
 .emptyUpcoming {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 13px;
   color: var(--ink-dim);
   font-style: italic;
@@ -154,7 +146,7 @@
   background: transparent;
   border: none;
   color: var(--gold);
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Archivo', sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -177,7 +169,7 @@
   border-radius: 4px;
   font-size: 12px;
   padding: 4px 8px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -200,12 +192,14 @@
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   cursor: pointer;
   user-select: none;
 }
 .roomSelectWrapper:hover h1 {
   color: var(--gold);
+  font-weight: 900;
 }
 .dropdownIcon {
   color: var(--ink-dim);
@@ -225,7 +219,7 @@
   border-radius: 8px;
   padding: 8px;
   min-width: 200px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -235,15 +229,21 @@
 }
 
 @keyframes dropdown-in {
-  from { opacity: 0; transform: scaleY(0.95) translateY(-5px); }
-  to { opacity: 1; transform: scaleY(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scaleY(0.95) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
 }
 
 .roomOption {
   background: transparent;
   border: none;
   color: var(--ink);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 14px;
   text-align: left;
   padding: 8px 12px;

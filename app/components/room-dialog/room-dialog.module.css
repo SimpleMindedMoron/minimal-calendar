@@ -28,7 +28,7 @@
 .title {
   margin: 0;
   color: var(--ink);
-  font-family: 'Fraunces', serif;
+  font-family: 'Pilcrow Rounded', sans-serif;
   font-style: italic;
   font-size: 26px;
   font-weight: 500;
@@ -37,7 +37,7 @@
 .subtitle {
   margin: 0.4rem 0 0;
   color: var(--ink-dim);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 13px;
 }
 
@@ -54,7 +54,7 @@
   border: 0;
   background: transparent;
   color: var(--ink-faint);
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Archivo', sans-serif;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -88,7 +88,7 @@
   display: grid;
   gap: 0.42rem;
   color: var(--ink-faint);
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Archivo', sans-serif;
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -102,7 +102,7 @@
   border-radius: 6px;
   background: var(--bg);
   color: var(--ink);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 14px;
   transition: border-color 0.2s, background-color 0.2s;
 }
@@ -126,7 +126,7 @@
   min-height: 2.65rem;
   padding: 0.55rem 1.2rem;
   border-radius: 6px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 13px;
   font-weight: 500;
   transition: all 0.2s;

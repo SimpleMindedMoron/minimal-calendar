@@ -1,3 +1,23 @@
+
+@font-face {
+  font-family: 'Archivo';
+  src: url('/fonts/Archivo-Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Archivo';
+  src: url('/fonts/Archivo-VariableItalic.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Pilcrow Rounded';
+  src: url('/fonts/PilcrowRounded-Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
 /* ── Font Variables ──────────────────────────────────────────────────── */
 :root {
   --bg: #17151B;
@@ -42,7 +62,7 @@ body {
     radial-gradient(ellipse at top left, rgba(201, 161, 90, 0.05), transparent 45%),
     radial-gradient(ellipse at bottom right, rgba(126, 160, 196, 0.04), transparent 50%);
   color: var(--ink);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

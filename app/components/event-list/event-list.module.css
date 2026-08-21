@@ -6,7 +6,7 @@
 }
 
 .panelHead h2 {
-  font-family: 'Fraunces', serif;
+  font-family: 'Pilcrow Rounded', sans-serif;
   font-style: italic;
   font-weight: 500;
   font-size: 18px;
@@ -14,7 +14,7 @@
 }
 
 .dateArrow {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Archivo', sans-serif;
   font-size: 10px;
   color: var(--ink-faint);
   text-transform: uppercase;
@@ -40,7 +40,7 @@
 }
 
 .agendaTime {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Archivo', sans-serif;
   font-size: 10.5px;
   color: var(--ink-faint);
   width: 56px;
@@ -53,7 +53,7 @@
 }
 
 .title {
-  font-family: 'Fraunces', serif;
+  font-family: 'Pilcrow Rounded', sans-serif;
   font-size: 15px;
   color: var(--ink);
   margin-bottom: 4px;
@@ -63,7 +63,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Archivo', sans-serif;
   font-size: 10px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -106,7 +106,7 @@
 .emptyState {
   padding: 32px 0;
   text-align: center;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 12px;
   color: var(--ink-dim);
 }

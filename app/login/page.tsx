@@ -27,7 +27,7 @@ export default function Login() {
     );
     setLoading(false);
   };
-  
+
   const signIn = async (email: string, password: string) => {
     setLoading(true);
     setMessage(null);
@@ -45,15 +45,16 @@ export default function Login() {
 
   return (
     <div className={styles.appShell}>
-      <div className={styles.page} style={{ maxWidth: "600px", marginTop: "10vh" }}>
-        
+      <div
+        className={styles.page}
+        style={{ maxWidth: "600px", marginTop: "10vh" }}
+      >
         {/* Same Letterhead as the main app */}
         <div className={styles.letterhead}>
           <div className={styles.mark}>
-            <div className={styles.markGlyph}>Lg</div>
             <div>
               <div className={styles.roomSelectWrapper}>
-                <h1>Agendly</h1>
+                <h1>Align</h1>
               </div>
               <div className={styles.sub}>
                 <span>Shared calendar platform</span>
@@ -71,7 +72,6 @@ export default function Login() {
             onSignUp={signUp}
           />
         </div>
-
       </div>
     </div>
   );
