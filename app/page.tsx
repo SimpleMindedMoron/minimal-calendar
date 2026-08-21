@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { format, addDays, startOfDay } from "date-fns";
 import { useRouter } from "next/navigation";
-import { LogOut, Plus, Settings } from "lucide-react";
+import { LogOut, Plus, Settings, ChevronDown } from "lucide-react";
 import { CalendarPanel } from "./components/calendar-panel/calendar-panel";
 import { EventDialog } from "./components/event-dialog/event-dialog";
 import { RoomDialog } from "./components/room-dialog/room-dialog";
@@ -20,6 +20,7 @@ export default function Home() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [activeRoom, setActiveRoom] = useState<Room | null>(null);
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Calendar state
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -129,19 +130,28 @@ export default function Home() {
     else await Promise.all([fetchEvents(), fetchUpcomingEvents()]);
   };
 
-  const handleRoomChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value;
-    if (val === "all") setActiveRoom(null);
+  const handleRoomSelect = (roomId: string | null) => {
+    if (roomId === null) setActiveRoom(null);
     else {
-      const room = rooms.find(r => r.id === val);
+      const room = rooms.find(r => r.id === roomId);
       if (room) setActiveRoom(room);
     }
+    setIsDropdownOpen(false);
   };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     router.push("/login");
   };
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const closeMenu = (e: MouseEvent) => {
+      if (isDropdownOpen) setIsDropdownOpen(false);
+    };
+    if (isDropdownOpen) document.addEventListener("click", closeMenu);
+    return () => document.removeEventListener("click", closeMenu);
+  }, [isDropdownOpen]);
 
   if (!userId) return null;
 
@@ -152,19 +162,36 @@ export default function Home() {
           <div className={styles.mark}>
             <div className={styles.markGlyph}>Lg</div>
             <div>
-              <h1>
-                <select 
-                  className={styles.roomSelect} 
-                  value={activeRoom?.id || "all"} 
-                  onChange={handleRoomChange}
-                  aria-label="Select Room"
-                >
-                  <option value="all">All Rooms</option>
-                  {rooms.map(r => (
-                    <option key={r.id} value={r.id}>{r.name}</option>
-                  ))}
-                </select>
-              </h1>
+              <div 
+                className={styles.roomSelectWrapper} 
+                onClick={(e) => { e.stopPropagation(); setIsDropdownOpen(!isDropdownOpen); }}
+              >
+                <h1>{activeRoom ? activeRoom.name : "All Rooms"}</h1>
+                <ChevronDown 
+                  size={20} 
+                  className={`${styles.dropdownIcon} ${isDropdownOpen ? styles.dropdownIconOpen : ""}`} 
+                />
+                
+                {isDropdownOpen && (
+                  <div className={styles.roomDropdown}>
+                    <button 
+                      className={`${styles.roomOption} ${activeRoom === null ? styles.roomOptionActive : ""}`} 
+                      onClick={() => handleRoomSelect(null)}
+                    >
+                      All Rooms
+                    </button>
+                    {rooms.map(r => (
+                      <button 
+                        key={r.id} 
+                        className={`${styles.roomOption} ${activeRoom?.id === r.id ? styles.roomOptionActive : ""}`} 
+                        onClick={() => handleRoomSelect(r.id)}
+                      >
+                        {r.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               <div className={styles.sub}>
                 <span>Shared calendar · {rooms.length} accessible rooms</span>
                 <button className={styles.headerBtn} onClick={() => setIsRoomModalOpen(true)}>

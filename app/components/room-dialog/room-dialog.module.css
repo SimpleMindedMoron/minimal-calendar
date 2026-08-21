@@ -7,83 +7,76 @@
   display: grid;
   place-items: center;
   padding: 1rem;
-  background: rgb(18 19 17 / 82%);
-  animation: fade-in 180ms var(--ease-soft) both;
+  background: rgba(23, 21, 27, 0.82);
+  animation: fade-in 180ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .dialog {
-  width: min(100%, 29rem);
+  width: min(100%, 31rem);
   padding: clamp(1.4rem, 4vw, 2.25rem);
-  border: 0;
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
   background: var(--surface);
-  animation: dialog-in 280ms var(--ease-out) both;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+  animation: dialog-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.dialogHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+.header {
+  margin: 0 0 1.6rem;
 }
 
 .title {
   margin: 0;
-  color: var(--text-main);
-  font-family: var(--font-pilcrow-rounded);
-  font-size: 2rem;
-  font-weight: 400;
+  color: var(--ink);
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 26px;
+  font-weight: 500;
 }
 
-.intro {
-  margin: 0.35rem 0 0;
-  color: var(--text-muted);
-  font-size: 0.86rem;
-}
-
-.closeButton {
-  display: grid;
-  width: 2.15rem;
-  height: 2.15rem;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: var(--surface-quiet);
-  color: var(--text-muted);
-  transition: background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out);
-}
-
-.closeButton:hover {
-  background: var(--surface-raised);
-  color: var(--text-main);
-  transform: rotate(4deg);
+.subtitle {
+  margin: 0.4rem 0 0;
+  color: var(--ink-dim);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
 }
 
 .tabs {
   display: flex;
-  gap: 1.2rem;
+  gap: 1.5rem;
   margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--rule);
 }
 
-.tab {
-  padding: 0.42rem 0.7rem;
+.tabBtn {
+  position: relative;
+  padding: 0 0 0.6rem;
   border: 0;
-  border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--text-muted);
-  font-size: 0.82rem;
+  color: var(--ink-faint);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
   font-weight: 600;
-  transition: color 180ms var(--ease-soft), background-color 180ms var(--ease-soft);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 180ms ease;
+  cursor: pointer;
 }
-
-.tab:hover {
-  color: var(--text-soft);
+.tabBtn:hover {
+  color: var(--ink-dim);
 }
-
-.activeTab {
-  background: var(--primary-dim);
-  color: var(--primary-strong);
+.tabBtn.activeTab {
+  color: var(--gold);
+}
+.tabBtn.activeTab::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 2px 2px 0 0;
 }
 
 .form {
@@ -94,9 +87,9 @@
 .field {
   display: grid;
   gap: 0.42rem;
-  color: var(--text-muted);
-  font-size: 0.72rem;
-  font-weight: 600;
+  color: var(--ink-faint);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -105,17 +98,19 @@
   width: 100%;
   min-height: 2.75rem;
   padding: 0.65rem 0.75rem;
-  border: 0;
-  border-radius: var(--radius-sm);
-  background: var(--bg-deep);
-  color: var(--text-main);
-  font-size: 0.96rem;
-  transition: background-color 180ms var(--ease-soft);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.2s, background-color 0.2s;
 }
 
 .field input:hover,
 .field input:focus {
-  background: var(--surface-quiet);
+  background: var(--surface-raised);
+  border-color: var(--gold);
   outline: none;
 }
 
@@ -127,50 +122,49 @@
 }
 
 .cancelButton,
-.submitButton {
+.saveButton {
   min-height: 2.65rem;
-  padding: 0.55rem 1rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out);
+  padding: 0.55rem 1.2rem;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
 }
 
 .cancelButton {
-  border: 0;
+  border: 1px solid var(--rule);
   background: transparent;
-  color: var(--text-muted);
+  color: var(--ink-dim);
 }
-
 .cancelButton:hover {
   background: var(--surface-raised);
-  color: var(--text-main);
+  color: var(--ink);
 }
 
-.submitButton {
-  border: 0;
-  background: var(--primary);
-  color: var(--primary-ink);
+.saveButton {
+  border: none;
+  background: var(--gold);
+  color: var(--bg);
 }
-
-.submitButton:hover:not(:disabled) {
-  background: var(--primary-strong);
+.saveButton:hover {
+  opacity: 0.9;
   transform: translateY(-1px);
 }
-
-.submitButton:disabled {
+.saveButton:active {
+  transform: scale(0.97);
+}
+.saveButton:disabled {
+  background: var(--rule);
+  color: var(--ink-faint);
   cursor: not-allowed;
-  opacity: 0.45;
+  transform: none;
 }
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes dialog-in {
@@ -178,7 +172,6 @@
     opacity: 0;
     transform: translateY(12px) scale(0.985);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);

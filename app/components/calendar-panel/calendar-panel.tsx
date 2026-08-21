@@ -79,6 +79,14 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
     return styles.tabGeneral;
   };
 
+  const getSmallDotClass = (type: string) => {
+    const t = type.toLowerCase();
+    if (t === "exam") return styles.smallDotExam;
+    if (t === "quiz") return styles.smallDotQuiz;
+    if (t === "study") return styles.smallDotStudy;
+    return styles.smallDotGeneral;
+  };
+
   return (
     <div className={styles.calendarSection}>
       <div className={styles.panelHead}>
@@ -117,11 +125,22 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
               <span className={styles.date}>{format(cell.date!, "d")}</span>
               
               <div className={styles.tabs}>
-                {dayEvents.map(ev => (
-                  <div key={ev.id} className={`${styles.tab} ${getTabClass(ev.event_type)}`} title={ev.title}>
-                    {ev.event_type}
+                {dayEvents.length > 0 && (
+                  <div className={`${styles.tab} ${getTabClass(dayEvents[0].event_type)}`} title={dayEvents[0].title}>
+                    {dayEvents[0].event_type}
                   </div>
-                ))}
+                )}
+                {dayEvents.length > 1 && (
+                  <div className={styles.additionalDots}>
+                    {dayEvents.slice(1).map(ev => (
+                      <div 
+                        key={ev.id} 
+                        className={`${styles.smallDot} ${getSmallDotClass(ev.event_type)}`} 
+                        title={ev.title}
+                      ></div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           );

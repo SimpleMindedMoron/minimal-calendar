@@ -1,7 +1,10 @@
 .page {
-    display: grid;
-    min-height: 100vh;
-    place-items: center;
-    padding: 1.25rem;
-    background: var(--bg-dark);
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 1.25rem;
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse at top left, rgba(201,161,90,0.05), transparent 45%),
+    radial-gradient(ellipse at bottom right, rgba(126,160,196,0.04), transparent 50%);
 }
