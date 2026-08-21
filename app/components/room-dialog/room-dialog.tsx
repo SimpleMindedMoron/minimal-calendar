@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { X } from "lucide-react";
 import { supabase } from "../../../lib/supabase";
 import styles from "./room-dialog.module.css";
 
@@ -76,19 +75,15 @@ export function RoomDialog({ isOpen, onClose, onSuccess, userId }: Props) {
   return (
     <div className={styles.backdrop} role="presentation">
       <div className={styles.dialog} role="dialog" aria-modal="true" aria-labelledby="room-dialog-title">
-        <div className={styles.dialogHeader}>
-          <div>
-            <h2 id="room-dialog-title" className={styles.title}>Your rooms</h2>
-            <p className={styles.intro}>Create a shared space or join one with an invite code.</p>
-          </div>
-          <button type="button" className={styles.closeButton} onClick={onClose} aria-label="Close rooms" title="Close">
-            <X size={18} />
-          </button>
+        <div className={styles.header}>
+          <h2 id="room-dialog-title" className={styles.title}>Your rooms</h2>
+          <p className={styles.subtitle}>Create a shared space or join one with an invite code.</p>
         </div>
+        
         <div className={styles.tabs}>
           <button
             type="button"
-            className={`${styles.tab} ${mode === "create" ? styles.activeTab : ""}`}
+            className={`${styles.tabBtn} ${mode === "create" ? styles.activeTab : ""}`}
             onClick={() => {
               setMode("create");
               setInputValue("");
@@ -98,7 +93,7 @@ export function RoomDialog({ isOpen, onClose, onSuccess, userId }: Props) {
           </button>
           <button
             type="button"
-            className={`${styles.tab} ${mode === "join" ? styles.activeTab : ""}`}
+            className={`${styles.tabBtn} ${mode === "join" ? styles.activeTab : ""}`}
             onClick={() => {
               setMode("join");
               setInputValue("");
@@ -135,7 +130,7 @@ export function RoomDialog({ isOpen, onClose, onSuccess, userId }: Props) {
             </button>
             <button
               type="submit"
-              className={styles.submitButton}
+              className={styles.saveButton}
               disabled={loading}
             >
               {loading

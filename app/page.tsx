@@ -21,6 +21,7 @@ export default function Home() {
   const [activeRoom, setActiveRoom] = useState<Room | null>(null);
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isUpcomingExpanded, setIsUpcomingExpanded] = useState(false);
 
   // Calendar state
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -194,18 +195,16 @@ export default function Home() {
               </div>
               <div className={styles.sub}>
                 <span>Shared calendar · {rooms.length} accessible rooms</span>
-                <button className={styles.headerBtn} onClick={() => setIsRoomModalOpen(true)}>
-                  <Settings size={12} /> Manage
-                </button>
-                <button className={`${styles.headerBtn} ${styles.dangerBtn}`} onClick={handleSignOut}>
-                  <LogOut size={12} /> Sign out
-                </button>
               </div>
             </div>
           </div>
-          <div className={styles.tally}>
-            <div className={styles.num}>{upcomingThisWeek}</div>
-            <div className={styles.label}>Events this week</div>
+          <div className={styles.headerActions}>
+            <button className={styles.headerBtn} onClick={() => setIsRoomModalOpen(true)}>
+              <Settings size={12} /> Manage
+            </button>
+            <button className={`${styles.headerBtn} ${styles.dangerBtn}`} onClick={handleSignOut}>
+              <LogOut size={12} /> Sign out
+            </button>
           </div>
         </div>
 
@@ -234,17 +233,40 @@ export default function Home() {
                 activeRoomName={activeRoom?.name}
               />
             </div>
-            
-            <div className={`${styles.panel} ${styles.stampPanel}`}>
-              <div className={styles.stamp}>
-                <div className={styles.n}>{upcomingThisWeek}</div>
-                <div className={styles.l}>Due<br/>this week</div>
+            <div className={styles.upcomingPanel}>
+              <h3 className={styles.upcomingTitle}>Later This Week</h3>
+              <div className={styles.upcomingList}>
+                {(() => {
+                  const future = upcomingEvents.filter(e => e.event_date !== format(new Date(), "yyyy-MM-dd"));
+                  if (future.length === 0) {
+                    return <p className={styles.emptyUpcoming}>No upcoming events this week.</p>;
+                  }
+                  
+                  const visible = isUpcomingExpanded ? future : future.slice(0, 3);
+                  
+                  return (
+                    <>
+                      {visible.map(ev => (
+                        <div key={ev.id} className={styles.upcomingItem}>
+                          <div className={styles.upcomingDate}>{format(new Date(ev.event_date), "MMM d")}</div>
+                          <div className={styles.upcomingDetails}>
+                            <div className={styles.upcomingName}>{ev.title}</div>
+                            <div className={styles.upcomingTime}>{ev.event_time.slice(0, 5)}</div>
+                          </div>
+                        </div>
+                      ))}
+                      {future.length > 3 && (
+                        <button 
+                          className={styles.viewMoreBtn}
+                          onClick={() => setIsUpcomingExpanded(!isUpcomingExpanded)}
+                        >
+                          {isUpcomingExpanded ? "View less" : `View ${future.length - 3} more`}
+                        </button>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
-              <p>
-                {upcomingThisWeek > 0 
-                  ? `You have ${upcomingThisWeek} upcoming event${upcomingThisWeek === 1 ? '' : 's'} scheduled for the next 7 days.` 
-                  : "No events coming up this week. Enjoy your free time!"}
-              </p>
             </div>
           </div>
         </div>

@@ -61,22 +61,10 @@
   gap: 12px;
 }
 
-.tally {
-  text-align: right;
-  font-family: 'IBM Plex Mono', monospace;
-}
-
-.tally .num {
-  font-size: 22px;
-  color: var(--gold);
-}
-
-.tally .label {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin-top: 2px;
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .layout {
@@ -99,45 +87,86 @@
   gap: 20px;
 }
 
-.stampPanel {
-  text-align: center;
-  padding: 22px;
+.upcomingPanel {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.03);
 }
 
-.stamp {
-  display: inline-block;
-  border: 1px dashed var(--gold);
-  border-radius: 50%;
-  width: 88px;
-  height: 88px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transform: rotate(-6deg);
-  margin: 0 auto 12px auto;
-}
-
-.stamp .n {
+.upcomingTitle {
   font-family: 'Fraunces', serif;
   font-style: italic;
-  font-size: 24px;
+  font-size: 20px;
+  font-weight: 500;
   color: var(--gold);
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
 }
 
-.stamp .l {
+.upcomingList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.upcomingItem {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.upcomingDate {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--gold);
+  font-size: 11px;
+  color: var(--ink-dim);
+  width: 45px;
 }
 
-.stampPanel p {
+.upcomingDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.upcomingName {
   font-family: 'Inter', sans-serif;
-  font-size: 12.5px;
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.upcomingTime {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.emptyUpcoming {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
   color: var(--ink-dim);
-  line-height: 1.6;
+  font-style: italic;
+}
+
+.viewMoreBtn {
+  background: transparent;
+  border: none;
+  color: var(--gold);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 0;
+  margin-top: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.2s;
+}
+
+.viewMoreBtn:hover {
+  color: var(--ink);
 }
 
 /* Actions in header */
@@ -201,6 +230,13 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  transform-origin: top left;
+  animation: dropdown-in 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes dropdown-in {
+  from { opacity: 0; transform: scaleY(0.95) translateY(-5px); }
+  to { opacity: 1; transform: scaleY(1) translateY(0); }
 }
 
 .roomOption {
@@ -232,8 +268,5 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
-  }
-  .tally {
-    text-align: left;
   }
 }

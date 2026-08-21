@@ -104,7 +104,7 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
         <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
       </div>
 
-      <div className={styles.grid}>
+      <div className={styles.grid} key={currentMonth.toString()}>
         {gridCells.map((cell) => {
           if (cell.type === "empty") {
             return <div key={cell.key} className={`${styles.cell} ${styles.empty}`}></div>;

@@ -26,7 +26,8 @@ export function LoginForm({ loading, message, onSignIn, onSignUp }: Props) {
 
   return (
     <div className={styles.card}>
-      <h1 className={styles.title}>Welcome</h1>
+      <div className={styles.markGlyph}>Lg</div>
+      <h1 className={styles.title}>Agendly</h1>
 
       <div className={styles.tabs}>
         <button
