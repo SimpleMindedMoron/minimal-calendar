@@ -7,7 +7,6 @@
   width: 100%;
   padding: 0.9rem;
   background: var(--surface-1);
-  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   position: relative; /* nav buttons positioned relative to this */
 }
@@ -37,7 +36,7 @@
   color: var(--text-primary);
   font-family: var(--font-pilcrow-rounded);
   font-size: 1rem;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.01em;
   user-select: none;
 }
@@ -54,7 +53,7 @@
   padding: 0 0.5rem; /* small inset from the card border */
   pointer-events: none;
   z-index: 2;
-  top: 15px;
+  top: 14px;
 }
 
 /* ── Buttons ────────────────────────────────────────────────────────────── */
@@ -69,18 +68,13 @@
   border-radius: var(--radius-xs);
   background: var(--surface-2);
   color: var(--text-muted);
-  transition:
-    background 160ms var(--ease-soft),
-    color 160ms var(--ease-soft),
-    border-color 160ms var(--ease-soft),
-    transform 180ms var(--ease-out);
+  transition: all 160ms var(--ease-soft);
 }
 .previousButton:hover,
 .nextButton:hover {
-  background: var(--accent-dim);
-  color: var(--accent-light);
+  background: var(--accent);
+  color: var(--text-muted);
   border-color: var(--accent);
-  transform: scale(1.1);
 }
 
 /* ── Grid ───────────────────────────────────────────────────────────────── */
@@ -122,6 +116,7 @@
 
 /* ── Day button ──────────────────────────────────────────────────────── */
 .day {
+  font-family: var(--font-pilcrow-rounded);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -143,10 +138,12 @@
 .day:hover:not([disabled]) {
   background: var(--surface-2);
   color: var(--text-primary);
-  transform: scale(1.08);
+  font-weight: 700;
+  border-radius: 5px;
 }
 .day:active {
-  transform: scale(0.91);
+  font-weight: 700;
+  border-radius: 5px;
 }
 
 /* ── Event dot ───────────────────────────────────────────────────────── */
@@ -163,30 +160,33 @@
 }
 .day:hover .eventDot {
   transform: scale(1.4);
+  font-weight: 900;
 }
 
 /* ── States ──────────────────────────────────────────────────────────── */
 .selected .day {
   background: var(--accent) !important;
   color: var(--accent-ink) !important;
-  font-weight: 700;
-  transform: scale(1.07);
-  box-shadow: 0 2px 12px rgba(199, 143, 87, 0.45);
+  font-weight: 900;
+  border-radius: 5px;
 }
 .selected .eventDot {
   background: var(--accent-ink);
   opacity: 0.65;
+  font-weight: 700;
 }
 
 .today:not(.selected) .day {
   background: var(--accent-dim);
   color: var(--accent-light);
-  font-weight: 600;
+  font-weight: 700;
+  border-radius: 5px;
 }
 
 .outside .day {
   color: var(--text-faint);
   opacity: 0.38;
+  font-weight: 700;
 }
 .disabled .day {
   color: var(--text-faint);

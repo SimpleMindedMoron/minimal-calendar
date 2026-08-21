@@ -29,15 +29,15 @@
   --font-pilcrow-rounded: "Pilcrow Rounded", Georgia, serif;
 
   /* ── Palette Constants ─────────────────────────────────────────────── */
-  --palette-navy: #1F3345;
-  --palette-red: #B54745;
+  --palette-navy: #1f3345;
+  --palette-red: #b54745;
   --palette-red-dim: rgba(181, 71, 69, 0.18);
-  --palette-gold: #C78F57;
+  --palette-gold: #c78f57;
   --palette-gold-dim: rgba(199, 143, 87, 0.14);
   --palette-gold-light: #d9a872;
-  --palette-seagreen: #85ABAB;
+  --palette-seagreen: #85abab;
   --palette-seagreen-dim: rgba(133, 171, 171, 0.16);
-  --palette-beige: #F0EDE5;
+  --palette-beige: #f0ede5;
 
   /* ── Motion ────────────────────────────────────────────────────────── */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -191,12 +191,14 @@ body {
   min-height: 100%;
   background: var(--bg-app);
   color: var(--text-primary);
-  font-family: var(--font-archivo);
+  font-family: "Erode", Georgia, serif;
   font-weight: 400;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 350ms var(--ease-soft), color 350ms var(--ease-soft);
+  transition:
+    background-color 350ms var(--ease-soft),
+    color 350ms var(--ease-soft);
 }
 
 button,
@@ -247,7 +249,6 @@ select:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
