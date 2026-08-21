@@ -158,104 +158,105 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
   return (
     <div className={styles.calendarSection}>
       <div className={styles.panelHead}>
-        <div className={styles.monthPickerWrapper} ref={monthPickerRef}>
-          <h2
-            className={`${styles.monthHeading} ${hoverUnderline ? styles.monthHeadingHover : ""} ${monthPickerOpen ? styles.monthHeadingOpen : ""}`}
-            onClick={() => setMonthPickerOpen((o) => !o)}
-            onMouseEnter={handleHeadingMouseEnter}
-            onMouseLeave={handleHeadingMouseLeave}
-            aria-haspopup="listbox"
-            aria-expanded={monthPickerOpen}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === "Enter" && setMonthPickerOpen((o) => !o)}
-          >
-            {format(currentMonth, "MMMM yyyy")}
-          </h2>
-          {monthPickerOpen && (
-            <div className={styles.monthDropdown} role="dialog" aria-label="Select month and year">
+        <div className={styles.monthNavGroup}>
+          <button className={styles.arrowBtn} onClick={handlePrevMonth} aria-label="Previous month">‹</button>
+          <div className={styles.monthPickerWrapper} ref={monthPickerRef}>
+            <h2
+              className={`${styles.monthHeading} ${hoverUnderline ? styles.monthHeadingHover : ""} ${monthPickerOpen ? styles.monthHeadingOpen : ""}`}
+              onClick={() => setMonthPickerOpen((o) => !o)}
+              onMouseEnter={handleHeadingMouseEnter}
+              onMouseLeave={handleHeadingMouseLeave}
+              aria-haspopup="listbox"
+              aria-expanded={monthPickerOpen}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === "Enter" && setMonthPickerOpen((o) => !o)}
+            >
+              {format(currentMonth, "MMMM yyyy")}
+            </h2>
+            {monthPickerOpen && (
+              <div className={styles.monthDropdown} role="dialog" aria-label="Select month and year">
 
-              {yearPickerOpen ? (
-                /* ══ YEAR VIEW ══ */
-                <>
-                  <div className={styles.yearViewHeader}>
-                    <button
-                      className={styles.backBtn}
-                      onClick={() => setYearPickerOpen(false)}
-                      aria-label="Back to month view"
-                    >
-                      ‹
-                    </button>
-                    <span className={styles.yearViewTitle}>{getYear(currentMonth)}</span>
-                    {/* spacer to balance the back button and keep title centered */}
-                    <div style={{ width: 24 }} />
-                  </div>
-
-                  <div className={styles.yearWheelOuter}>
-                    <div className={styles.yearRail} aria-hidden="true" />
-                    <div
-                      className={styles.yearWheel}
-                      ref={yearScrollRef}
-                      onScroll={handleYearScroll}
-                      aria-label="Year selector"
-                    >
-                      <div className={styles.yearSpacer} aria-hidden="true" />
-                      {YEARS.map((year, idx) => (
-                        <div
-                          key={year}
-                          className={`${styles.yearItem} ${year === getYear(currentMonth) ? styles.yearItemActive : ""}`}
-                          onClick={() => scrollToYear(idx)}
-                          aria-selected={year === getYear(currentMonth)}
-                          role="option"
-                        >
-                          {year}
-                        </div>
-                      ))}
-                      <div className={styles.yearSpacer} aria-hidden="true" />
-                    </div>
-                  </div>
-                </>
-              ) : (
-                /* ══ MONTH VIEW ══ */
-                <>
-                  <div className={styles.yearHeader}>
-                    <button
-                      className={`${styles.yearBtn} ${yearHover ? styles.yearBtnHover : ""}`}
-                      onClick={() => setYearPickerOpen(true)}
-                      onMouseEnter={() => setYearHover(true)}
-                      onMouseLeave={() => setYearHover(false)}
-                      aria-label="Pick a year"
-                    >
-                      {getYear(currentMonth)}
-                    </button>
-                  </div>
-
-                  <div className={styles.monthDivider} />
-
-                  <div className={styles.monthGrid} role="listbox" aria-label="Select month">
-                    {MONTH_NAMES.map((name, i) => (
+                {yearPickerOpen ? (
+                  /* ══ YEAR VIEW ══ */
+                  <>
+                    <div className={styles.yearViewHeader}>
                       <button
-                        key={name}
-                        role="option"
-                        aria-selected={i === currentMonth.getMonth()}
-                        className={`${styles.monthOption} ${i === currentMonth.getMonth() ? styles.monthOptionActive : ""}`}
-                        onClick={() => handleSelectMonth(i)}
+                        className={styles.backBtn}
+                        onClick={() => setYearPickerOpen(false)}
+                        aria-label="Back to month view"
                       >
-                        {name}
+                        ‹
                       </button>
-                    ))}
-                  </div>
-                </>
-              )}
+                      <span className={styles.yearViewTitle}>{getYear(currentMonth)}</span>
+                      {/* spacer to balance the back button and keep title centered */}
+                      <div style={{ width: 24 }} />
+                    </div>
 
-            </div>
-          )}
+                    <div className={styles.yearWheelOuter}>
+                      <div className={styles.yearRail} aria-hidden="true" />
+                      <div
+                        className={styles.yearWheel}
+                        ref={yearScrollRef}
+                        onScroll={handleYearScroll}
+                        aria-label="Year selector"
+                      >
+                        <div className={styles.yearSpacer} aria-hidden="true" />
+                        {YEARS.map((year, idx) => (
+                          <div
+                            key={year}
+                            className={`${styles.yearItem} ${year === getYear(currentMonth) ? styles.yearItemActive : ""}`}
+                            onClick={() => scrollToYear(idx)}
+                            aria-selected={year === getYear(currentMonth)}
+                            role="option"
+                          >
+                            {year}
+                          </div>
+                        ))}
+                        <div className={styles.yearSpacer} aria-hidden="true" />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  /* ══ MONTH VIEW ══ */
+                  <>
+                    <div className={styles.yearHeader}>
+                      <button
+                        className={`${styles.yearBtn} ${yearHover ? styles.yearBtnHover : ""}`}
+                        onClick={() => setYearPickerOpen(true)}
+                        onMouseEnter={() => setYearHover(true)}
+                        onMouseLeave={() => setYearHover(false)}
+                        aria-label="Pick a year"
+                      >
+                        {getYear(currentMonth)}
+                      </button>
+                    </div>
 
+                    <div className={styles.monthDivider} />
+
+                    <div className={styles.monthGrid} role="listbox" aria-label="Select month">
+                      {MONTH_NAMES.map((name, i) => (
+                        <button
+                          key={name}
+                          role="option"
+                          aria-selected={i === currentMonth.getMonth()}
+                          className={`${styles.monthOption} ${i === currentMonth.getMonth() ? styles.monthOptionActive : ""}`}
+                          onClick={() => handleSelectMonth(i)}
+                        >
+                          {name}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+              </div>
+            )}
+          </div>
+          <button className={styles.arrowBtn} onClick={handleNextMonth} aria-label="Next month">›</button>
         </div>
+
         <div className={styles.nav}>
-          <button onClick={handlePrevMonth} aria-label="Previous month">‹</button>
-          <button onClick={handleNextMonth} aria-label="Next month">›</button>
-          <span style={{ width: "12px" }}></span>
           <button className={styles.addBtn} onClick={onAddEvent}>+ Add event</button>
         </div>
       </div>
