@@ -1,185 +1,112 @@
-/* ── Wrapper ─────────────────────────────────────────────────────────── */
-.wrapper {
+.panelHead {
   display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-}
-
-/* ── Header ──────────────────────────────────────────────────────────── */
-.header {
-  display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  gap: 1.5rem;
-  padding: 2.25rem 2.5rem 1.5rem;
-  flex-shrink: 0;
+  align-items: baseline;
+  margin-bottom: 6px;
 }
 
-.headerLeft {
+.panelHead h2 {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.dateArrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.agendaList {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
 }
 
-.greeting {
-  font-size: 0.82rem;
-  font-style: italic;
-  color: var(--text-muted);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  margin-bottom: 0.1rem;
+.agendaRow {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  position: relative;
 }
 
-.dayHeading {
-  font-family: var(--font-pilcrow-rounded);
-  font-size: clamp(2.8rem, 5vw, 4.5rem);
-  font-weight: 400;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
+.agendaRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
-.dateLine {
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  letter-spacing: 0.01em;
+.agendaTime {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  width: 56px;
+  flex-shrink: 0;
+  padding-top: 2px;
 }
 
-.headerRight {
+.agendaBody {
+  flex: 1;
+}
+
+.title {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.meta {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  flex-shrink: 0;
-  padding-bottom: 0.5rem;
-}
-
-.todayBadge {
-  padding: 0.3rem 0.7rem;
-  border-radius: 99px;
-  background: var(--accent-dim);
-  color: var(--accent-light);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
+  gap: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-.addBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.65rem 1.1rem;
-  border: 0;
-  border-radius: 20px;
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-size: 0.875rem;
-  font-weight: 300;
-  letter-spacing: 0.01em;
-  box-shadow: 0 2px 10px rgba(199, 143, 87, 0.28);
-  transition: all 0.3s var(--ease-soft);
-}
-.addBtn:hover {
-  text-shadow: 1px 0 0 currentColor;
-}
-.addBtn:active {
-  transform: scale(0.97);
-  box-shadow: none;
-}
+.metaExam { color: var(--exam); }
+.metaQuiz { color: var(--quiz); }
+.metaStudy { color: var(--study); }
+.metaGeneral { color: var(--ink-dim); }
 
-/* ── Divider ─────────────────────────────────────────────────────────── */
-.divider {
-  height: 1px;
-  margin: 0 2.5rem;
-  background: var(--border-subtle);
-  flex-shrink: 0;
-}
-
-/* ── Events section ──────────────────────────────────────────────────── */
-.eventsSection {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1.5rem 2.5rem 2rem;
-}
-
-.eventGrid {
-  display: grid;
-  gap: 0.75rem;
-}
-
-/* ── Empty / Loading states ──────────────────────────────────────────── */
-.stateBox {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.85rem;
-  min-height: 14rem;
-  text-align: center;
-}
-
-.emptyGlyph {
-  font-size: 2.5rem;
-  color: var(--border-default);
-  line-height: 1;
-}
-
-.stateText {
-  color: var(--text-faint);
-  font-size: 0.9rem;
-  font-style: italic;
-  max-width: 24ch;
-  line-height: 1.6;
-}
-
-.emptyAddBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 0.82rem;
-  transition:
-    background 150ms var(--ease-soft),
-    color 150ms var(--ease-soft),
-    border-color 150ms var(--ease-soft);
-}
-.emptyAddBtn:hover {
-  background: var(--accent-dim);
-  border-color: var(--accent);
-  color: var(--accent-light);
-}
-
-/* ── Spinner ─────────────────────────────────────────────────────────── */
-.spinner {
-  width: 1.6rem;
-  height: 1.6rem;
-  border: 2px solid var(--border-subtle);
-  border-top-color: var(--accent);
+.meta::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  animation: spin 700ms linear infinite;
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  background: currentColor;
 }
 
-/* ── Responsive ──────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .header {
-    padding: 1.5rem 1.25rem 1rem;
-  }
-  .divider {
-    margin: 0 1.25rem;
-  }
-  .eventsSection {
-    padding: 1.25rem 1.25rem 2rem;
-  }
+.deleteBtn {
+  position: absolute;
+  top: 12px;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--ink-faint);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.agendaRow:hover .deleteBtn {
+  opacity: 1;
+}
+
+.deleteBtn:hover {
+  color: var(--exam);
+}
+
+.emptyState {
+  padding: 32px 0;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--ink-dim);
 }

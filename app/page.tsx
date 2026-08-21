@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { format, addDays, startOfDay } from "date-fns";
 import { useRouter } from "next/navigation";
-import { IconSidebar } from "./components/icon-sidebar/icon-sidebar";
-import { LeftPanel } from "./components/left-panel/left-panel";
+import { LogOut, Plus, Settings } from "lucide-react";
+import { CalendarPanel } from "./components/calendar-panel/calendar-panel";
 import { EventDialog } from "./components/event-dialog/event-dialog";
 import { RoomDialog } from "./components/room-dialog/room-dialog";
 import { EventList } from "./components/event-list/event-list";
@@ -30,6 +30,7 @@ export default function Home() {
   // Upcoming & dot data
   const [upcomingEvents, setUpcomingEvents] = useState<CalendarEvent[]>([]);
   const [allEventDates, setAllEventDates] = useState<string[]>([]);
+  const [upcomingThisWeek, setUpcomingThisWeek] = useState(0);
 
   // Fetch user + rooms
   useEffect(() => {
@@ -61,6 +62,11 @@ export default function Home() {
         role: item.role,
       }));
       setRooms(formattedRooms);
+      
+      // If no active room is set but rooms exist, pick the first one by default
+      if (formattedRooms.length > 0 && !activeRoom) {
+        setActiveRoom(formattedRooms[0]);
+      }
     }
   };
 
@@ -92,6 +98,9 @@ export default function Home() {
     const all = (data ?? []) as CalendarEvent[];
     setUpcomingEvents(all);
     setAllEventDates([...new Set(all.map((e) => e.event_date))]);
+    
+    // Calculate events due this week (next 7 days)
+    setUpcomingThisWeek(all.length);
   }, [activeRoom, rooms]);
 
   useEffect(() => {
@@ -120,12 +129,13 @@ export default function Home() {
     else await Promise.all([fetchEvents(), fetchUpcomingEvents()]);
   };
 
-  const handleDeleteRoom = async () => {
-    if (!activeRoom || activeRoom.role !== "admin") return;
-    if (!window.confirm(`Delete "${activeRoom.name}"? This will remove all its events.`)) return;
-    const { error } = await supabase.from("calendars").delete().eq("id", activeRoom.id);
-    if (error) { console.error("Error deleting room:", error); alert("Failed to delete room."); }
-    else { setActiveRoom(null); if (userId) await fetchRooms(userId); }
+  const handleRoomChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    if (val === "all") setActiveRoom(null);
+    else {
+      const room = rooms.find(r => r.id === val);
+      if (room) setActiveRoom(room);
+    }
   };
 
   const handleSignOut = async () => {
@@ -137,36 +147,81 @@ export default function Home() {
 
   return (
     <div className={styles.appShell}>
-      {/* Slim icon sidebar */}
-      <IconSidebar
-        onAddEvent={() => setIsEventModalOpen(true)}
-        onManageRooms={() => setIsRoomModalOpen(true)}
-        onSignOut={handleSignOut}
-      />
+      <div className={styles.page}>
+        <div className={styles.letterhead}>
+          <div className={styles.mark}>
+            <div className={styles.markGlyph}>Lg</div>
+            <div>
+              <h1>
+                <select 
+                  className={styles.roomSelect} 
+                  value={activeRoom?.id || "all"} 
+                  onChange={handleRoomChange}
+                  aria-label="Select Room"
+                >
+                  <option value="all">All Rooms</option>
+                  {rooms.map(r => (
+                    <option key={r.id} value={r.id}>{r.name}</option>
+                  ))}
+                </select>
+              </h1>
+              <div className={styles.sub}>
+                <span>Shared calendar · {rooms.length} accessible rooms</span>
+                <button className={styles.headerBtn} onClick={() => setIsRoomModalOpen(true)}>
+                  <Settings size={12} /> Manage
+                </button>
+                <button className={`${styles.headerBtn} ${styles.dangerBtn}`} onClick={handleSignOut}>
+                  <LogOut size={12} /> Sign out
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className={styles.tally}>
+            <div className={styles.num}>{upcomingThisWeek}</div>
+            <div className={styles.label}>Events this week</div>
+          </div>
+        </div>
 
-      {/* Left panel: calendar + rooms + upcoming */}
-      <LeftPanel
-        rooms={rooms}
-        activeRoom={activeRoom}
-        onSelectRoom={setActiveRoom}
-        selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
-        eventDates={allEventDates}
-        upcomingEvents={upcomingEvents}
-        onDeleteRoom={handleDeleteRoom}
-      />
+        <div className={styles.layout}>
+          {/* Left panel: calendar */}
+          <div className={styles.panel}>
+            <CalendarPanel
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+              eventDates={allEventDates}
+              onAddEvent={() => setIsEventModalOpen(true)}
+              activeRoom={activeRoom}
+              rooms={rooms}
+            />
+          </div>
 
-      {/* Main content: events for selected day */}
-      <main className={styles.main}>
-        <EventList
-          selectedDate={selectedDate}
-          events={events}
-          isLoading={loading}
-          onDeleteEvent={handleDeleteEvent}
-          onAddEvent={() => setIsEventModalOpen(true)}
-          activeRoomName={activeRoom?.name}
-        />
-      </main>
+          {/* Right sidebar: Agenda + Stamp */}
+          <div className={styles.sidebar}>
+            <div className={styles.panel}>
+              <EventList
+                selectedDate={selectedDate}
+                events={events}
+                isLoading={loading}
+                onDeleteEvent={handleDeleteEvent}
+                onAddEvent={() => setIsEventModalOpen(true)}
+                activeRoomName={activeRoom?.name}
+              />
+            </div>
+            
+            <div className={`${styles.panel} ${styles.stampPanel}`}>
+              <div className={styles.stamp}>
+                <div className={styles.n}>{upcomingThisWeek}</div>
+                <div className={styles.l}>Due<br/>this week</div>
+              </div>
+              <p>
+                {upcomingThisWeek > 0 
+                  ? `You have ${upcomingThisWeek} upcoming event${upcomingThisWeek === 1 ? '' : 's'} scheduled for the next 7 days.` 
+                  : "No events coming up this week. Enjoy your free time!"}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Dialogs */}
       <EventDialog

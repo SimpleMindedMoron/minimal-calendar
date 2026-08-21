@@ -1,40 +1,198 @@
-/* ── App shell ───────────────────────────────────────────────────────── */
 .appShell {
+  padding: 56px 24px;
   display: flex;
-  height: 100dvh;
-  overflow: hidden;
-  background: var(--bg-app);
-  animation: appear 400ms var(--ease-out) both;
+  justify-content: center;
+  width: 100%;
 }
 
-@keyframes appear {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+.page {
+  width: 100%;
+  max-width: 1080px;
 }
 
-/* ── Main content (right of the two panels) ──────────────────────────── */
-.main {
-  flex: 1;
-  min-width: 0;
-  height: 100dvh;
-  overflow: hidden;
+.letterhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 28px;
+}
+
+.mark {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.markGlyph {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 19px;
+  color: var(--gold);
+}
+
+.letterhead h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.letterhead .sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tally {
+  text-align: right;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.tally .num {
+  font-size: 22px;
+  color: var(--gold);
+}
+
+.tally .label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 28px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--rule-soft);
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.sidebar {
   display: flex;
   flex-direction: column;
-  background: var(--bg-app);
+  gap: 20px;
 }
 
-/* ── Mobile fallback ─────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .appShell {
-    flex-direction: column;
-    height: auto;
-    min-height: 100dvh;
-    overflow: auto;
-  }
+.stampPanel {
+  text-align: center;
+  padding: 22px;
+}
 
-  .main {
-    height: auto;
-    flex: none;
-    overflow: visible;
+.stamp {
+  display: inline-block;
+  border: 1px dashed var(--gold);
+  border-radius: 50%;
+  width: 88px;
+  height: 88px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-6deg);
+  margin: 0 auto 12px auto;
+}
+
+.stamp .n {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--gold);
+}
+
+.stamp .l {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.stampPanel p {
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+
+/* Actions in header */
+.headerBtn {
+  background: none;
+  border: 1px solid var(--rule);
+  color: var(--ink-dim);
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 4px 8px;
+  font-family: 'Inter', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.headerBtn:hover {
+  background: var(--surface-raised);
+  color: var(--ink);
+  border-color: var(--rule-soft);
+}
+
+.dangerBtn:hover {
+  color: var(--exam);
+  border-color: var(--exam-dim);
+}
+
+/* Room Dropdown or Switcher inside Letterhead */
+.roomSelect {
+  background: transparent;
+  color: var(--ink);
+  border: none;
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 26px;
+  cursor: pointer;
+  outline: none;
+}
+.roomSelect option {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .letterhead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .tally {
+    text-align: left;
   }
 }

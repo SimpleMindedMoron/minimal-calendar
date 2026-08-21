@@ -16,7 +16,7 @@
   padding: clamp(1.4rem, 4vw, 2.25rem);
   border: 0;
   border-radius: var(--radius-lg);
-  background: var(--surface);
+  background: #050709;
   animation: dialog-in 280ms var(--ease-out) both;
 }
 
@@ -81,7 +81,10 @@
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-weight: 600;
-  transition: background-color 180ms var(--ease-soft), color 180ms var(--ease-soft), transform 180ms var(--ease-out);
+  transition:
+    background-color 180ms var(--ease-soft),
+    color 180ms var(--ease-soft),
+    transform 180ms var(--ease-out);
 }
 
 .cancelButton {

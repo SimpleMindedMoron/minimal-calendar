@@ -1,198 +1,194 @@
-/* ── Wrapper ─────────────────────────────────────────────────────────── */
-.calendarSection {
-  width: 100%;
-}
-
-.panel {
-  width: 100%;
-  padding: 0.9rem;
-  background: var(--surface-1);
-  border-radius: var(--radius-lg);
-  position: relative; /* nav buttons positioned relative to this */
-}
-
-/* ── Month layout ──────────────────────────────────────────────────────── */
-.months {
+.panelHead {
   display: flex;
-  width: 100%;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 18px;
 }
-.month {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  width: 100%;
-}
-
-/* ── Caption: centered month label ─────────────────────────────────────── */
-.caption {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.captionLabel {
-  color: var(--text-primary);
-  font-family: var(--font-pilcrow-rounded);
-  font-size: 1rem;
+.panelHead h2 {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
   font-weight: 500;
-  letter-spacing: 0.01em;
-  user-select: none;
+  font-size: 21px;
+  color: var(--ink);
 }
-
-/* ── Nav: absolute overlay spanning the ENTIRE panel card ──────────────── */
-/* pointer-events:none lets clicks pass through to the calendar days;       */
-/* only the two small buttons re-enable pointer-events                       */
 .nav {
-  position: absolute;
-  inset: 0; /* stretch to all 4 edges of .panel */
   display: flex;
-  align-items: flex-start; /* vertically centred in the full card */
-  justify-content: space-between; /* ‹ on left edge, › on right edge */
-  padding: 0 0.5rem; /* small inset from the card border */
-  pointer-events: none;
-  z-index: 2;
-  top: 14px;
-}
-
-/* ── Buttons ────────────────────────────────────────────────────────────── */
-.previousButton,
-.nextButton {
-  pointer-events: all;
-  display: grid;
-  width: 1.6rem;
-  height: 1.6rem;
-  place-items: center;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xs);
-  background: var(--surface-2);
-  color: var(--text-muted);
-  transition: all 160ms var(--ease-soft);
-}
-.previousButton:hover,
-.nextButton:hover {
-  background: var(--accent);
-  color: var(--text-muted);
-  border-color: var(--accent);
-}
-
-/* ── Grid ───────────────────────────────────────────────────────────────── */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.headRow,
-.row {
-  display: flex;
-  width: 100%;
-}
-.headRow {
-  margin: 0.4rem 0 0.2rem;
-}
-.row {
-  margin-top: 0.06rem;
-}
-
-.headCell,
-.cell {
-  display: flex;
-  width: calc(100% / 7);
-  justify-content: center;
   align-items: center;
+  gap: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+.nav button {
+  background: none;
+  border: 1px solid var(--rule);
+  color: var(--ink-dim);
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.nav button:hover {
+  background: var(--surface-raised);
+  color: var(--ink);
 }
 
-.headCell {
-  color: var(--text-faint);
-  font-size: 0.58rem;
-  font-weight: 700;
+.addBtn {
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-size: 11px !important;
+  letter-spacing: 0.04em;
+  color: var(--bg) !important;
+  background: var(--gold) !important;
+  border: none !important;
+  padding: 8px 14px !important;
+  border-radius: 5px !important;
+  cursor: pointer;
+  width: auto !important;
+  height: auto !important;
+}
+.addBtn:hover {
+  opacity: 0.9;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+.weekdays span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: center;
+  padding-bottom: 8px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 74px;
 }
 
 .cell {
-  padding: 0.04rem 0;
-}
-
-/* ── Day button ──────────────────────────────────────────────────────── */
-.day {
-  font-family: var(--font-pilcrow-rounded);
+  border-top: 1px solid var(--rule-soft);
+  border-right: 1px solid var(--rule-soft);
+  padding: 7px 8px;
   position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
   display: flex;
   flex-direction: column;
+}
+.cell:nth-child(7n) {
+  border-right: none;
+}
+.cell:hover:not(.empty) {
+  background: rgba(255, 255, 255, 0.02);
+}
+.cell.selected:not(.today) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.date {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  color: var(--ink-dim);
+}
+
+.empty {
+  background: repeating-linear-gradient(135deg, transparent, transparent 6px, rgba(255,255,255,0.008) 6px, rgba(255,255,255,0.008) 7px);
+  cursor: default;
+}
+
+.today {
+  background: var(--surface-raised);
+}
+.today .date {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.fold {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 16px 16px 0;
+  border-color: transparent var(--bg) transparent transparent;
+  filter: drop-shadow(-1px 1px 1px rgba(0,0,0,0.35));
+}
+
+.tabs {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tab {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.03em;
+  padding: 1.5px 5px;
+  border-radius: 2px;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tabExam {
+  background: var(--exam-dim);
+  color: var(--exam);
+}
+.tabQuiz {
+  background: var(--quiz-dim);
+  color: var(--quiz);
+}
+.tabStudy {
+  background: var(--study-dim);
+  color: var(--study);
+}
+.tabGeneral {
+  background: var(--rule-soft);
+  color: var(--ink);
+}
+
+.legend {
+  display: flex;
+  gap: 18px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule-soft);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--ink-dim);
+}
+.legend span {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1.5px;
-  width: min(2rem, 100%);
-  aspect-ratio: 1;
-  border: 0;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.82rem;
-  line-height: 1;
-  transition:
-    background 160ms var(--ease-soft),
-    color 160ms var(--ease-soft),
-    transform 200ms var(--ease-out);
+  gap: 6px;
 }
-.day:hover:not([disabled]) {
-  background: var(--surface-2);
-  color: var(--text-primary);
-  font-weight: 700;
-  border-radius: 5px;
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
 }
-.day:active {
-  font-weight: 700;
-  border-radius: 5px;
+.dotExam {
+  background: var(--exam);
 }
-
-/* ── Event dot ───────────────────────────────────────────────────────── */
-.eventDot {
-  display: block;
-  width: 3.5px;
-  height: 3.5px;
-  border-radius: 50%;
-  background: var(--accent);
-  flex-shrink: 0;
-  transition:
-    transform 160ms var(--ease-out),
-    opacity 160ms var(--ease-soft);
+.dotQuiz {
+  background: var(--quiz);
 }
-.day:hover .eventDot {
-  transform: scale(1.4);
-  font-weight: 900;
-}
-
-/* ── States ──────────────────────────────────────────────────────────── */
-.selected .day {
-  background: var(--accent) !important;
-  color: var(--accent-ink) !important;
-  font-weight: 900;
-  border-radius: 5px;
-}
-.selected .eventDot {
-  background: var(--accent-ink);
-  opacity: 0.65;
-  font-weight: 700;
-}
-
-.today:not(.selected) .day {
-  background: var(--accent-dim);
-  color: var(--accent-light);
-  font-weight: 700;
-  border-radius: 5px;
-}
-
-.outside .day {
-  color: var(--text-faint);
-  opacity: 0.38;
-  font-weight: 700;
-}
-.disabled .day {
-  color: var(--text-faint);
-  opacity: 0.25;
-  cursor: not-allowed;
-}
-.hidden {
-  visibility: hidden;
+.dotStudy {
+  background: var(--study);
 }
