@@ -45,14 +45,10 @@ export default function Login() {
   };
 
   return (
-<<<<<<< Updated upstream
     <div className={styles.appShell} style={{ minHeight: "100vh", alignItems: "center" }}>
-=======
-    <div className={styles.appShell}>
       <Link href="/" className={styles.cornerLogo} title="Home">
         A
       </Link>
->>>>>>> Stashed changes
       <div
         className={styles.page}
         style={{ maxWidth: "400px", width: "100%" }}
