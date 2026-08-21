@@ -103,7 +103,7 @@
 .panel {
   background: var(--surface);
   border: 2px solid var(--rule);
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 24px;
   box-shadow: 4px 4px 0px 0px var(--shadow);
 }
@@ -117,7 +117,7 @@
 .upcomingPanel {
   background: var(--surface);
   border: 2px solid var(--rule);
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 24px;
   box-shadow: 4px 4px 0px 0px var(--shadow);
 }
@@ -201,7 +201,7 @@
   background: var(--gold);
   color: var(--bg);
   border: 1px solid var(--gold);
-  border-radius: 5px;
+  border-radius: 12px;
   font-size: 13px;
   font-weight: 500;
   padding: 6px 14px;
@@ -283,7 +283,7 @@
   margin-top: 8px;
   background: var(--surface-raised);
   border: 2px solid var(--rule);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 8px;
   min-width: 200px;
   box-shadow: 4px 4px 0px 0px var(--shadow);
