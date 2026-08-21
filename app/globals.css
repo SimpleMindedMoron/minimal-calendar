@@ -22,32 +22,35 @@
 /* ── Colour Tokens ───────────────────────────────────────────────────── */
 :root {
   /* Backgrounds */
-  --bg: #121212;
-  --bg-warm: #121212;
-  --surface: #1e1e1e;
-  --surface-raised: #2c2c2c;
+  --bg: #171717;
+  --bg-warm: #171717;
+  --surface: #242424;
+  --surface-raised: #2E2E2E;
 
   /* Ink */
-  --ink: #f4f4f0;
-  --ink-dim: #a0a0a0;
-  --ink-faint: #666666;
+  --ink: #F0EBE1;
+  --ink-dim: #A3A3A3;
+  --ink-faint: #737373;
 
   /* Rules / borders */
-  --rule: #f4f4f0;
-  --rule-soft: #444444;
+  --rule: #454545;
+  --rule-soft: #333333;
 
-  /* Event types (Neobrutalism Pop Colors) */
-  --exam: #121212; /* Dark text for events */
-  --exam-dim: #ff90e8; /* Pink background */
+  /* Event types (Muted Pastels for dark mode) */
+  --exam: #171717;
+  --exam-dim: #D69494; /* Soft clay/pink */
 
-  --quiz: #121212;
-  --quiz-dim: #bde0fe; /* Mint background */
+  --quiz: #171717;
+  --quiz-dim: #94ADD6; /* Soft blue */
 
-  --study: #121212;
-  --study-dim: #ffc900; /* Yellow background */
+  --study: #171717;
+  --study-dim: #C7C08F; /* Soft sage/sand */
 
   /* Accent */
-  --gold: #ffc900; /* Yellow accent */
+  --gold: #B8AC95; /* Muted taupe */
+  
+  /* Soft Neobrutalism Shadows */
+  --shadow: rgba(0, 0, 0, 0.35);
 }
 
 /* ══════════════════════════════════════════════════════════════════════
