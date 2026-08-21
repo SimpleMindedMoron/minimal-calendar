@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday, setMonth, setYear, getYear } from "date-fns";
 import { supabase } from "../../../lib/supabase";
 import type { Room, CalendarEvent } from "../../types/calendar";
 import styles from "./calendar-panel.module.css";
@@ -15,9 +15,77 @@ type Props = {
   rooms: Room[];
 };
 
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+const ITEM_HEIGHT = 36; // px — height of each year row in the drum wheel
+const THIS_YEAR = new Date().getFullYear();
+const YEARS = Array.from({ length: 21 }, (_, i) => THIS_YEAR - 10 + i);
+
 export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRoom, rooms }: Props) {
   const [currentMonth, setCurrentMonth] = useState(startOfMonth(selectedDate || new Date()));
   const [monthEvents, setMonthEvents] = useState<CalendarEvent[]>([]);
+  const [monthPickerOpen, setMonthPickerOpen] = useState(false);
+  const [hoverUnderline, setHoverUnderline] = useState(false);
+  const [yearPickerOpen, setYearPickerOpen] = useState(false);
+  const [yearHover, setYearHover] = useState(false);
+  const monthPickerRef = useRef<HTMLDivElement>(null);
+  const yearScrollRef = useRef<HTMLDivElement>(null);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Scroll wheel to the correct year whenever it opens
+  useEffect(() => {
+    if (!yearPickerOpen || !yearScrollRef.current) return;
+    const idx = YEARS.indexOf(getYear(currentMonth));
+    if (idx !== -1) {
+      yearScrollRef.current.scrollTop = idx * ITEM_HEIGHT;
+    }
+  }, [yearPickerOpen, currentMonth]);
+
+  // Live-update year as the wheel scrolls — debounced so re-renders
+  // don't interrupt the scroll animation mid-flight
+  const handleYearScroll = useCallback(() => {
+    if (!yearScrollRef.current) return;
+    const scrollTop = yearScrollRef.current.scrollTop;
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = setTimeout(() => {
+      const idx = Math.round(scrollTop / ITEM_HEIGHT);
+      const year = YEARS[Math.max(0, Math.min(idx, YEARS.length - 1))];
+      if (year !== undefined) {
+        setCurrentMonth(prev => {
+          if (getYear(prev) === year) return prev;
+          return startOfMonth(setYear(prev, year));
+        });
+      }
+    }, 80);
+  }, []);
+
+  // Clicking a year item snaps the wheel to it
+  const scrollToYear = (idx: number) => {
+    yearScrollRef.current?.scrollTo({ top: idx * ITEM_HEIGHT, behavior: "smooth" });
+  };
+
+  // Close the month picker when clicking outside
+  useEffect(() => {
+    if (!monthPickerOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (monthPickerRef.current && !monthPickerRef.current.contains(e.target as Node)) {
+        setMonthPickerOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [monthPickerOpen]);
+
+  const handleSelectMonth = (monthIndex: number) => {
+    setCurrentMonth(startOfMonth(setMonth(currentMonth, monthIndex)));
+    setMonthPickerOpen(false);
+  };
+
+  const handleHeadingMouseEnter = () => setHoverUnderline(true);
+  const handleHeadingMouseLeave = () => setHoverUnderline(false);
 
   // Fetch events for the current month
   const fetchMonthEvents = useCallback(async () => {
@@ -90,10 +158,86 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
   return (
     <div className={styles.calendarSection}>
       <div className={styles.panelHead}>
-        <h2>{format(currentMonth, "MMMM yyyy")}</h2>
+        <div className={styles.monthPickerWrapper} ref={monthPickerRef}>
+          <h2
+            className={`${styles.monthHeading} ${hoverUnderline ? styles.monthHeadingHover : ""} ${monthPickerOpen ? styles.monthHeadingOpen : ""}`}
+            onClick={() => setMonthPickerOpen((o) => !o)}
+            onMouseEnter={handleHeadingMouseEnter}
+            onMouseLeave={handleHeadingMouseLeave}
+            aria-haspopup="listbox"
+            aria-expanded={monthPickerOpen}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === "Enter" && setMonthPickerOpen((o) => !o)}
+          >
+            {format(currentMonth, "MMMM yyyy")}
+          </h2>
+          {monthPickerOpen && (
+            <div className={styles.monthDropdown} role="dialog" aria-label="Select month and year">
+
+              {/* ── Year header ── */}
+              <div className={styles.yearHeader}>
+                <button
+                  className={`${styles.yearBtn} ${yearHover ? styles.yearBtnHover : ""} ${yearPickerOpen ? styles.yearBtnOpen : ""}`}
+                  onClick={() => setYearPickerOpen(o => !o)}
+                  onMouseEnter={() => setYearHover(true)}
+                  onMouseLeave={() => setYearHover(false)}
+                  aria-expanded={yearPickerOpen}
+                  aria-label="Pick a year"
+                >
+                  {getYear(currentMonth)}
+                </button>
+              </div>
+
+              {/* ── Year drum wheel ── */}
+              {yearPickerOpen && (
+                <div className={styles.yearWheelOuter}>
+                  <div className={styles.yearRail} aria-hidden="true" />
+                  <div
+                    className={styles.yearWheel}
+                    ref={yearScrollRef}
+                    onScroll={handleYearScroll}
+                    aria-label="Year selector"
+                  >
+                    <div className={styles.yearSpacer} aria-hidden="true" />
+                    {YEARS.map((year, idx) => (
+                      <div
+                        key={year}
+                        className={`${styles.yearItem} ${year === getYear(currentMonth) ? styles.yearItemActive : ""}`}
+                        onClick={() => scrollToYear(idx)}
+                        aria-selected={year === getYear(currentMonth)}
+                        role="option"
+                      >
+                        {year}
+                      </div>
+                    ))}
+                    <div className={styles.yearSpacer} aria-hidden="true" />
+                  </div>
+                </div>
+              )}
+
+              <div className={styles.monthDivider} />
+
+              {/* ── Month grid ── */}
+              <div className={styles.monthGrid} role="listbox" aria-label="Select month">
+                {MONTH_NAMES.map((name, i) => (
+                  <button
+                    key={name}
+                    role="option"
+                    aria-selected={i === currentMonth.getMonth()}
+                    className={`${styles.monthOption} ${i === currentMonth.getMonth() ? styles.monthOptionActive : ""}`}
+                    onClick={() => handleSelectMonth(i)}
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+
+            </div>
+          )}
+        </div>
         <div className={styles.nav}>
           <button onClick={handlePrevMonth} aria-label="Previous month">‹</button>
-          <span>Month</span>
           <button onClick={handleNextMonth} aria-label="Next month">›</button>
           <span style={{ width: "12px" }}></span>
           <button className={styles.addBtn} onClick={onAddEvent}>+ Add event</button>

@@ -5,13 +5,7 @@
   margin-bottom: 18px;
 }
 
-.panelHead h2 {
-  font-family: 'Pilcrow Rounded', sans-serif;
-  font-style: italic;
-  font-weight: 500;
-  font-size: 21px;
-  color: var(--ink);
-}
+
 
 .nav {
   display: flex;
@@ -251,4 +245,231 @@
 
 .dotStudy {
   background: var(--study);
+}
+
+/* Month picker */
+.monthPickerWrapper {
+  position: relative;
+}
+
+.monthHeading {
+  font-family: 'Pilcrow Rounded', sans-serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 21px;
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: font-weight 0.3s ease, text-decoration-color 0.2s, color 0.2s;
+  text-decoration-color: transparent;
+  display: inline-block;
+  user-select: none;
+}
+
+.monthHeadingHover {
+  font-weight: 700;
+}
+
+.monthHeadingOpen {
+  color: var(--gold, #cbb89e);
+  font-weight: 700;
+}
+
+.monthDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: var(--surface-raised, #1a1a1a);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 222px;
+  z-index: 100;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  animation: dropdown-in 0.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Year header row */
+.yearHeader {
+  display: flex;
+  justify-content: center;
+  padding: 2px 0 6px;
+}
+
+.yearBtn {
+  font-family: 'Pilcrow Rounded', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-dim);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 4px;
+  transition: font-weight 0.25s ease, color 0.2s;
+  letter-spacing: 0.04em;
+  width: auto !important;
+  height: auto !important;
+}
+
+.yearBtnHover {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.yearBtnOpen {
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* Drum-wheel container */
+.yearWheelOuter {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+/* Center-rail: two horizontal lines framing the selected item */
+.yearRail {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.yearRail::before,
+.yearRail::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  height: 1px;
+  background: var(--rule);
+}
+
+.yearRail::before { top: calc(50% - 18px); }
+.yearRail::after  { top: calc(50% + 18px); }
+
+/* Gradient mask fades items above and below center */
+.yearWheel {
+  height: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0,0,0,0.45) 20%,
+    black 36%,
+    black 64%,
+    rgba(0,0,0,0.45) 80%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0,0,0,0.45) 20%,
+    black 36%,
+    black 64%,
+    rgba(0,0,0,0.45) 80%,
+    transparent 100%
+  );
+}
+
+.yearWheel::-webkit-scrollbar { display: none; }
+
+/* Top & bottom spacers let the first/last year scroll to center */
+.yearSpacer {
+  height: 72px; /* 2 * ITEM_HEIGHT — keeps first/last items reachable */
+  flex-shrink: 0;
+}
+
+.yearItem {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+  font-family: 'Pilcrow Rounded', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: font-weight 0.2s ease, color 0.2s;
+  user-select: none;
+  border-radius: 4px;
+}
+
+.yearItem:hover {
+  color: var(--ink-dim);
+}
+
+.yearItemActive {
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 16px;
+}
+
+.monthDivider {
+  height: 1px;
+  background: var(--rule-soft);
+  margin: 4px 0 8px;
+}
+
+/* 3-column month grid inside the dropdown */
+.monthGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.monthOption {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10.5px;
+  color: var(--bg);
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 5px;
+  padding: 6px 4px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  height: auto !important;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  letter-spacing: 0.01em;
+}
+
+.monthOption:hover {
+  background: rgba(203, 184, 158, 0.08);
+  border-color: var(--rule);
+  color: var(--ink);
+}
+
+.monthOptionActive {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg);
+  font-weight: 600;
+  box-shadow: 0 0 0 2px rgba(203, 184, 158, 0.35);
 }
