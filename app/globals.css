@@ -36,10 +36,11 @@ html {
 
 body {
   min-height: 100%;
+  overflow-x: hidden;
   background: var(--bg);
   background-image:
-    radial-gradient(ellipse at top left, rgba(201,161,90,0.05), transparent 45%),
-    radial-gradient(ellipse at bottom right, rgba(126,160,196,0.04), transparent 50%);
+    radial-gradient(ellipse at top left, rgba(201, 161, 90, 0.05), transparent 45%),
+    radial-gradient(ellipse at bottom right, rgba(126, 160, 196, 0.04), transparent 50%);
   color: var(--ink);
   font-family: 'Inter', sans-serif;
   line-height: 1.55;
@@ -95,10 +96,11 @@ select:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+    animation-duration: 0.1ms !important;
+    transition-duration: 0.1ms !important;
   }
 }
