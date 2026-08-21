@@ -66,8 +66,8 @@
   border-radius: 12px;
   padding: 24px;
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(203, 184, 158, 0.05);
 }
 
 .sidebar {
@@ -82,8 +82,8 @@
   border-radius: 12px;
   padding: 24px;
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(203, 184, 158, 0.05);
 }
 
 .upcomingTitle {
@@ -196,14 +196,17 @@
   cursor: pointer;
   user-select: none;
 }
+
 .roomSelectWrapper:hover h1 {
   color: #eef4ce;
   font-weight: 900;
 }
+
 .dropdownIcon {
   color: var(--ink-dim);
   transition: transform 0.2s;
 }
+
 .dropdownIconOpen {
   transform: rotate(180deg);
 }
@@ -218,7 +221,7 @@
   border-radius: 8px;
   padding: 8px;
   min-width: 200px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -232,6 +235,7 @@
     opacity: 0;
     transform: scaleY(0.95) translateY(-5px);
   }
+
   to {
     opacity: 1;
     transform: scaleY(1) translateY(0);
@@ -250,11 +254,13 @@
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .roomOption:hover {
   background: var(--rule-soft);
 }
+
 .roomOptionActive {
-  background: rgba(201, 161, 90, 0.1);
+  background: rgba(203, 184, 158, 0.12);
   color: var(--gold);
   font-weight: 500;
 }
@@ -263,6 +269,7 @@
   .layout {
     grid-template-columns: 1fr;
   }
+
   .letterhead {
     flex-direction: column;
     align-items: flex-start;

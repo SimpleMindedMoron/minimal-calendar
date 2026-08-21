@@ -4,6 +4,7 @@
   align-items: baseline;
   margin-bottom: 18px;
 }
+
 .panelHead h2 {
   font-family: 'Pilcrow Rounded', sans-serif;
   font-style: italic;
@@ -11,6 +12,7 @@
   font-size: 21px;
   color: var(--ink);
 }
+
 .nav {
   display: flex;
   align-items: center;
@@ -19,6 +21,7 @@
   font-size: 11px;
   color: var(--ink-faint);
 }
+
 .nav button {
   background: none;
   border: 1px solid var(--rule);
@@ -33,6 +36,7 @@
   justify-content: center;
   transition: all 0.2s;
 }
+
 .nav button:hover {
   background: var(--surface-raised);
   color: var(--ink);
@@ -51,6 +55,7 @@
   width: auto !important;
   height: auto !important;
 }
+
 .addBtn:hover {
   opacity: 0.9;
 }
@@ -60,6 +65,7 @@
   grid-template-columns: repeat(7, 1fr);
   margin-bottom: 4px;
 }
+
 .weekdays span {
   font-family: 'Archivo', sans-serif;
   font-size: 10px;
@@ -78,8 +84,15 @@
 }
 
 @keyframes calendar-in {
-  from { opacity: 0; transform: translateX(5px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .cell {
@@ -92,14 +105,17 @@
   display: flex;
   flex-direction: column;
 }
+
 .cell:nth-child(7n) {
   border-right: none;
 }
+
 .cell:hover:not(.empty) {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(203, 184, 158, 0.05);
 }
+
 .cell.selected:not(.today) {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(203, 184, 158, 0.1);
 }
 
 .date {
@@ -109,13 +125,14 @@
 }
 
 .empty {
-  background: repeating-linear-gradient(135deg, transparent, transparent 6px, rgba(255,255,255,0.008) 6px, rgba(255,255,255,0.008) 7px);
+  background: repeating-linear-gradient(135deg, transparent, transparent 6px, rgba(203, 184, 158, 0.02) 6px, rgba(203, 184, 158, 0.02) 7px);
   cursor: default;
 }
 
 .today {
   background: var(--surface-raised);
 }
+
 .today .date {
   color: var(--gold);
   font-weight: 500;
@@ -130,7 +147,7 @@
   border-style: solid;
   border-width: 0 16px 16px 0;
   border-color: transparent var(--bg) transparent transparent;
-  filter: drop-shadow(-1px 1px 1px rgba(0,0,0,0.35));
+  filter: drop-shadow(-1px 1px 1px rgba(0, 0, 0, 0.5));
 }
 
 .tabs {
@@ -156,14 +173,17 @@
   background: var(--exam-dim);
   color: var(--exam);
 }
+
 .tabQuiz {
   background: var(--quiz-dim);
   color: var(--quiz);
 }
+
 .tabStudy {
   background: var(--study-dim);
   color: var(--study);
 }
+
 .tabGeneral {
   background: var(--rule-soft);
   color: var(--ink);
@@ -181,10 +201,22 @@
   height: 4px;
   border-radius: 50%;
 }
-.smallDotExam { background: var(--exam); }
-.smallDotQuiz { background: var(--quiz); }
-.smallDotStudy { background: var(--study); }
-.smallDotGeneral { background: var(--ink-dim); }
+
+.smallDotExam {
+  background: var(--exam);
+}
+
+.smallDotQuiz {
+  background: var(--quiz);
+}
+
+.smallDotStudy {
+  background: var(--study);
+}
+
+.smallDotGeneral {
+  background: var(--ink-dim);
+}
 
 .legend {
   display: flex;
@@ -196,22 +228,27 @@
   font-size: 10.5px;
   color: var(--ink-dim);
 }
+
 .legend span {
   display: flex;
   align-items: center;
   gap: 6px;
 }
+
 .dot {
   width: 7px;
   height: 7px;
   border-radius: 1px;
 }
+
 .dotExam {
   background: var(--exam);
 }
+
 .dotQuiz {
   background: var(--quiz);
 }
+
 .dotStudy {
   background: var(--study);
 }

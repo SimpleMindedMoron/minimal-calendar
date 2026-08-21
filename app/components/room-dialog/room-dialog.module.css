@@ -7,7 +7,7 @@
   display: grid;
   place-items: center;
   padding: 1rem;
-  background: rgba(23, 21, 27, 0.82);
+  background: rgba(12, 12, 12, 0.85);
   animation: fade-in 180ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
@@ -17,7 +17,7 @@
   border: 1px solid var(--rule);
   border-radius: 12px;
   background: var(--surface);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(203, 184, 158, 0.05);
   animation: dialog-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -62,12 +62,15 @@
   transition: color 180ms ease;
   cursor: pointer;
 }
+
 .tabBtn:hover {
   color: var(--ink-dim);
 }
+
 .tabBtn.activeTab {
   color: var(--gold);
 }
+
 .tabBtn.activeTab::after {
   content: "";
   position: absolute;
@@ -138,6 +141,7 @@
   background: transparent;
   color: var(--ink-dim);
 }
+
 .cancelButton:hover {
   background: var(--surface-raised);
   color: var(--ink);
@@ -148,13 +152,16 @@
   background: var(--gold);
   color: var(--bg);
 }
+
 .saveButton:hover {
   opacity: 0.9;
   transform: translateY(-1px);
 }
+
 .saveButton:active {
   transform: scale(0.97);
 }
+
 .saveButton:disabled {
   background: var(--rule);
   color: var(--ink-faint);
@@ -163,8 +170,13 @@
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes dialog-in {
@@ -172,6 +184,7 @@
     opacity: 0;
     transform: translateY(12px) scale(0.985);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
