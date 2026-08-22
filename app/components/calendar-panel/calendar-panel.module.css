@@ -137,6 +137,11 @@
   background: rgba(203, 184, 158, 0.05);
 }
 
+.cell:hover:not(.empty) .date {
+  font-weight: 800;
+  color: var(--ink);
+}
+
 .cell.selected:not(.today) {
   background: rgba(203, 184, 158, 0.1);
 }
@@ -145,6 +150,7 @@
   font-family: 'Pilcrow Rounded', sans-serif;
   font-size: 14px;
   color: var(--ink-dim);
+  transition: all 0.15s ease;
 }
 
 .empty {
@@ -555,3 +561,44 @@
   font-weight: 600;
   box-shadow: 2px 2px 0px 0px var(--rule);
 }
+.dateRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.eventsIndicator {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.desktopDot {
+  display: inline-block;
+}
+
+.mobileDot {
+  display: none;
+}
+
+.desktopTabs {
+  display: flex;
+}
+
+.dotGeneral {
+  background: var(--ink-dim);
+}
+
+@media (max-width: 768px) {
+  .desktopDot {
+    display: none;
+  }
+  .mobileDot {
+    display: inline-block;
+  }
+  .desktopTabs {
+    display: none !important;
+  }
+}
+
