@@ -9,6 +9,8 @@ A high-performance, multi-tenant shared calendar application built for study gro
 *   **Zero-Flash Authentication:** Utilizes Next.js Middleware and `@supabase/ssr` for seamless server-side route protection, eliminating client-side loading flashes.
 *   **Production-Grade Security:** Fully locked down with Supabase Row Level Security (RLS). Users can only view, create, or delete events within rooms they have explicitly joined. Admins retain exclusive deletion rights for the rooms they create.
 *   **Event Categorization:** Classify calendar events seamlessly (e.g., Exams, Quizzes, Study Sessions).
+*   **Automated Email Invitations:** Invite users directly via email. The app sends customized HTML emails containing the secure room code using Gmail SMTP (via Nodemailer) or the Resend API.
+*   **Access Control Modes:** Define room access as "Strict" (only invited emails can join) or "Open" (anyone with the code can join).
 
 ## 🛠 Tech Stack
 
@@ -16,7 +18,8 @@ A high-performance, multi-tenant shared calendar application built for study gro
 *   **Backend & Auth:** Supabase (PostgreSQL, Supabase Auth, `@supabase/ssr`)
 *   **Styling:** CSS Modules
 *   **Components:** `react-day-picker` (Calendar logic), `lucide-react` (Icons)
-*   **Utilities:** `date-fns`
+*   **Utilities:** `date-fns`, `next-themes` (Dark Mode)
+*   **Email Services:** `nodemailer`, Resend API
 
 ---
 
@@ -33,10 +36,16 @@ npm install
 ```
 
 ### 2. Environment Variables
-Create a `.env.local` file in the root directory and add your Supabase credentials:
+Create a `.env.local` file in the root directory and add your Supabase credentials, as well as optional email provider credentials for sending invites:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Optional: For Email Invitations
+GMAIL_USER=your_gmail_address
+GMAIL_APP_PASSWORD=your_gmail_app_password
+# OR
+RESEND_API_KEY=your_resend_api_key
 ```
 
 ### 3. Database Setup
