@@ -111,23 +111,21 @@
 }
 
 .field input:hover {
-  border-color: var(--rule);
+  border-color: var(--gold);
 }
 
 .field input:focus {
   background: var(--surface-raised);
-  border-color: var(--rule);
+  border-color: var(--gold);
   color: var(--ink);
   font-weight: 500;
   outline: none;
-  transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px 0px transparent;
 }
 
 .submitButton {
   width: 100%;
   padding: 10px;
-  background: var(--exam);
+  background: var(--gold);
   color: var(--bg);
   border: 2px solid var(--rule);
   border-radius: 12px;
@@ -140,11 +138,11 @@
 }
 
 .submitButton:hover:not(:disabled) {
-  background: var(--exam-dim);
+  background: #8b9e82;
   color: var(--ink);
   font-weight: 700;
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px 0px var(--rule);
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
 .submitButton:active:not(:disabled) {
