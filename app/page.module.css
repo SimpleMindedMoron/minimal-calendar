@@ -303,7 +303,7 @@
   border-radius: 12px;
   font-size: 12px;
   padding: 4px 8px;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Archivo', sans-serif;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -389,7 +389,7 @@
   background: transparent;
   border: none;
   color: var(--ink);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 14px;
   text-align: left;
   padding: 8px 12px;
