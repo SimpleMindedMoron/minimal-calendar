@@ -4,11 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import { format, addDays, startOfDay } from "date-fns";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { LogOut, Plus, Settings, ChevronDown, UserPlus } from "lucide-react";
+import { LogOut, Plus, Settings, ChevronDown, UserPlus, Users } from "lucide-react";
 import { CalendarPanel } from "./components/calendar-panel/calendar-panel";
 import { EventDialog } from "./components/event-dialog/event-dialog";
 import { RoomDialog } from "./components/room-dialog/room-dialog";
 import { InviteDialog } from "./components/invite-dialog/invite-dialog";
+import { MembersDialog } from "./components/members-dialog/members-dialog";
 import { EventList } from "./components/event-list/event-list";
 import styles from "./page.module.css";
 import { supabase } from "../lib/supabase";
@@ -23,6 +24,7 @@ export default function Home() {
   const [activeRoom, setActiveRoom] = useState<Room | null>(null);
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUpcomingExpanded, setIsUpcomingExpanded] = useState(false);
 
@@ -148,6 +150,28 @@ export default function Home() {
     router.push("/login");
   };
 
+  const handleLeaveRoom = async (roomId: string) => {
+    if (!userId) return;
+    const roomToLeave = rooms.find((r) => r.id === roomId);
+    const roomName = roomToLeave ? roomToLeave.name : "this room";
+    if (!confirm(`Are you sure you want to leave "${roomName}"?`)) return;
+
+    const { error } = await supabase
+      .from("calendar_members")
+      .delete()
+      .eq("calendar_id", roomId)
+      .eq("user_id", userId);
+
+    if (error) {
+      alert("Failed to leave room: " + error.message);
+    } else {
+      if (activeRoom?.id === roomId) {
+        setActiveRoom(null);
+      }
+      await fetchRooms(userId);
+    }
+  };
+
   // Close dropdown on outside click
   useEffect(() => {
     const closeMenu = (e: MouseEvent) => {
@@ -163,16 +187,20 @@ export default function Home() {
     <div className={styles.appShell}>
       <Link 
         href="/" 
-        className={styles.cornerLogo} 
+        className={styles.cornerBrand} 
         onClick={() => setActiveRoom(null)}
         title="Home"
       >
-        A
+        <div className={styles.cornerLogo}>A</div>
+        <div className={styles.cornerBrandText}>
+          <span className={styles.cornerBrandTitle}>Shared calendar</span>
+          <span className={styles.cornerBrandSub}>{rooms.length} accessible rooms</span>
+        </div>
       </Link>
       <div className={styles.page}>
         <div className={styles.letterhead}>
           <div className={styles.mark}>
-            <div>
+            <div className={styles.roomHeaderGroup}>
               <div 
                 className={styles.roomSelectWrapper} 
                 onClick={(e) => { e.stopPropagation(); setIsDropdownOpen(!isDropdownOpen); }}
@@ -203,8 +231,16 @@ export default function Home() {
                   </div>
                 )}
               </div>
-              <div className={styles.sub}>
-                <span>Shared calendar · {rooms.length} accessible rooms</span>
+              <div className={styles.membersWrapper}>
+                <button
+                  type="button"
+                  className={styles.membersBtn}
+                  onClick={() => setIsMembersModalOpen(true)}
+                  aria-label="View room members"
+                >
+                  <Users size={12} />
+                  <span>Members</span>
+                </button>
               </div>
             </div>
           </div>
@@ -296,12 +332,22 @@ export default function Home() {
         onClose={() => setIsRoomModalOpen(false)}
         onSuccess={() => fetchRooms(userId)}
         userId={userId}
+        rooms={rooms}
+        onLeaveRoom={handleLeaveRoom}
       />
       <InviteDialog
         isOpen={isInviteModalOpen}
         onClose={() => setIsInviteModalOpen(false)}
         activeRoom={activeRoom}
         rooms={rooms}
+      />
+      <MembersDialog
+        isOpen={isMembersModalOpen}
+        onClose={() => setIsMembersModalOpen(false)}
+        activeRoom={activeRoom}
+        rooms={rooms}
+        onOpenInvite={() => setIsInviteModalOpen(true)}
+        onLeaveRoom={handleLeaveRoom}
       />
     </div>
   );

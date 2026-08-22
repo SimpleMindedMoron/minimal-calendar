@@ -22,9 +22,9 @@ export default function Login() {
       error
         ? { text: error.message, type: "error" }
         : {
-            text: "Success! Check your email to confirm your account.",
-            type: "success",
-          },
+          text: "Success! Check your email to confirm your account.",
+          type: "success",
+        },
     );
     setLoading(false);
   };

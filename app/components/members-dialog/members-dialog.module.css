@@ -1,0 +1,327 @@
+.backdrop {
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(12, 12, 12, 0.85);
+  animation: fade-in 180ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.dialog {
+  width: min(100%, 30rem);
+  padding: clamp(1.4rem, 4vw, 2.25rem);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(203, 184, 158, 0.05);
+  animation: dialog-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.header {
+  margin: 0 0 1.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(203, 184, 158, 0.1);
+  border: 1px solid var(--rule);
+  color: var(--gold);
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  margin: 0;
+  color: var(--ink);
+  font-family: 'Pilcrow Rounded', sans-serif;
+  font-style: italic;
+  font-size: 26px;
+  font-weight: 500;
+}
+
+.subtitle {
+  margin: 0.4rem 0 0;
+  color: var(--ink-dim);
+  font-family: 'Archivo', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.body {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.roomSelectSection {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.label {
+  color: var(--ink-faint);
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.select {
+  width: 100%;
+  min-height: 2.6rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Archivo', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: var(--surface-raised);
+}
+
+.rosterSection {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.rosterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.roomTag {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.memberList {
+  display: grid;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--bg);
+  border: 1px solid var(--rule-soft);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.memberItem:hover {
+  background: var(--surface-raised);
+  border-color: var(--rule);
+}
+
+.memberAvatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(203, 184, 158, 0.1);
+  border: 1px solid var(--rule);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.memberDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.memberId {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.memberJoined {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+
+.roleBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  text-transform: capitalize;
+  letter-spacing: 0.02em;
+}
+
+.role_admin {
+  background: rgba(226, 135, 139, 0.15);
+  border: 1px solid var(--exam, #E2878B);
+  color: var(--exam, #E2878B);
+}
+
+.role_contributor {
+  background: rgba(137, 179, 153, 0.15);
+  border: 1px solid var(--quiz, #89B399);
+  color: var(--quiz, #89B399);
+}
+
+.role_viewer {
+  background: rgba(203, 184, 158, 0.08);
+  border: 1px solid var(--rule);
+  color: var(--ink-dim);
+}
+
+.loadingRow,
+.emptyRow {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: var(--ink-dim);
+  font-family: 'Archivo', sans-serif;
+  font-size: 12.5px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.leftActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inviteButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  background: var(--surface-raised);
+  color: var(--ink);
+  border-radius: 6px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.inviteButton:hover {
+  background: var(--gold);
+  color: var(--bg);
+  border-color: var(--gold);
+}
+
+.leaveButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgba(226, 135, 139, 0.3);
+  background: transparent;
+  color: var(--exam, #E2878B);
+  border-radius: 6px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.leaveButton:hover {
+  background: rgba(226, 135, 139, 0.15);
+  border-color: var(--exam, #E2878B);
+}
+
+.doneButton {
+  padding: 8px 18px;
+  border: none;
+  background: var(--gold);
+  color: var(--bg);
+  border-radius: 6px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.doneButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.doneButton:active {
+  transform: scale(0.97);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 1.5rem 0;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  color: var(--ink-dim);
+  font-family: 'Archivo', sans-serif;
+  font-size: 13px;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

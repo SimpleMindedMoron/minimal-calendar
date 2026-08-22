@@ -16,16 +16,16 @@
   width: min(100%, 31rem);
   padding: clamp(1.4rem, 4vw, 2.25rem);
   border: 2px solid var(--rule);
-  border-radius: 4px;
+  border-radius: 24px;
   background: var(--surface);
-  box-shadow: 4px 4px 0px 0px var(--rule);
+  box-shadow: 4px 4px 0px 0px var(--shadow);
   animation: dialog-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .title {
   margin: 0 0 1.6rem;
   color: var(--ink);
-  font-family: 'Pilcrow Rounded', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-style: italic;
   font-size: 26px;
   font-weight: 500;
@@ -57,13 +57,13 @@
   min-height: 2.75rem;
   padding: 0.65rem 0.75rem;
   border: 2px solid var(--rule);
-  border-radius: 4px;
+  border-radius: 12px;
   background: var(--surface-raised);
   color: var(--ink);
   font-family: 'Archivo', sans-serif;
   font-size: 14px;
   transition: all 0.1s;
-  box-shadow: 4px 4px 0px 0px var(--rule);
+  box-shadow: 2px 2px 0px 0px var(--shadow);
 }
 
 .field input:hover,
@@ -72,7 +72,7 @@
   border-color: var(--rule);
   outline: none;
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px 0px var(--rule);
+  box-shadow: 0px 0px 0px 0px transparent;
 }
 
 .actions {
@@ -86,13 +86,13 @@
 .saveButton {
   min-height: 2.65rem;
   padding: 0.55rem 1.2rem;
-  border-radius: 4px;
+  border-radius: 12px;
   font-family: 'Archivo', sans-serif;
   font-size: 13px;
   font-weight: 500;
   transition: all 0.1s;
   cursor: pointer;
-  box-shadow: 4px 4px 0px 0px var(--rule);
+  box-shadow: 4px 4px 0px 0px var(--shadow);
 }
 
 .cancelButton {
@@ -105,24 +105,24 @@
   background: var(--surface-raised);
   color: var(--ink);
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px 0px var(--rule);
+  box-shadow: 2px 2px 0px 0px var(--shadow);
 }
 
 .saveButton {
   border: 2px solid var(--rule);
   background: var(--gold);
-  color: var(--ink);
+  color: var(--bg);
 }
 
 .saveButton:hover {
   opacity: 1;
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px 0px var(--rule);
+  box-shadow: 2px 2px 0px 0px var(--shadow);
 }
 
 .saveButton:active {
   transform: translate(4px, 4px);
-  box-shadow: 0px 0px 0px 0px var(--rule);
+  box-shadow: 0px 0px 0px 0px transparent;
 }
 
 @keyframes fade-in {

@@ -6,7 +6,7 @@
 }
 
 .panelHead h2 {
-  font-family: 'Pilcrow Rounded', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-style: italic;
   font-weight: 500;
   font-size: 18px;
@@ -53,7 +53,7 @@
 }
 
 .title {
-  font-family: 'Pilcrow Rounded', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 15px;
   color: var(--ink);
   margin-bottom: 4px;
@@ -69,9 +69,9 @@
   text-transform: uppercase;
 }
 
-.metaExam { color: var(--exam); }
-.metaQuiz { color: var(--quiz); }
-.metaStudy { color: var(--study); }
+.metaExam { color: var(--exam-dim); }
+.metaQuiz { color: var(--quiz-dim); }
+.metaStudy { color: var(--study-dim); }
 .metaGeneral { color: var(--ink-dim); }
 
 .meta::before {
@@ -100,7 +100,7 @@
 }
 
 .deleteBtn:hover {
-  color: var(--exam);
+  color: var(--exam-dim);
 }
 
 .emptyState {
