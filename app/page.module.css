@@ -161,7 +161,8 @@
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  width: 350px;
+  gap: 15px;
 }
 
 .layout {
@@ -269,26 +270,27 @@
 
 /* Actions in header */
 .inviteBtn {
+  flex: 1;
   background: var(--gold);
   color: var(--bg);
   border: 1px solid var(--gold);
   border-radius: 12px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   padding: 6px 14px;
-  font-family: "Archivo", sans-serif;
+  font-family: 'Archivo', sans-serif;
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.15s ease;
   box-shadow: 2px 2px 0px 0px var(--rule);
 }
 
 .inviteBtn:hover {
-  font-weight: 700;
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px 0px var(--rule);
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
 .inviteBtn:active {
@@ -297,12 +299,15 @@
 }
 
 .headerBtn {
+  justify-content: center;
+  flex: 1;
   background: var(--surface);
   border: 2px solid var(--rule);
   color: var(--ink);
   border-radius: 12px;
   font-size: 12px;
-  padding: 4px 8px;
+  font-weight: 500;
+  padding: 6px 14px;
   font-family: 'Archivo', sans-serif;
   display: inline-flex;
   align-items: center;
@@ -313,9 +318,8 @@
 
 .headerBtn:hover {
   background: var(--surface-raised);
-  font-weight: 700;
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px 0px var(--rule);
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
 .headerBtn:active {
@@ -323,8 +327,13 @@
   box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
+.dangerBtn {
+  flex: 1;
+}
+
 .dangerBtn:hover {
   color: var(--exam);
+  background-color: var(--exam-dim);
   border-color: var(--exam-dim);
 }
 
@@ -341,6 +350,11 @@
 }
 
 .roomSelectWrapper:hover h1 {
+  color: var(--gold);
+  font-weight: 900;
+}
+
+.roomSelectWrapper:active {
   color: var(--gold);
   font-weight: 900;
 }
