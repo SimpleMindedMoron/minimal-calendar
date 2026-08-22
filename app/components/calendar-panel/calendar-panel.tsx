@@ -90,14 +90,14 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
   // Fetch events for the current month
   const fetchMonthEvents = useCallback(async () => {
     if (rooms.length === 0) { setMonthEvents([]); return; }
-    
+
     const start = format(startOfMonth(currentMonth), "yyyy-MM-dd");
     const end = format(endOfMonth(currentMonth), "yyyy-MM-dd");
-    
+
     let query = supabase.from("events").select("*").gte("event_date", start).lte("event_date", end);
     if (activeRoom) query = query.eq("calendar_id", activeRoom.id);
     else query = query.in("calendar_id", rooms.map(r => r.id));
-    
+
     const { data, error } = await query;
     if (error) console.error("Error fetching month events:", error);
     else setMonthEvents((data ?? []) as CalendarEvent[]);
@@ -113,26 +113,26 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
     const end = endOfMonth(currentMonth);
     const daysInMonth = eachDayOfInterval({ start, end });
     const startWeekday = getDay(start); // 0 = Sunday, 1 = Monday...
-    
+
     type Cell = { type: "empty" | "day"; key: string; date?: Date };
     const cells: Cell[] = [];
-    
+
     // Empty cells before the 1st
     for (let i = 0; i < startWeekday; i++) {
       cells.push({ type: "empty", key: `prev-empty-${i}` });
     }
-    
+
     // Actual days
     daysInMonth.forEach((day) => {
       cells.push({ type: "day", date: day, key: format(day, "yyyy-MM-dd") });
     });
-    
+
     // Empty cells after the end to complete 42 cells (6 rows)
     const remaining = 42 - cells.length;
     for (let i = 0; i < remaining; i++) {
       cells.push({ type: "empty", key: `next-empty-${i}` });
     }
-    
+
     return cells;
   }, [currentMonth]);
 
@@ -275,31 +275,30 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
           const dayEvents = monthEvents.filter(e => e.event_date === dateStr);
           const isSelected = selectedDate && isSameDay(cell.date!, selectedDate);
           const isTodayDate = isToday(cell.date!);
-          
+
           return (
-            <div 
-              key={cell.key} 
+            <div
+              key={cell.key}
               className={`${styles.cell} ${isSelected ? styles.selected : ''} ${isTodayDate ? styles.today : ''}`}
               onClick={() => onSelectDate(cell.date!)}
             >
               {isTodayDate && <div className={styles.fold}></div>}
-              
               <div className={styles.dateRow}>
                 <span className={styles.date}>{format(cell.date!, "d")}</span>
-                
+
                 {dayEvents.length > 0 && (
                   <div className={styles.eventsIndicator}>
                     {dayEvents.slice(1).map(ev => (
-                      <div 
-                        key={`desk-${ev.id}`} 
-                        className={`${styles.dot} ${getDotClass(ev.event_type)} ${styles.desktopDot}`} 
+                      <div
+                        key={`desk-${ev.id}`}
+                        className={`${styles.dot} ${getDotClass(ev.event_type)} ${styles.desktopDot}`}
                         title={ev.title}
                       ></div>
                     ))}
                     {dayEvents.slice(0, 2).map(ev => (
-                      <div 
-                        key={`mob-${ev.id}`} 
-                        className={`${styles.dot} ${getDotClass(ev.event_type)} ${styles.mobileDot}`} 
+                      <div
+                        key={`mob-${ev.id}`}
+                        className={`${styles.dot} ${getDotClass(ev.event_type)} ${styles.mobileDot}`}
                         title={ev.title}
                       ></div>
                     ))}
