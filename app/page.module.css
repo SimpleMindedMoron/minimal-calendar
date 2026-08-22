@@ -6,41 +6,77 @@
   position: relative;
 }
 
-.cornerLogo {
+.cornerBrand {
   position: fixed;
-  top: 20px;
+  top: 18px;
   left: 24px;
-  width: 38px;
-  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.cornerLogo {
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
   background: var(--surface-raised);
   border: 1px solid var(--rule);
   color: var(--gold);
   font-family: 'Pilcrow Rounded', sans-serif;
   font-style: italic;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   user-select: none;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(203, 184, 158, 0.1);
+  box-shadow: 2px 2px 0px 0px var(--rule);
   z-index: 100;
 }
 
-.cornerLogo:hover {
+.cornerBrand:hover .cornerLogo {
   background: rgba(203, 184, 158, 0.12);
   border-color: var(--gold);
   color: var(--ink);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(203, 184, 158, 0.25);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px var(--rule);
 }
 
-.cornerLogo:active {
-  transform: scale(0.95);
+.cornerBrand:active .cornerLogo {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--rule);
+}
+
+.cornerBrandText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cornerBrandTitle {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  transition: color 0.2s ease;
+}
+
+.cornerBrandSub {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+}
+
+.cornerBrand:hover .cornerBrandTitle {
+  color: var(--ink);
 }
 
 .page {
@@ -74,6 +110,40 @@
   justify-self: center;
   gap: 12px;
   transition: all 0.2s ease-in-out;
+}
+
+.roomHeaderGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.membersWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.membersBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: font-weight 0.3s ease, color 0.2s ease;
+  user-select: none;
+}
+
+.membersBtn:hover {
+  font-weight: 700;
+  color: var(--ink);
 }
 
 .letterhead .sub {
@@ -189,11 +259,12 @@
   margin-top: 4px;
   cursor: pointer;
   text-align: left;
-  transition: color 0.2s;
+  transition: all 0.15s ease;
 }
 
 .viewMoreBtn:hover {
   color: var(--ink);
+  font-weight: 700;
 }
 
 /* Actions in header */
@@ -210,18 +281,19 @@
   align-items: center;
   gap: 7px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(203, 184, 158, 0.15);
+  transition: all 0.15s ease;
+  box-shadow: 2px 2px 0px 0px var(--rule);
 }
 
 .inviteBtn:hover {
-  opacity: 0.92;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(203, 184, 158, 0.25);
+  font-weight: 700;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px var(--rule);
 }
 
 .inviteBtn:active {
-  transform: scale(0.98);
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
 .headerBtn {
@@ -235,14 +307,20 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.1s;
-  box-shadow: 2px 2px 0px 0px var(--shadow);
+  transition: all 0.15s ease;
+  box-shadow: 2px 2px 0px 0px var(--rule);
 }
 
 .headerBtn:hover {
   background: var(--surface-raised);
+  font-weight: 700;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px var(--rule);
+}
+
+.headerBtn:active {
   transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px 0px transparent;
+  box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
 .dangerBtn:hover {
@@ -317,11 +395,13 @@
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.15s ease;
 }
 
 .roomOption:hover {
   background: var(--rule-soft);
+  font-weight: 700;
+  transform: translate(-1px, -1px);
 }
 
 .roomOptionActive {

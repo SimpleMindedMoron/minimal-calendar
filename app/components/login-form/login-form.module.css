@@ -126,29 +126,30 @@
 
 .submitButton {
   width: 100%;
-  min-height: 3.2rem;
-  margin-top: 1rem;
+  padding: 10px;
+  background: var(--exam);
+  color: var(--bg);
   border: 2px solid var(--rule);
   border-radius: 12px;
-  background: var(--gold);
-  color: var(--ink);
-  font-family: "Archivo", sans-serif;
-  font-size: 14px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 15px;
   font-weight: 600;
-  transition: all 0.1s ease;
   cursor: pointer;
-  box-shadow: 4px 4px 0px 0px var(--shadow);
+  transition: all 0.15s ease;
+  box-shadow: 2px 2px 0px 0px var(--rule);
 }
 
 .submitButton:hover:not(:disabled) {
   background: var(--exam-dim);
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px 0px var(--shadow);
+  color: var(--ink);
+  font-weight: 700;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px var(--rule);
 }
 
 .submitButton:active:not(:disabled) {
-  transform: translate(4px, 4px);
-  box-shadow: 0px 0px 0px 0px transparent;
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
 .submitButton:disabled {

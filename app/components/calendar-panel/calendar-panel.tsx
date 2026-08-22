@@ -147,12 +147,12 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
     return styles.tabGeneral;
   };
 
-  const getSmallDotClass = (type: string) => {
+  const getDotClass = (type: string) => {
     const t = type.toLowerCase();
-    if (t === "exam") return styles.smallDotExam;
-    if (t === "quiz") return styles.smallDotQuiz;
-    if (t === "study") return styles.smallDotStudy;
-    return styles.smallDotGeneral;
+    if (t === "exam") return styles.dotExam;
+    if (t === "quiz") return styles.dotQuiz;
+    if (t === "study") return styles.dotStudy;
+    return styles.dotGeneral;
   };
 
   return (
@@ -283,26 +283,37 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
               onClick={() => onSelectDate(cell.date!)}
             >
               {isTodayDate && <div className={styles.fold}></div>}
-              <span className={styles.date}>{format(cell.date!, "d")}</span>
               
-              <div className={styles.tabs}>
+              <div className={styles.dateRow}>
+                <span className={styles.date}>{format(cell.date!, "d")}</span>
+                
                 {dayEvents.length > 0 && (
-                  <div className={`${styles.tab} ${getTabClass(dayEvents[0].event_type)}`} title={dayEvents[0].title}>
-                    {dayEvents[0].event_type}
-                  </div>
-                )}
-                {dayEvents.length > 1 && (
-                  <div className={styles.additionalDots}>
+                  <div className={styles.eventsIndicator}>
                     {dayEvents.slice(1).map(ev => (
                       <div 
-                        key={ev.id} 
-                        className={`${styles.smallDot} ${getSmallDotClass(ev.event_type)}`} 
+                        key={`desk-${ev.id}`} 
+                        className={`${styles.dot} ${getDotClass(ev.event_type)} ${styles.desktopDot}`} 
+                        title={ev.title}
+                      ></div>
+                    ))}
+                    {dayEvents.slice(0, 2).map(ev => (
+                      <div 
+                        key={`mob-${ev.id}`} 
+                        className={`${styles.dot} ${getDotClass(ev.event_type)} ${styles.mobileDot}`} 
                         title={ev.title}
                       ></div>
                     ))}
                   </div>
                 )}
               </div>
+
+              {dayEvents.length > 0 && (
+                <div className={`${styles.tabs} ${styles.desktopTabs}`}>
+                  <div className={`${styles.tab} ${getTabClass(dayEvents[0].event_type)}`} title={dayEvents[0].title}>
+                    {dayEvents[0].event_type}
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
