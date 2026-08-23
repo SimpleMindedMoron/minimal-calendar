@@ -95,8 +95,11 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
     const end = format(endOfMonth(currentMonth), "yyyy-MM-dd");
 
     let query = supabase.from("events").select("*").gte("event_date", start).lte("event_date", end);
-    if (activeRoom) query = query.eq("calendar_id", activeRoom.id);
-    else query = query.in("calendar_id", rooms.map(r => r.id));
+    if (activeRoom && activeRoom.name !== "Personal Calendar") {
+      query = query.eq("calendar_id", activeRoom.id);
+    } else {
+      query = query.in("calendar_id", rooms.map((r) => r.id));
+    }
 
     const { data, error } = await query;
     if (error) console.error("Error fetching month events:", error);

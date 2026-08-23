@@ -51,7 +51,8 @@
   text-transform: uppercase;
 }
 
-.field input {
+.field input,
+.field select {
   width: 100%;
   min-height: 2.75rem;
   padding: 0.65rem 0.75rem;
@@ -66,7 +67,9 @@
 }
 
 .field input:hover,
-.field input:focus {
+.field input:focus,
+.field select:hover,
+.field select:focus {
   background: var(--surface-raised);
   border-color: var(--gold);
   outline: none;

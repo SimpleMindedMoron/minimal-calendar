@@ -62,11 +62,19 @@ export default function Home() {
         role: "admin" | "contributor" | "viewer";
         calendars: { id: string; name: string };
       };
-      const formattedRooms: Room[] = (data as unknown as SupabaseRoomResponse[]).map((item) => ({
+      let formattedRooms: Room[] = (data as unknown as SupabaseRoomResponse[]).map((item) => ({
         id: item.calendars.id,
         name: item.calendars.name,
         role: item.role,
       }));
+
+      // Deduplicate Personal Calendars caused by dev-mode race conditions
+      const personalCals = formattedRooms.filter(r => r.name === "Personal Calendar");
+      if (personalCals.length > 1) {
+        const [first, ...rest] = personalCals;
+        const restIds = new Set(rest.map(r => r.id));
+        formattedRooms = formattedRooms.filter(r => !restIds.has(r.id));
+      }
 
       // Auto-create Personal Calendar if it doesn't exist
       const hasPersonal = formattedRooms.some((r) => r.name === "Personal Calendar");
@@ -104,8 +112,11 @@ export default function Home() {
     setLoading(true);
     const formattedDate = format(selectedDate, "yyyy-MM-dd");
     let query = supabase.from("events").select("*").eq("event_date", formattedDate);
-    if (activeRoom) query = query.eq("calendar_id", activeRoom.id);
-    else query = query.in("calendar_id", rooms.map((r) => r.id));
+    if (activeRoom && activeRoom.name !== "Personal Calendar") {
+      query = query.eq("calendar_id", activeRoom.id);
+    } else {
+      query = query.in("calendar_id", rooms.map((r) => r.id));
+    }
     const { data, error } = await query.order("event_time", { ascending: true });
     if (error) console.error("Error fetching events:", error);
     else setEvents((data ?? []) as CalendarEvent[]);
@@ -119,8 +130,11 @@ export default function Home() {
     const fromDate = format(today, "yyyy-MM-dd");
     const toDate   = format(addDays(today, 8), "yyyy-MM-dd");
     let query = supabase.from("events").select("*").gte("event_date", fromDate).lt("event_date", toDate);
-    if (activeRoom) query = query.eq("calendar_id", activeRoom.id);
-    else query = query.in("calendar_id", rooms.map((r) => r.id));
+    if (activeRoom && activeRoom.name !== "Personal Calendar") {
+      query = query.eq("calendar_id", activeRoom.id);
+    } else {
+      query = query.in("calendar_id", rooms.map((r) => r.id));
+    }
     const { data, error } = await query.order("event_date").order("event_time");
     if (error) { console.error("Error fetching upcoming:", error); return; }
     const all = (data ?? []) as CalendarEvent[];
@@ -132,14 +146,12 @@ export default function Home() {
     if (userId) { void fetchEvents(); void fetchUpcomingEvents(); }
   }, [fetchEvents, fetchUpcomingEvents, userId]);
 
-  const handleAddEvent = async (title: string, time: string, type: EventType) => {
-    if (!selectedDate || !userId) return false;
-    const targetRoomId = activeRoom ? activeRoom.id : rooms[0]?.id || null;
-    if (!targetRoomId) { alert("You must join or create a room first."); return false; }
+  const handleAddEvent = async (title: string, time: string, type: EventType, date: string, roomId: string) => {
+    if (!userId) return false;
     const { error } = await supabase.from("events").insert([{
-      calendar_id: targetRoomId,
+      calendar_id: roomId,
       title,
-      event_date: format(selectedDate, "yyyy-MM-dd"),
+      event_date: date,
       event_time: `${time}:00`,
       event_type: type,
     }]);
@@ -219,7 +231,7 @@ export default function Home() {
                 className={styles.roomSelectWrapper} 
                 onClick={(e) => { e.stopPropagation(); setIsDropdownOpen(!isDropdownOpen); }}
               >
-                <h1>{activeRoom ? activeRoom.name : "All Rooms"}</h1>
+                <h1>{activeRoom ? activeRoom.name : "Loading..."}</h1>
                 <ChevronDown 
                   size={20} 
                   className={`${styles.dropdownIcon} ${isDropdownOpen ? styles.dropdownIconOpen : ""}`} 
@@ -355,6 +367,9 @@ export default function Home() {
         isOpen={isEventModalOpen}
         onClose={() => setIsEventModalOpen(false)}
         onSave={handleAddEvent}
+        rooms={rooms}
+        defaultRoomId={activeRoom?.id || ""}
+        defaultDate={selectedDate ? format(selectedDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")}
       />
       <RoomDialog
         isOpen={isRoomModalOpen}
