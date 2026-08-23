@@ -181,19 +181,21 @@ export function MembersDialog({
 
             <div className={styles.actions}>
               <div className={styles.leftActions}>
-                <button
-                  type="button"
-                  className={styles.inviteButton}
-                  onClick={() => {
-                    onClose();
-                    onOpenInvite();
-                  }}
-                >
-                  <UserPlus size={14} />
-                  <span>Invite</span>
-                </button>
+                {currentRoom?.name !== "Personal Calendar" && (
+                  <button
+                    type="button"
+                    className={styles.inviteButton}
+                    onClick={() => {
+                      onClose();
+                      onOpenInvite();
+                    }}
+                  >
+                    <UserPlus size={14} />
+                    <span>Invite</span>
+                  </button>
+                )}
 
-                {onLeaveRoom && currentRoom && (
+                {onLeaveRoom && currentRoom && currentRoom.name !== "Personal Calendar" && (
                   <button
                     type="button"
                     className={styles.leaveButton}

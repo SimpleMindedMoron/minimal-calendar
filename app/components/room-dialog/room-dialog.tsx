@@ -179,7 +179,7 @@ export function RoomDialog({
                       <span className={styles.roomRowName}>{r.name}</span>
                       <span className={styles.roomRowRole}>{r.role}</span>
                     </div>
-                    {onLeaveRoom && (
+                    {onLeaveRoom && r.name !== "Personal Calendar" && (
                       <button
                         type="button"
                         className={styles.leaveRoomRowBtn}

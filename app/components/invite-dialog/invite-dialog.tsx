@@ -149,7 +149,14 @@ export function InviteDialog({ isOpen, onClose, activeRoom, rooms }: Props) {
         aria-labelledby="invite-dialog-title"
         onClick={(e) => e.stopPropagation()}
       >
-        {!currentRoom ? (
+        {currentRoom?.name === "Personal Calendar" ? (
+          <div className={styles.emptyState}>
+            <p>This is your Personal Calendar. You cannot invite members to it.</p>
+            <button className={styles.doneButton} onClick={onClose}>
+              Close
+            </button>
+          </div>
+        ) : !currentRoom ? (
           <div className={styles.emptyState}>
             <p>You haven't created or joined any rooms yet.</p>
             <button className={styles.doneButton} onClick={onClose}>

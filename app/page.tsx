@@ -67,11 +67,33 @@ export default function Home() {
         name: item.calendars.name,
         role: item.role,
       }));
+
+      // Auto-create Personal Calendar if it doesn't exist
+      const hasPersonal = formattedRooms.some((r) => r.name === "Personal Calendar");
+      if (!hasPersonal) {
+        const { data: newRoom, error: roomError } = await supabase
+          .from("calendars")
+          .insert([{ name: "Personal Calendar" }])
+          .select()
+          .single();
+
+        if (!roomError && newRoom) {
+          const { error: memberError } = await supabase
+            .from("calendar_members")
+            .insert([{ calendar_id: newRoom.id, user_id: currentUserId, role: "admin" }]);
+
+          if (!memberError) {
+            formattedRooms.unshift({ id: newRoom.id, name: newRoom.name, role: "admin" });
+          }
+        }
+      }
+
       setRooms(formattedRooms);
       
-      // If no active room is set but rooms exist, pick the first one by default
+      // Select Personal Calendar by default if no active room is set
       if (formattedRooms.length > 0 && !activeRoom) {
-        setActiveRoom(formattedRooms[0]);
+        const personal = formattedRooms.find(r => r.name === "Personal Calendar");
+        setActiveRoom(personal || formattedRooms[0]);
       }
     }
   };
@@ -132,12 +154,9 @@ export default function Home() {
     else await Promise.all([fetchEvents(), fetchUpcomingEvents()]);
   };
 
-  const handleRoomSelect = (roomId: string | null) => {
-    if (roomId === null) setActiveRoom(null);
-    else {
-      const room = rooms.find(r => r.id === roomId);
-      if (room) setActiveRoom(room);
-    }
+  const handleRoomSelect = (roomId: string) => {
+    const room = rooms.find(r => r.id === roomId);
+    if (room) setActiveRoom(room);
     setIsDropdownOpen(false);
   };
 
@@ -184,7 +203,6 @@ export default function Home() {
       <Link 
         href="/" 
         className={styles.cornerBrand} 
-        onClick={() => setActiveRoom(null)}
         title="Home"
       >
         <div className={styles.cornerLogo}>A</div>
@@ -209,13 +227,20 @@ export default function Home() {
                 
                 {isDropdownOpen && (
                   <div className={styles.roomDropdown}>
-                    <button 
-                      className={`${styles.roomOption} ${activeRoom === null ? styles.roomOptionActive : ""}`} 
-                      onClick={() => handleRoomSelect(null)}
-                    >
-                      All Rooms
-                    </button>
-                    {rooms.map(r => (
+                    {rooms.find(r => r.name === "Personal Calendar") && (
+                      <button 
+                        className={`${styles.roomOption} ${activeRoom?.name === "Personal Calendar" ? styles.roomOptionActive : ""}`} 
+                        onClick={() => handleRoomSelect(rooms.find(r => r.name === "Personal Calendar")!.id)}
+                      >
+                        Personal Calendar
+                      </button>
+                    )}
+
+                    {rooms.filter(r => r.name !== "Personal Calendar").length > 0 && (
+                      <div className={styles.roomDropdownSection}>Shared Rooms</div>
+                    )}
+                    
+                    {rooms.filter(r => r.name !== "Personal Calendar").map(r => (
                       <button 
                         key={r.id} 
                         className={`${styles.roomOption} ${activeRoom?.id === r.id ? styles.roomOptionActive : ""}`} 
@@ -228,22 +253,26 @@ export default function Home() {
                 )}
               </div>
               <div className={styles.membersWrapper}>
-                <button
-                  type="button"
-                  className={styles.membersBtn}
-                  onClick={() => setIsMembersModalOpen(true)}
-                  aria-label="View room members"
-                >
-                  <Users size={12} />
-                  <span>Members</span>
-                </button>
+                {activeRoom?.name !== "Personal Calendar" && (
+                  <button
+                    type="button"
+                    className={styles.membersBtn}
+                    onClick={() => setIsMembersModalOpen(true)}
+                    aria-label="View room members"
+                  >
+                    <Users size={12} />
+                    <span>Members</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>
           <div className={styles.headerActions}>
-            <button className={styles.inviteBtn} onClick={() => setIsInviteModalOpen(true)}>
-              <UserPlus size={14} /> Invite
-            </button>
+            {activeRoom?.name !== "Personal Calendar" && (
+              <button className={styles.inviteBtn} onClick={() => setIsInviteModalOpen(true)}>
+                <UserPlus size={14} /> Invite
+              </button>
+            )}
             <button className={styles.headerBtn} onClick={() => setIsRoomModalOpen(true)}>
               <Settings size={12} /> Manage
             </button>

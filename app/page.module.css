@@ -399,6 +399,17 @@
   }
 }
 
+.roomDropdownSection {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  padding: 12px 12px 4px;
+  border-bottom: 1px solid var(--rule-soft);
+  margin-bottom: 4px;
+}
+
 .roomOption {
   background: transparent;
   border: none;
