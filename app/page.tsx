@@ -37,7 +37,6 @@ export default function Home() {
   // Upcoming & dot data
   const [upcomingEvents, setUpcomingEvents] = useState<CalendarEvent[]>([]);
   const [allEventDates, setAllEventDates] = useState<string[]>([]);
-  const [upcomingThisWeek, setUpcomingThisWeek] = useState(0);
 
   // Fetch user + rooms
   useEffect(() => {
@@ -105,9 +104,6 @@ export default function Home() {
     const all = (data ?? []) as CalendarEvent[];
     setUpcomingEvents(all);
     setAllEventDates([...new Set(all.map((e) => e.event_date))]);
-    
-    // Calculate events due this week (next 7 days)
-    setUpcomingThisWeek(all.length);
   }, [activeRoom, rooms]);
 
   useEffect(() => {
@@ -295,15 +291,19 @@ export default function Home() {
                   
                   return (
                     <>
-                      {visible.map(ev => (
-                        <div key={ev.id} className={styles.upcomingItem}>
-                          <div className={styles.upcomingDate}>{format(new Date(ev.event_date), "MMM d")}</div>
-                          <div className={styles.upcomingDetails}>
+                      {visible.map(ev => {
+                        const [y, m, d] = ev.event_date.split("-").map(Number);
+                        const localDate = new Date(y, m - 1, d);
+                        return (
+                          <div key={ev.id} className={styles.upcomingItem}>
+                            <div className={styles.upcomingDate}>{format(localDate, "MMM d")}</div>
+                            <div className={styles.upcomingDetails}>
                             <div className={styles.upcomingName}>{ev.title}</div>
-                            <div className={styles.upcomingTime}>{ev.event_time.slice(0, 5)}</div>
+                              <div className={styles.upcomingTime}>{ev.event_time.slice(0, 5)}</div>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                       {future.length > 3 && (
                         <button 
                           className={styles.viewMoreBtn}
