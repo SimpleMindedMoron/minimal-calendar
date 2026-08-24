@@ -6,7 +6,7 @@ import styles from "./event-dialog.module.css";
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (title: string, time: string, type: EventType, date: string, roomId: string) => Promise<boolean>;
+  onSave: (title: string, time: string, type: EventType, date: string, roomId: string, description: string) => Promise<boolean>;
   rooms: Room[];
   defaultRoomId: string;
   defaultDate: string;
@@ -17,6 +17,7 @@ export function EventDialog({ isOpen, onClose, onSave, rooms, defaultRoomId, def
   const [type, setType] = useState<EventType>("General");
   const [date, setDate] = useState(defaultDate);
   const [roomId, setRoomId] = useState(defaultRoomId);
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     if (isOpen) {
@@ -25,12 +26,13 @@ export function EventDialog({ isOpen, onClose, onSave, rooms, defaultRoomId, def
       setType("General");
       setDate(defaultDate);
       setRoomId(defaultRoomId);
+      setDescription("");
     }
   }, [isOpen, defaultDate, defaultRoomId]);
   if (!isOpen) return null;
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (await onSave(title, time, type, date, roomId)) {
+    if (await onSave(title, time, type, date, roomId, description)) {
       onClose();
     }
   };
@@ -53,6 +55,15 @@ export function EventDialog({ isOpen, onClose, onSave, rooms, defaultRoomId, def
               required
               value={title}
               onChange={(event) => setTitle(event.target.value)}
+            />
+          </label>
+          <label className={styles.field}>
+            Description (Optional)
+            <textarea
+              rows={2}
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder="e.g. Topics to cover..."
             />
           </label>
           <div className={styles.fieldRow}>

@@ -11,6 +11,7 @@ type Props = {
   isLoading: boolean;
   onDeleteEvent: (id: string) => void;
   onAddEvent: () => void;
+  onEventClick: (event: CalendarEvent) => void;
   activeRoomName?: string;
 };
 
@@ -19,6 +20,7 @@ export function EventList({
   events,
   isLoading,
   onDeleteEvent,
+  onEventClick,
 }: Props) {
   const getMetaClass = (type: string) => {
     const t = type.toLowerCase();
@@ -47,7 +49,12 @@ export function EventList({
           events.map(ev => {
             const timeFormatted = ev.event_time.slice(0, 5); // "HH:MM"
             return (
-              <div key={ev.id} className={styles.agendaRow}>
+              <div 
+                key={ev.id} 
+                className={styles.agendaRow}
+                onClick={() => onEventClick(ev)}
+                style={{ cursor: "pointer" }}
+              >
                 <div className={styles.agendaTime}>{timeFormatted}</div>
                 <div className={styles.agendaBody}>
                   <div className={styles.title}>{ev.title}</div>
@@ -57,7 +64,7 @@ export function EventList({
                 </div>
                 <button 
                   className={styles.deleteBtn} 
-                  onClick={() => onDeleteEvent(ev.id)}
+                  onClick={(e) => { e.stopPropagation(); onDeleteEvent(ev.id); }}
                   title="Delete event"
                   aria-label="Delete event"
                 >

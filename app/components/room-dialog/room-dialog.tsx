@@ -12,6 +12,7 @@ type Props = {
   userId: string | null;
   rooms?: Room[];
   onLeaveRoom?: (roomId: string) => Promise<void>;
+  onDeleteRoom?: (roomId: string) => Promise<void>;
 };
 
 export function RoomDialog({
@@ -21,6 +22,7 @@ export function RoomDialog({
   userId,
   rooms = [],
   onLeaveRoom,
+  onDeleteRoom,
 }: Props) {
   const [mode, setMode] = useState<"rooms" | "create" | "join">(
     rooms.length > 0 ? "rooms" : "create"
@@ -179,16 +181,32 @@ export function RoomDialog({
                       <span className={styles.roomRowName}>{r.name}</span>
                       <span className={styles.roomRowRole}>{r.role}</span>
                     </div>
-                    {onLeaveRoom && r.name !== "Personal Calendar" && (
-                      <button
-                        type="button"
-                        className={styles.leaveRoomRowBtn}
-                        onClick={async () => {
-                          await onLeaveRoom(r.id);
-                        }}
-                      >
-                        Leave
-                      </button>
+                    {r.name !== "Personal Calendar" && (
+                      r.role === "admin" ? (
+                        onDeleteRoom && (
+                          <button
+                            type="button"
+                            className={`${styles.leaveRoomRowBtn} ${styles.deleteRoomRowBtn || ''}`}
+                            onClick={async () => {
+                              await onDeleteRoom(r.id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        )
+                      ) : (
+                        onLeaveRoom && (
+                          <button
+                            type="button"
+                            className={styles.leaveRoomRowBtn}
+                            onClick={async () => {
+                              await onLeaveRoom(r.id);
+                            }}
+                          >
+                            Leave
+                          </button>
+                        )
+                      )
                     )}
                   </div>
                 ))}

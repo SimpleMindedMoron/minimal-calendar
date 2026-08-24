@@ -186,6 +186,16 @@
   border-color: var(--exam, #E2878B);
 }
 
+.deleteRoomRowBtn {
+  color: #ff4444;
+  border-color: rgba(255, 68, 68, 0.3);
+}
+
+.deleteRoomRowBtn:hover {
+  background: rgba(255, 68, 68, 0.15);
+  border-color: #ff4444;
+}
+
 .emptyRoomsNotice {
   text-align: center;
   padding: 1.5rem 0;

@@ -127,7 +127,7 @@ export function MembersDialog({
                   value={selectedRoomId}
                   onChange={(e) => setSelectedRoomId(e.target.value)}
                 >
-                  {rooms.map((r) => (
+                  {rooms.filter(r => r.name !== "Personal Calendar").map((r) => (
                     <option key={r.id} value={r.id}>
                       {r.name} {r.role === "admin" ? "(Admin)" : ""}
                     </option>

@@ -52,7 +52,8 @@
 }
 
 .field input,
-.field select {
+.field select,
+.field textarea {
   width: 100%;
   min-height: 2.75rem;
   padding: 0.65rem 0.75rem;
@@ -66,10 +67,17 @@
   box-shadow: 2px 2px 0px 0px var(--shadow);
 }
 
+.field textarea {
+  resize: vertical;
+  min-height: 4rem;
+}
+
 .field input:hover,
-.field input:focus,
 .field select:hover,
-.field select:focus {
+.field textarea:hover,
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
   background: var(--surface-raised);
   border-color: var(--gold);
   outline: none;

@@ -52,6 +52,11 @@ RESEND_API_KEY=your_resend_api_key
 Execute the following SQL script in your Supabase SQL Editor to generate the necessary tables and enforce Row Level Security (RLS):
 
 ```sql
+-- Clean slate (Drops existing tables and their dependent policies)
+DROP TABLE IF EXISTS events CASCADE;
+DROP TABLE IF EXISTS calendar_members CASCADE;
+DROP TABLE IF EXISTS calendars CASCADE;
+
 -- Create Tables
 CREATE TABLE calendars (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -72,10 +77,11 @@ CREATE TABLE events (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   calendar_id UUID REFERENCES calendars(id) ON DELETE CASCADE NOT NULL,
   title TEXT NOT NULL,
+  description TEXT,
   event_date DATE NOT NULL,
   event_time TIME NOT NULL,
   event_type TEXT NOT NULL,
-  created_by UUID NOT NULL,
+  created_by UUID REFERENCES auth.users(id),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 

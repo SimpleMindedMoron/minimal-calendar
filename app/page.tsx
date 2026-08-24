@@ -11,6 +11,7 @@ import { RoomDialog } from "./components/room-dialog/room-dialog";
 import { InviteDialog } from "./components/invite-dialog/invite-dialog";
 import { MembersDialog } from "./components/members-dialog/members-dialog";
 import { EventList } from "./components/event-list/event-list";
+import { EventDetailsDialog } from "./components/event-details-dialog/event-details-dialog";
 import styles from "./page.module.css";
 import { supabase } from "../lib/supabase";
 import type { CalendarEvent, EventType, Room } from "./types/calendar";
@@ -33,6 +34,7 @@ export default function Home() {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(false);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
 
   // Upcoming & dot data
   const [upcomingEvents, setUpcomingEvents] = useState<CalendarEvent[]>([]);
@@ -146,7 +148,7 @@ export default function Home() {
     if (userId) { void fetchEvents(); void fetchUpcomingEvents(); }
   }, [fetchEvents, fetchUpcomingEvents, userId]);
 
-  const handleAddEvent = async (title: string, time: string, type: EventType, date: string, roomId: string) => {
+  const handleAddEvent = async (title: string, time: string, type: EventType, date: string, roomId: string, description: string) => {
     if (!userId) return false;
     const { error } = await supabase.from("events").insert([{
       calendar_id: roomId,
@@ -154,6 +156,8 @@ export default function Home() {
       event_date: date,
       event_time: `${time}:00`,
       event_type: type,
+      description,
+      created_by: userId,
     }]);
     if (error) { console.error("Error adding event:", error); alert("Failed to add event"); return false; }
     await Promise.all([fetchEvents(), fetchUpcomingEvents()]);
@@ -191,6 +195,27 @@ export default function Home() {
 
     if (error) {
       alert("Failed to leave room: " + error.message);
+    } else {
+      if (activeRoom?.id === roomId) {
+        setActiveRoom(null);
+      }
+      await fetchRooms(userId);
+    }
+  };
+
+  const handleDeleteRoom = async (roomId: string) => {
+    if (!userId) return;
+    const roomToDelete = rooms.find((r) => r.id === roomId);
+    const roomName = roomToDelete ? roomToDelete.name : "this room";
+    if (!confirm(`Are you absolutely sure you want to DELETE "${roomName}"? This will permanently remove all events and kick all members.`)) return;
+
+    const { error } = await supabase
+      .from("calendars")
+      .delete()
+      .eq("id", roomId);
+
+    if (error) {
+      alert("Failed to delete room: " + error.message);
     } else {
       if (activeRoom?.id === roomId) {
         setActiveRoom(null);
@@ -316,6 +341,7 @@ export default function Home() {
                 isLoading={loading}
                 onDeleteEvent={handleDeleteEvent}
                 onAddEvent={() => setIsEventModalOpen(true)}
+                onEventClick={(ev) => setSelectedEvent(ev)}
                 activeRoomName={activeRoom?.name}
               />
             </div>
@@ -336,7 +362,12 @@ export default function Home() {
                         const [y, m, d] = ev.event_date.split("-").map(Number);
                         const localDate = new Date(y, m - 1, d);
                         return (
-                          <div key={ev.id} className={styles.upcomingItem}>
+                          <div 
+                            key={ev.id} 
+                            className={styles.upcomingItem}
+                            onClick={() => setSelectedEvent(ev)}
+                            style={{ cursor: "pointer" }}
+                          >
                             <div className={styles.upcomingDate}>{format(localDate, "MMM d")}</div>
                             <div className={styles.upcomingDetails}>
                             <div className={styles.upcomingName}>{ev.title}</div>
@@ -378,6 +409,7 @@ export default function Home() {
         userId={userId}
         rooms={rooms}
         onLeaveRoom={handleLeaveRoom}
+        onDeleteRoom={handleDeleteRoom}
       />
       <InviteDialog
         isOpen={isInviteModalOpen}
@@ -392,6 +424,13 @@ export default function Home() {
         rooms={rooms}
         onOpenInvite={() => setIsInviteModalOpen(true)}
         onLeaveRoom={handleLeaveRoom}
+      />
+      <EventDetailsDialog
+        isOpen={!!selectedEvent}
+        onClose={() => setSelectedEvent(null)}
+        event={selectedEvent}
+        rooms={rooms}
+        currentUserId={userId}
       />
     </div>
   );

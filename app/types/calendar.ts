@@ -13,4 +13,6 @@ export type CalendarEvent = {
   event_date: string;
   event_time: string;
   event_type: EventType;
+  description?: string;
+  created_by?: string;
 };
