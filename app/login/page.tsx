@@ -46,9 +46,7 @@ export default function Login() {
 
   return (
     <div className={styles.appShell} style={{ minHeight: "100vh", alignItems: "center" }}>
-      <Link href="/" className={styles.cornerLogo} title="Home">
-        A
-      </Link>
+
       <div
         className={styles.page}
         style={{ maxWidth: "400px", width: "100%" }}
