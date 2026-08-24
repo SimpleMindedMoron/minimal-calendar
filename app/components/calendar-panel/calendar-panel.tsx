@@ -13,6 +13,7 @@ type Props = {
   onAddEvent: () => void;
   activeRoom: Room | null;
   rooms: Room[];
+  refreshTrigger?: number;
 };
 
 const MONTH_NAMES = [
@@ -24,7 +25,7 @@ const ITEM_HEIGHT = 36; // px — height of each year row in the drum wheel
 const THIS_YEAR = new Date().getFullYear();
 const YEARS = Array.from({ length: 21 }, (_, i) => THIS_YEAR - 10 + i);
 
-export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRoom, rooms }: Props) {
+export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRoom, rooms, refreshTrigger }: Props) {
   const [currentMonth, setCurrentMonth] = useState(startOfMonth(selectedDate || new Date()));
   const [monthEvents, setMonthEvents] = useState<CalendarEvent[]>([]);
   const [monthPickerOpen, setMonthPickerOpen] = useState(false);
@@ -108,7 +109,7 @@ export function CalendarPanel({ selectedDate, onSelectDate, onAddEvent, activeRo
 
   useEffect(() => {
     fetchMonthEvents();
-  }, [fetchMonthEvents]);
+  }, [fetchMonthEvents, refreshTrigger]);
 
   // Generate calendar grid (42 cells: 6 weeks * 7 days)
   const gridCells = useMemo(() => {

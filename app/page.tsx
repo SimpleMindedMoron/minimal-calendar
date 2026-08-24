@@ -36,9 +36,9 @@ export default function Home() {
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
 
-  // Upcoming & dot data
   const [upcomingEvents, setUpcomingEvents] = useState<CalendarEvent[]>([]);
   const [allEventDates, setAllEventDates] = useState<string[]>([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // Fetch user + rooms
   useEffect(() => {
@@ -161,13 +161,17 @@ export default function Home() {
     }]);
     if (error) { console.error("Error adding event:", error); alert("Failed to add event"); return false; }
     await Promise.all([fetchEvents(), fetchUpcomingEvents()]);
+    setRefreshTrigger(prev => prev + 1);
     return true;
   };
 
   const handleDeleteEvent = async (id: string) => {
     const { error } = await supabase.from("events").delete().eq("id", id);
     if (error) { console.error("Error deleting event:", error); alert("Failed to delete event"); }
-    else await Promise.all([fetchEvents(), fetchUpcomingEvents()]);
+    else {
+      await Promise.all([fetchEvents(), fetchUpcomingEvents()]);
+      setRefreshTrigger(prev => prev + 1);
+    }
   };
 
   const handleRoomSelect = (roomId: string) => {
@@ -322,13 +326,14 @@ export default function Home() {
         <div className={styles.layout}>
           {/* Left panel: calendar */}
           <div className={styles.panel}>
-            <CalendarPanel
+              <CalendarPanel
               selectedDate={selectedDate}
               onSelectDate={setSelectedDate}
               eventDates={allEventDates}
               onAddEvent={() => setIsEventModalOpen(true)}
               activeRoom={activeRoom}
               rooms={rooms}
+              refreshTrigger={refreshTrigger}
             />
           </div>
 
