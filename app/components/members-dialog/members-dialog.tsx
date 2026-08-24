@@ -10,7 +10,7 @@ type MemberInfo = {
   id: string;
   user_id: string;
   role: "admin" | "contributor" | "viewer" | string;
-  created_at?: string;
+  joined_at?: string;
 };
 
 type Props = {
@@ -50,7 +50,7 @@ export function MembersDialog({
       setLoading(true);
       const { data, error } = await supabase
         .from("calendar_members")
-        .select("id, user_id, role, created_at")
+        .select("id, user_id, role, joined_at")
         .eq("calendar_id", selectedRoomId);
 
       if (isMounted) {
@@ -163,9 +163,9 @@ export function MembersDialog({
                         <span className={styles.memberId}>
                           User #{m.user_id.slice(0, 8)}
                         </span>
-                        {m.created_at && (
+                        {m.joined_at && (
                           <span className={styles.memberJoined}>
-                            Joined {new Date(m.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                            Joined {new Date(m.joined_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                           </span>
                         )}
                       </div>
