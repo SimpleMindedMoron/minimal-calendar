@@ -87,8 +87,7 @@
 .letterhead {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  padding-bottom: 22px;
+  align-items: center;
   border-bottom: 1px solid #d1e0de3b;
   margin-bottom: 28px;
   gap: 20px;
@@ -400,7 +399,7 @@
 }
 
 .roomDropdownSection {
-  font-family: 'Archivo', sans-serif;
+  font-family: 'Pilcrow Rounded', sans-serif;
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -414,7 +413,7 @@
   background: transparent;
   border: none;
   color: var(--ink);
-  font-family: 'Archivo', sans-serif;
+  font-family: 'Pilcrow Rounded', sans-serif;
   font-size: 14px;
   text-align: left;
   padding: 8px 12px;
@@ -443,6 +442,6 @@
   .letterhead {
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    padding-bottom: 20px;
   }
 }
