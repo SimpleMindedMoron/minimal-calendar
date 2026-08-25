@@ -99,7 +99,7 @@ export default function Home() {
       }
 
       setRooms(formattedRooms);
-      
+
       // Select Personal Calendar by default if no active room is set
       if (formattedRooms.length > 0 && !activeRoom) {
         const personal = formattedRooms.find(r => r.name === "Personal Calendar");
@@ -130,7 +130,7 @@ export default function Home() {
     if (rooms.length === 0) { setUpcomingEvents([]); setAllEventDates([]); return; }
     const today = startOfDay(new Date());
     const fromDate = format(today, "yyyy-MM-dd");
-    const toDate   = format(addDays(today, 8), "yyyy-MM-dd");
+    const toDate = format(addDays(today, 8), "yyyy-MM-dd");
     let query = supabase.from("events").select("*").gte("event_date", fromDate).lt("event_date", toDate);
     if (activeRoom && activeRoom.name !== "Personal Calendar") {
       query = query.eq("calendar_id", activeRoom.id);
@@ -241,9 +241,9 @@ export default function Home() {
 
   return (
     <div className={styles.appShell}>
-      <Link 
-        href="/" 
-        className={styles.cornerBrand} 
+      <Link
+        href="/"
+        className={styles.cornerBrand}
         title="Home"
       >
         <div className={styles.cornerLogo}>A</div>
@@ -256,21 +256,21 @@ export default function Home() {
         <div className={styles.letterhead}>
           <div className={styles.mark}>
             <div className={styles.roomHeaderGroup}>
-              <div 
-                className={styles.roomSelectWrapper} 
+              <div
+                className={styles.roomSelectWrapper}
                 onClick={(e) => { e.stopPropagation(); setIsDropdownOpen(!isDropdownOpen); }}
               >
                 <h1>{activeRoom ? activeRoom.name : "Loading..."}</h1>
-                <ChevronDown 
-                  size={20} 
-                  className={`${styles.dropdownIcon} ${isDropdownOpen ? styles.dropdownIconOpen : ""}`} 
+                <ChevronDown
+                  size={20}
+                  className={`${styles.dropdownIcon} ${isDropdownOpen ? styles.dropdownIconOpen : ""}`}
                 />
-                
+
                 {isDropdownOpen && (
                   <div className={styles.roomDropdown}>
                     {rooms.find(r => r.name === "Personal Calendar") && (
-                      <button 
-                        className={`${styles.roomOption} ${activeRoom?.name === "Personal Calendar" ? styles.roomOptionActive : ""}`} 
+                      <button
+                        className={`${styles.roomOption} ${activeRoom?.name === "Personal Calendar" ? styles.roomOptionActive : ""}`}
                         onClick={() => handleRoomSelect(rooms.find(r => r.name === "Personal Calendar")!.id)}
                       >
                         Personal Calendar
@@ -280,11 +280,11 @@ export default function Home() {
                     {rooms.filter(r => r.name !== "Personal Calendar").length > 0 && (
                       <div className={styles.roomDropdownSection}>Shared Rooms</div>
                     )}
-                    
+
                     {rooms.filter(r => r.name !== "Personal Calendar").map(r => (
-                      <button 
-                        key={r.id} 
-                        className={`${styles.roomOption} ${activeRoom?.id === r.id ? styles.roomOptionActive : ""}`} 
+                      <button
+                        key={r.id}
+                        className={`${styles.roomOption} ${activeRoom?.id === r.id ? styles.roomOptionActive : ""}`}
                         onClick={() => handleRoomSelect(r.id)}
                       >
                         {r.name}
@@ -326,7 +326,7 @@ export default function Home() {
         <div className={styles.layout}>
           {/* Left panel: calendar */}
           <div className={styles.panel}>
-              <CalendarPanel
+            <CalendarPanel
               selectedDate={selectedDate}
               onSelectDate={setSelectedDate}
               eventDates={allEventDates}
@@ -358,31 +358,31 @@ export default function Home() {
                   if (future.length === 0) {
                     return <p className={styles.emptyUpcoming}>No upcoming events this week.</p>;
                   }
-                  
+
                   const visible = isUpcomingExpanded ? future : future.slice(0, 3);
-                  
+
                   return (
                     <>
                       {visible.map(ev => {
                         const [y, m, d] = ev.event_date.split("-").map(Number);
                         const localDate = new Date(y, m - 1, d);
                         return (
-                          <div 
-                            key={ev.id} 
+                          <div
+                            key={ev.id}
                             className={styles.upcomingItem}
                             onClick={() => setSelectedEvent(ev)}
                             style={{ cursor: "pointer" }}
                           >
                             <div className={styles.upcomingDate}>{format(localDate, "MMM d")}</div>
                             <div className={styles.upcomingDetails}>
-                            <div className={styles.upcomingName}>{ev.title}</div>
+                              <div className={styles.upcomingName}>{ev.title}</div>
                               <div className={styles.upcomingTime}>{ev.event_time.slice(0, 5)}</div>
                             </div>
                           </div>
                         );
                       })}
                       {future.length > 3 && (
-                        <button 
+                        <button
                           className={styles.viewMoreBtn}
                           onClick={() => setIsUpcomingExpanded(!isUpcomingExpanded)}
                         >
@@ -396,6 +396,10 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        <footer className={styles.footer}>
+          Align &copy; {new Date().getFullYear()}
+        </footer>
       </div>
 
       {/* Dialogs */}

@@ -75,7 +75,7 @@ export function InviteDialog({ isOpen, onClose, activeRoom, rooms }: Props) {
 
   const getInviteMessage = () => {
     if (!currentRoom) return "";
-    return `Hey! Join my shared room "${currentRoom.name}" on Minimal Calendar.\n\nRoom Invite Code: ${currentRoom.id}\n\nTo join:\n1. Open Minimal Calendar\n2. Click Manage → Join Room\n3. Paste the code above`;
+    return `Hey! Join my shared room "${currentRoom.name}" on Align.\n\nRoom Invite Code: ${currentRoom.id}\n\nTo join:\n1. Open Align\n2. Click Manage → Join Room\n3. Paste the code above`;
   };
 
   const handleCopyInviteMessage = async () => {

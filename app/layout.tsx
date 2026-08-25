@@ -3,7 +3,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Minimal Calendar",
+  title: "Align",
   description: "A clean, shared agenda",
 };
 

@@ -72,11 +72,11 @@ export async function POST(req: Request) {
     savePermissions(permissions);
 
     // Construct email payload
-    const emailSubject = `Invitation: Join "${roomName}" on Minimal Calendar`;
+    const emailSubject = `Invitation: Join "${roomName}" on Align`;
     const emailHtmlBody = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 520px; margin: 0 auto; padding: 28px; background: #0c0c0c; color: #f5f0e9; border-radius: 12px; border: 1px solid #2a2a2a;">
         <div style="display: inline-block; padding: 4px 8px; border-radius: 4px; background: rgba(203, 184, 158, 0.15); border: 1px solid #444; color: #cbb89e; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px;">
-          Minimal Calendar
+          Align
         </div>
         
         <h2 style="color: #f5f0e9; margin: 0 0 12px; font-size: 22px; font-weight: 500;">You've been invited to join a room!</h2>
@@ -91,7 +91,7 @@ export async function POST(req: Request) {
 
         <h3 style="color: #f5f0e9; font-size: 13px; margin: 24px 0 10px; text-transform: uppercase; letter-spacing: 0.06em;">How to join:</h3>
         <ol style="color: #888; font-size: 13px; padding-left: 20px; line-height: 1.7; margin: 0;">
-          <li>Open <strong>Minimal Calendar</strong></li>
+          <li>Open <strong>Align</strong></li>
           <li>Click <strong>Manage → Join Room</strong> in the top right</li>
           <li>Paste the code above to immediately access the calendar</li>
         </ol>
@@ -121,7 +121,7 @@ export async function POST(req: Request) {
         });
 
         await transporter.sendMail({
-          from: `"Minimal Calendar" <${gmailUser}>`,
+          from: `"Align" <${gmailUser}>`,
           to: validEmails.join(", "),
           subject: emailSubject,
           html: emailHtmlBody,
@@ -153,7 +153,7 @@ export async function POST(req: Request) {
           Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
         },
         body: JSON.stringify({
-          from: "Minimal Calendar <onboarding@resend.dev>",
+          from: "Align <onboarding@resend.dev>",
           to: validEmails,
           subject: emailSubject,
           html: emailHtmlBody,

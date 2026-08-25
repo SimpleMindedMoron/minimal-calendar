@@ -66,11 +66,11 @@
 
 html {
   background: var(--bg);
-  height: 100%;
+  min-height: 100dvh;
 }
 
 body {
-  min-height: 100%;
+  min-height: 100dvh;
   overflow-x: hidden;
   background: var(--bg);
   color: var(--ink);
