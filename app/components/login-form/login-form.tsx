@@ -7,20 +7,21 @@ type Props = {
   loading: boolean;
   message: { text: string; type: "error" | "success" } | null;
   onSignIn: (email: string, password: string) => Promise<void>;
-  onSignUp: (email: string, password: string) => Promise<void>;
+  onSignUp: (email: string, password: string, fullName: string) => Promise<void>;
 };
 
 export function LoginForm({ loading, message, onSignIn, onSignUp }: Props) {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (mode === "signin") {
       void onSignIn(email, password);
     } else {
-      void onSignUp(email, password);
+      void onSignUp(email, password, fullName);
     }
   };
 
@@ -35,6 +36,7 @@ export function LoginForm({ loading, message, onSignIn, onSignUp }: Props) {
             setMode("signin");
             setEmail("");
             setPassword("");
+            setFullName("");
           }}
         >
           Sign In
@@ -46,6 +48,7 @@ export function LoginForm({ loading, message, onSignIn, onSignUp }: Props) {
             setMode("signup");
             setEmail("");
             setPassword("");
+            setFullName("");
           }}
         >
           Create Account
@@ -61,6 +64,18 @@ export function LoginForm({ loading, message, onSignIn, onSignUp }: Props) {
       )}
 
       <form onSubmit={handleSubmit} className={styles.form}>
+        {mode === "signup" && (
+          <label className={styles.field}>
+            Full Name
+            <input
+              type="text"
+              required
+              value={fullName}
+              onChange={(event) => setFullName(event.target.value)}
+              placeholder="John Doe"
+            />
+          </label>
+        )}
         <label className={styles.field}>
           Email
           <input

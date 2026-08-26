@@ -14,10 +14,14 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<Message>(null);
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, fullName: string) => {
     setLoading(true);
     setMessage(null);
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: fullName } },
+    });
     setMessage(
       error
         ? { text: error.message, type: "error" }

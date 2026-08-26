@@ -11,6 +11,7 @@ type MemberInfo = {
   user_id: string;
   role: "admin" | "contributor" | "viewer" | string;
   joined_at?: string;
+  full_name?: string;
 };
 
 type Props = {
@@ -54,8 +55,26 @@ export function MembersDialog({
         .eq("calendar_id", selectedRoomId);
 
       if (isMounted) {
-        if (!error && data) {
-          setMembers(data as MemberInfo[]);
+        if (!error && data && data.length > 0) {
+          const membersData = data as MemberInfo[];
+          
+          // Fetch profiles
+          const userIds = membersData.map((m) => m.user_id);
+          const { data: profiles, error: profilesError } = await supabase
+            .from("user_profiles")
+            .select("id, full_name")
+            .in("id", userIds);
+
+          if (!profilesError && profiles) {
+            membersData.forEach((m) => {
+              const profile = profiles.find((p) => p.id === m.user_id);
+              if (profile && profile.full_name) {
+                m.full_name = profile.full_name;
+              }
+            });
+          }
+          
+          setMembers(membersData);
         } else {
           setMembers([]);
         }
@@ -161,7 +180,7 @@ export function MembersDialog({
                       </div>
                       <div className={styles.memberDetails}>
                         <span className={styles.memberId}>
-                          User #{m.user_id.slice(0, 8)}
+                          {m.full_name ? m.full_name : `User #${m.user_id.slice(0, 8)}`}
                         </span>
                         {m.joined_at && (
                           <span className={styles.memberJoined}>
