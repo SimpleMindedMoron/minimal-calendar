@@ -109,6 +109,13 @@ CREATE POLICY "Members can insert events" ON events FOR INSERT TO authenticated 
 CREATE POLICY "Members can delete events" ON events FOR DELETE TO authenticated USING (
   EXISTS (SELECT 1 FROM calendar_members WHERE calendar_id = events.calendar_id AND user_id = auth.uid())
 );
+
+-- Expose user profiles for member roster
+CREATE OR REPLACE VIEW public.user_profiles AS
+SELECT id, raw_user_meta_data->>'full_name' AS full_name
+FROM auth.users;
+
+GRANT SELECT ON public.user_profiles TO authenticated;
 ```
 
 ### 4. Run the Development Server
