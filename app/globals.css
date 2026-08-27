@@ -124,21 +124,11 @@ select:focus-visible {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--rule);
-  border-radius: 99px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--rule-soft);
+body {
+  scrollbar-width: none; /* Firefox */
 }
 
 @media (prefers-reduced-motion: reduce) {

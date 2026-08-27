@@ -12,6 +12,7 @@ import { InviteDialog } from "./components/invite-dialog/invite-dialog";
 import { MembersDialog } from "./components/members-dialog/members-dialog";
 import { EventList } from "./components/event-list/event-list";
 import { EventDetailsDialog } from "./components/event-details-dialog/event-details-dialog";
+import { Onboarding } from "./components/onboarding/onboarding";
 import styles from "./page.module.css";
 import { supabase } from "../lib/supabase";
 import type { CalendarEvent, EventType, Room } from "./types/calendar";
@@ -19,6 +20,7 @@ import type { CalendarEvent, EventType, Room } from "./types/calendar";
 export default function Home() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
+  const [needsOnboarding, setNeedsOnboarding] = useState(false);
 
   // Room state
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -46,10 +48,21 @@ export default function Home() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setUserId(user.id);
-        await fetchRooms(user.id);
+        if (!user.user_metadata?.full_name) {
+          setNeedsOnboarding(true);
+        } else {
+          await fetchRooms(user.id);
+        }
       }
     })();
   }, []);
+
+  const handleOnboardingComplete = async () => {
+    setNeedsOnboarding(false);
+    if (userId) {
+      await fetchRooms(userId);
+    }
+  };
 
   const fetchRooms = async (currentUserId: string) => {
     const { data, error } = await supabase
@@ -238,6 +251,10 @@ export default function Home() {
   }, [isDropdownOpen]);
 
   if (!userId) return null;
+
+  if (needsOnboarding) {
+    return <Onboarding onComplete={handleOnboardingComplete} />;
+  }
 
   return (
     <div className={styles.appShell}>

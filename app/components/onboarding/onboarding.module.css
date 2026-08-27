@@ -1,0 +1,104 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 24px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 2px solid var(--rule);
+  border-radius: 24px;
+  padding: 40px;
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+
+.title {
+  font-family: "Pilcrow Rounded", sans-serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  font-family: "Archivo", sans-serif;
+  font-size: 14px;
+  color: var(--ink-dim);
+  margin-bottom: 32px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: left;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--ink-faint);
+  font-family: "Archivo", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 2px solid var(--rule);
+  border-radius: 8px;
+  background: var(--surface-raised);
+  font-weight: 500;
+  color: var(--ink);
+  font-family: "Archivo", sans-serif;
+  font-size: 15px;
+  transition: all 0.15s ease;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.submitButton {
+  width: 100%;
+  height: 48px;
+  background: var(--gold);
+  color: var(--bg);
+  border: 2px solid var(--rule);
+  border-radius: 8px;
+  font-family: "Archivo", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #8b9e82;
+  color: var(--ink);
+}
+
+.submitButton:disabled {
+  background: var(--surface-raised);
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
+.error {
+  color: var(--exam-dim);
+  font-family: "Archivo", sans-serif;
+  font-size: 12px;
+  margin-top: 8px;
+  text-align: center;
+}
