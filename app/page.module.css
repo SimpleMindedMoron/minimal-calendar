@@ -208,8 +208,8 @@
 .upcomingTitle {
   font-family: "Pilcrow Rounded", sans-serif;
   font-style: italic;
-  font-size: 20px;
   font-weight: 500;
+  font-size: 20px;
   color: var(--gold);
   margin: 0 0 16px 0;
   padding-bottom: 12px;
