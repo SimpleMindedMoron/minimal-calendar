@@ -270,7 +270,7 @@ export default function Home() {
         </div>
       </Link>
       <div className={styles.page}>
-        <div className={styles.letterhead}>
+        <div className={`${styles.letterhead} animate-in`} style={{ animationDelay: "100ms" }}>
           <div className={styles.mark}>
             <div className={styles.roomHeaderGroup}>
               <div
@@ -342,7 +342,7 @@ export default function Home() {
 
         <div className={styles.layout}>
           {/* Left panel: calendar */}
-          <div className={styles.panel}>
+          <div className={`${styles.panel} animate-in`} style={{ animationDelay: "200ms" }}>
             <CalendarPanel
               selectedDate={selectedDate}
               onSelectDate={setSelectedDate}
@@ -355,7 +355,7 @@ export default function Home() {
           </div>
 
           {/* Right sidebar: Agenda + Stamp */}
-          <div className={styles.sidebar}>
+          <div className={`${styles.sidebar} animate-in`} style={{ animationDelay: "300ms" }}>
             <div className={styles.panel}>
               <EventList
                 selectedDate={selectedDate}

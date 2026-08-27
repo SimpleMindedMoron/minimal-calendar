@@ -96,7 +96,7 @@ export default function Login() {
         className={styles.page}
         style={{ maxWidth: "400px", width: "100%" }}
       >
-        <div className={styles.letterhead} style={{ justifyContent: "center", borderBottom: "none", marginBottom: "32px", paddingBottom: 0 }}>
+        <div className={`${styles.letterhead} animate-in`} style={{ justifyContent: "center", borderBottom: "none", marginBottom: "32px", paddingBottom: 0, animationDelay: "100ms" }}>
           <div className={styles.mark}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
               <div className={styles.roomSelectWrapper} style={{ justifyContent: "center", pointerEvents: "none" }}>
@@ -109,7 +109,7 @@ export default function Login() {
           </div>
         </div>
 
-        <div className={styles.panel}>
+        <div className={`${styles.panel} animate-in`} style={{ animationDelay: "200ms" }}>
           {isCheckingEmail ? (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "16px", padding: "32px 16px", animation: "fade-in 400ms ease" }}>
               <MailCheck size={48} color="var(--gold)" />

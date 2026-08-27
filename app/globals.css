@@ -140,3 +140,20 @@ body {
     transition-duration: 0.1ms !important;
   }
 }
+
+/* ── Global Animations ─────────────────────────────────────────────────── */
+.animate-in {
+  opacity: 0;
+  animation: slideFadeIn 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

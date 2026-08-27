@@ -32,7 +32,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.panel}>
+      <div className={`${styles.panel} animate-in`} style={{ animationDelay: "150ms" }}>
         <h1 className={styles.title}>Welcome to Align</h1>
         <p className={styles.subtitle}>
           Your email has been verified. Before we start, what should we call you?
