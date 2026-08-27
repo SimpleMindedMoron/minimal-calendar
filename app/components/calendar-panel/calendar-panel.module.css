@@ -609,4 +609,8 @@
   .desktopTabs {
     display: none !important;
   }
+
+  .monthDropdown {
+    right: 0;
+  }
 }

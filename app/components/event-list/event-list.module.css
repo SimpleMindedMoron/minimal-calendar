@@ -115,3 +115,9 @@
   font-size: 12px;
   color: var(--ink-dim);
 }
+
+@media (max-width: 768px) {
+  .deleteBtn {
+    opacity: 1;
+  }
+}
