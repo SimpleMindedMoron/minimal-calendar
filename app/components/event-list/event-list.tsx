@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { format, isToday } from "date-fns";
 import { Trash2 } from "lucide-react";
 import type { CalendarEvent } from "../../types/calendar";
@@ -22,6 +23,13 @@ export function EventList({
   onDeleteEvent,
   onEventClick,
 }: Props) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Reset expansion when date changes
+  useEffect(() => {
+    setIsExpanded(false);
+  }, [selectedDate]);
+
   const getMetaClass = (type: string) => {
     const t = type.toLowerCase();
     if (t === "exam") return styles.metaExam;
@@ -32,6 +40,8 @@ export function EventList({
 
   const formattedDate = selectedDate ? format(selectedDate, "MMM d") : "";
   const displayDate = selectedDate && isToday(selectedDate) ? `Today, ${formattedDate}` : formattedDate;
+
+  const visibleEvents = isExpanded ? events : events.slice(0, 3);
 
   return (
     <>
@@ -46,33 +56,52 @@ export function EventList({
         ) : events.length === 0 ? (
           <div className={styles.emptyState}>No events for {displayDate || "this date"}.</div>
         ) : (
-          events.map(ev => {
-            const timeFormatted = ev.event_time.slice(0, 5); // "HH:MM"
-            return (
-              <div 
-                key={ev.id} 
-                className={styles.agendaRow}
-                onClick={() => onEventClick(ev)}
-                style={{ cursor: "pointer" }}
-              >
-                <div className={styles.agendaTime}>{timeFormatted}</div>
-                <div className={styles.agendaBody}>
-                  <div className={styles.title}>{ev.title}</div>
-                  <div className={`${styles.meta} ${getMetaClass(ev.event_type)}`}>
-                    {ev.event_type}
-                  </div>
-                </div>
-                <button 
-                  className={styles.deleteBtn} 
-                  onClick={(e) => { e.stopPropagation(); onDeleteEvent(ev.id); }}
-                  title="Delete event"
-                  aria-label="Delete event"
+          <>
+            {visibleEvents.map(ev => {
+              const timeFormatted = ev.event_time.slice(0, 5); // "HH:MM"
+              return (
+                <div 
+                  key={ev.id} 
+                  className={styles.agendaRow}
+                  onClick={() => onEventClick(ev)}
+                  style={{ cursor: "pointer" }}
                 >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            );
-          })
+                  <div className={styles.agendaTime}>{timeFormatted}</div>
+                  <div className={styles.agendaBody}>
+                    <div className={styles.title}>{ev.title}</div>
+                    <div className={`${styles.meta} ${getMetaClass(ev.event_type)}`}>
+                      {ev.event_type}
+                    </div>
+                  </div>
+                  <button 
+                    className={styles.deleteBtn} 
+                    onClick={(e) => { e.stopPropagation(); onDeleteEvent(ev.id); }}
+                    title="Delete event"
+                    aria-label="Delete event"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              );
+            })}
+            {events.length > 3 && (
+              <button
+                className={styles.viewMoreBtn}
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                {isExpanded ? "View less" : (
+                  <span className={styles.viewMoreContent}>
+                    <span className={styles.dots}>
+                      <span className={styles.dot}></span>
+                      <span className={styles.dot}></span>
+                      <span className={styles.dot}></span>
+                    </span>
+                    View {events.length - 3} more
+                  </span>
+                )}
+              </button>
+            )}
+          </>
         )}
       </div>
     </>

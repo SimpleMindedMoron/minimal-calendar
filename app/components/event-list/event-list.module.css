@@ -123,3 +123,43 @@
     opacity: 1;
   }
 }
+
+.viewMoreBtn {
+  background: transparent;
+  border: none;
+  color: var(--gold);
+  font-family: "Archivo", sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 0 0 0;
+  margin-top: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.viewMoreBtn:hover {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.viewMoreContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: currentColor;
+}

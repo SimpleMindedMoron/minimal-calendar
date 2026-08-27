@@ -280,6 +280,25 @@
   font-weight: 700;
 }
 
+.viewMoreContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
 /* Actions in header */
 .inviteBtn {
   flex: 1;

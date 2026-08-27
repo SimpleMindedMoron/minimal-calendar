@@ -403,7 +403,16 @@ export default function Home() {
                           className={styles.viewMoreBtn}
                           onClick={() => setIsUpcomingExpanded(!isUpcomingExpanded)}
                         >
-                          {isUpcomingExpanded ? "View less" : `View ${future.length - 3} more`}
+                          {isUpcomingExpanded ? "View less" : (
+                            <span className={styles.viewMoreContent}>
+                              <span className={styles.dots}>
+                                <span className={styles.dot}></span>
+                                <span className={styles.dot}></span>
+                                <span className={styles.dot}></span>
+                              </span>
+                              View {future.length - 3} more
+                            </span>
+                          )}
                         </button>
                       )}
                     </>
