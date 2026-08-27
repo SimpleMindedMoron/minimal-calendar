@@ -4,6 +4,12 @@
   justify-content: center;
   width: 100%;
   position: relative;
+  animation: pageFadeIn 500ms ease forwards;
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .cornerBrand {
