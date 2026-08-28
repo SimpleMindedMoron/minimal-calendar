@@ -136,7 +136,7 @@ export default function Login() {
                 }
               `}</style>
               <h2 style={{ fontFamily: "'Pilcrow Rounded', sans-serif", fontSize: "24px", color: "var(--ink)", fontWeight: 500, fontStyle: "italic" }}>
-                Welcome back, {welcomeName}!
+                Welcome, {welcomeName}!
               </h2>
             </div>
           ) : (
