@@ -422,11 +422,11 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        <footer className={styles.footer}>
-          Align &copy; {new Date().getFullYear()}
-        </footer>
       </div>
+
+      <footer className={styles.footer}>
+        Align &copy; {new Date().getFullYear()}
+      </footer>
 
       {/* Dialogs */}
       <EventDialog

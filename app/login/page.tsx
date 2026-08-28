@@ -87,6 +87,7 @@ export default function Login() {
       style={{ 
         minHeight: "100vh", 
         alignItems: "center",
+        justifyContent: "center",
         opacity: isFadingOut ? 0 : 1,
         transition: "opacity 400ms ease",
         pointerEvents: isFadingOut ? "none" : "auto"
