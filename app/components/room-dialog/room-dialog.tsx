@@ -68,7 +68,7 @@ export function RoomDialog({
       try {
         // 1. Get current logged-in user's email
         const { data: userData } = await supabase.auth.getUser();
-        const userEmail = userData?.user?.email || "";
+        const email = userData?.user?.email || "";
 
         // 2. Check access permissions with backend API
         const checkRes = await fetch("/api/join-room", {
@@ -76,7 +76,7 @@ export function RoomDialog({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             calendarId: inputValue.trim(),
-            userEmail,
+            userEmail: email,
           }),
         });
 
@@ -127,7 +127,7 @@ export function RoomDialog({
       >
         <div className={styles.header}>
           <h2 id="room-dialog-title" className={styles.title}>
-            Manage Rooms
+            Manage Spaces
           </h2>
           <p className={styles.subtitle}>
             Create, join, or leave shared calendar spaces.
@@ -143,7 +143,7 @@ export function RoomDialog({
               setInputValue("");
             }}
           >
-            My Rooms ({rooms.length})
+            My Spaces ({rooms.length})
           </button>
           <button
             type="button"
@@ -153,7 +153,7 @@ export function RoomDialog({
               setInputValue("");
             }}
           >
-            Create Room
+            Create Space
           </button>
           <button
             type="button"
@@ -163,7 +163,7 @@ export function RoomDialog({
               setInputValue("");
             }}
           >
-            Join Room
+            Join Space
           </button>
         </div>
 
@@ -186,7 +186,7 @@ export function RoomDialog({
                         onDeleteRoom && (
                           <button
                             type="button"
-                            className={`${styles.leaveRoomRowBtn} ${styles.deleteRoomRowBtn || ''}`}
+                            className={`${styles.leaveRoomRowBtn} ${styles.deleteRoomRowBtn || ""}`}
                             onClick={async () => {
                               await onDeleteRoom(r.id);
                             }}
@@ -226,7 +226,7 @@ export function RoomDialog({
         ) : (
           <form onSubmit={handleSubmit} className={styles.form}>
             <label className={styles.field}>
-              {mode === "create" ? "Room Name" : "Invite Code (UUID)"}
+              {mode === "create" ? "Space Name" : "Invite Code (UUID)"}
               <input
                 type="text"
                 required
@@ -257,8 +257,8 @@ export function RoomDialog({
                 {loading
                   ? "Processing..."
                   : mode === "create"
-                  ? "Create Room"
-                  : "Join Room"}
+                  ? "Create Space"
+                  : "Join Space"}
               </button>
             </div>
           </form>

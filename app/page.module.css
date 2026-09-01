@@ -1,5 +1,5 @@
 .appShell {
-  padding: 56px 24px 16px;
+  padding: 32px 24px 16px 92px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7,6 +7,13 @@
   min-height: 100vh;
   position: relative;
   animation: pageFadeIn 500ms ease forwards;
+  transition: padding-left 240ms ease;
+}
+
+@media (max-width: 768px) {
+  .appShell {
+    padding: 24px 14px 16px 80px;
+  }
 }
 
 @keyframes pageFadeIn {

@@ -13,6 +13,10 @@ import { MembersDialog } from "./components/members-dialog/members-dialog";
 import { EventList } from "./components/event-list/event-list";
 import { EventDetailsDialog } from "./components/event-details-dialog/event-details-dialog";
 import { Onboarding } from "./components/onboarding/onboarding";
+import { DeleteAccountDialog } from "./components/delete-account-dialog/delete-account-dialog";
+import { AccountDialog } from "./components/account-dialog/account-dialog";
+import { SignOutDialog } from "./components/sign-out-dialog/sign-out-dialog";
+import { Sidebar } from "./components/sidebar/sidebar";
 import styles from "./page.module.css";
 import { supabase } from "../lib/supabase";
 import type { CalendarEvent, EventType, Room } from "./types/calendar";
@@ -20,14 +24,19 @@ import type { CalendarEvent, EventType, Room } from "./types/calendar";
 export default function Home() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
 
-  // Room state
+  // Room & Account modal state
   const [rooms, setRooms] = useState<Room[]>([]);
   const [activeRoom, setActiveRoom] = useState<Room | null>(null);
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
+  const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
+  const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUpcomingExpanded, setIsUpcomingExpanded] = useState(false);
 
@@ -48,6 +57,8 @@ export default function Home() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setUserId(user.id);
+        setUserEmail(user.email || "");
+        setUserName(user.user_metadata?.full_name || "");
         if (!user.user_metadata?.full_name) {
           setNeedsOnboarding(true);
         } else {
@@ -195,7 +206,7 @@ export default function Home() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.push("/login");
+    router.push("/login?signed_out=true");
   };
 
   const handleLeaveRoom = async (roomId: string) => {
@@ -241,6 +252,21 @@ export default function Home() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    const res = await fetch("/api/delete-account", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || "Failed to delete account.");
+    }
+
+    await supabase.auth.signOut();
+    router.push("/login?deleted=true");
+  };
+
   // Close dropdown on outside click
   useEffect(() => {
     const closeMenu = (e: MouseEvent) => {
@@ -258,17 +284,16 @@ export default function Home() {
 
   return (
     <div className={styles.appShell}>
-      <Link
-        href="/"
-        className={styles.cornerBrand}
-        title="Home"
-      >
-        <div className={styles.cornerLogo}>A</div>
-        <div className={styles.cornerBrandText}>
-          <span className={styles.cornerBrandTitle}>Shared calendar</span>
-          <span className={styles.cornerBrandSub}>{rooms.length} accessible rooms</span>
-        </div>
-      </Link>
+      <Sidebar
+        rooms={rooms}
+        activeRoom={activeRoom}
+        onSelectRoom={handleRoomSelect}
+        onOpenManageRooms={() => setIsRoomModalOpen(true)}
+        onOpenManageAccount={() => setIsAccountModalOpen(true)}
+        onSignOut={() => setIsSignOutModalOpen(true)}
+        userName={userName}
+        userEmail={userEmail}
+      />
       <div className={styles.page}>
         <div className={`${styles.letterhead} animate-in`} style={{ animationDelay: "100ms" }}>
           <div className={styles.mark}>
@@ -331,12 +356,6 @@ export default function Home() {
                 <UserPlus size={14} /> Invite
               </button>
             )}
-            <button className={styles.headerBtn} onClick={() => setIsRoomModalOpen(true)}>
-              <Settings size={12} /> Manage
-            </button>
-            <button className={`${styles.headerBtn} ${styles.dangerBtn}`} onClick={handleSignOut}>
-              <LogOut size={12} /> Sign out
-            </button>
           </div>
         </div>
 
@@ -445,6 +464,25 @@ export default function Home() {
         rooms={rooms}
         onLeaveRoom={handleLeaveRoom}
         onDeleteRoom={handleDeleteRoom}
+      />
+      <AccountDialog
+        isOpen={isAccountModalOpen}
+        onClose={() => setIsAccountModalOpen(false)}
+        userEmail={userEmail}
+        userName={userName}
+        roomCount={rooms.length}
+        onOpenDeleteAccount={() => setIsDeleteAccountModalOpen(true)}
+      />
+      <DeleteAccountDialog
+        isOpen={isDeleteAccountModalOpen}
+        onClose={() => setIsDeleteAccountModalOpen(false)}
+        onConfirmDelete={handleDeleteAccount}
+        userEmail={userEmail}
+      />
+      <SignOutDialog
+        isOpen={isSignOutModalOpen}
+        onClose={() => setIsSignOutModalOpen(false)}
+        onConfirmSignOut={handleSignOut}
       />
       <InviteDialog
         isOpen={isInviteModalOpen}

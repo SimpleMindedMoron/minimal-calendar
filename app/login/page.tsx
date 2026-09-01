@@ -1,23 +1,45 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { MailCheck, CheckCircle2 } from "lucide-react";
+import { useState, useEffect, useRef, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { MailCheck, CheckCircle2, LogOut } from "lucide-react";
 import { LoginForm } from "../components/login-form/login-form";
 import styles from "../page.module.css";
 import { supabase } from "../../lib/supabase";
 
 type Message = { text: string; type: "error" | "success" } | null;
 
-export default function Login() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<Message>(null);
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const [isWelcomeBack, setIsWelcomeBack] = useState(false);
+  const [isGoodbye, setIsGoodbye] = useState(false);
   const [welcomeName, setWelcomeName] = useState("");
   const [isFadingOut, setIsFadingOut] = useState(false);
   const pollCredentials = useRef({ email: "", password: "" });
+
+  useEffect(() => {
+    if (searchParams.get("signed_out") === "true") {
+      setIsGoodbye(true);
+      const timer = setTimeout(() => {
+        setIsGoodbye(false);
+      }, 2200);
+      return () => clearTimeout(timer);
+    } else if (searchParams.get("deleted") === "true") {
+      setMessage({
+        text: "Your account and all associated data have been permanently deleted.",
+        type: "success",
+      });
+    } else if (searchParams.get("reset") === "true") {
+      setMessage({
+        text: "Your password has been updated. Please sign in with your new password.",
+        type: "success",
+      });
+    }
+  }, [searchParams]);
 
   const signUp = async (email: string, password: string) => {
     setLoading(true);
@@ -26,7 +48,7 @@ export default function Login() {
       email,
       password,
     });
-    
+
     if (error) {
       setMessage({ text: error.message, type: "error" });
       setLoading(false);
@@ -82,25 +104,44 @@ export default function Login() {
   };
 
   return (
-    <div 
-      className={styles.appShell} 
-      style={{ 
-        minHeight: "100vh", 
+    <div
+      className={styles.appShell}
+      style={{
+        minHeight: "100vh",
         alignItems: "center",
         justifyContent: "center",
         opacity: isFadingOut ? 0 : 1,
         transition: "opacity 400ms ease",
-        pointerEvents: isFadingOut ? "none" : "auto"
+        pointerEvents: isFadingOut ? "none" : "auto",
       }}
     >
       <div
         className={styles.page}
         style={{ maxWidth: "400px", width: "100%" }}
       >
-        <div className={`${styles.letterhead} animate-in`} style={{ justifyContent: "center", borderBottom: "none", marginBottom: "32px", paddingBottom: 0, animationDelay: "100ms" }}>
+        <div
+          className={`${styles.letterhead} animate-in`}
+          style={{
+            justifyContent: "center",
+            borderBottom: "none",
+            marginBottom: "32px",
+            paddingBottom: 0,
+            animationDelay: "100ms",
+          }}
+        >
           <div className={styles.mark}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-              <div className={styles.roomSelectWrapper} style={{ justifyContent: "center", pointerEvents: "none" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <div
+                className={styles.roomSelectWrapper}
+                style={{ justifyContent: "center", pointerEvents: "none" }}
+              >
                 <h1>Align</h1>
               </div>
               <div className={styles.sub} style={{ justifyContent: "center" }}>
@@ -110,35 +151,143 @@ export default function Login() {
           </div>
         </div>
 
-        <div className={`${styles.panel} animate-in`} style={{ animationDelay: "200ms" }}>
+        <div
+          className={`${styles.panel} animate-in`}
+          style={{ animationDelay: "200ms" }}
+        >
           {isCheckingEmail ? (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "16px", padding: "32px 16px", animation: "fade-in 400ms ease" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+                gap: "16px",
+                padding: "32px 16px",
+                animation: "fade-in 400ms ease",
+              }}
+            >
               <MailCheck size={48} color="var(--gold)" />
-              <h2 style={{ fontFamily: "'Pilcrow Rounded', sans-serif", fontSize: "20px", color: "var(--ink)", fontWeight: 500, fontStyle: "italic" }}>
+              <h2
+                style={{
+                  fontFamily: "'Pilcrow Rounded', sans-serif",
+                  fontSize: "20px",
+                  color: "var(--ink)",
+                  fontWeight: 500,
+                  fontStyle: "italic",
+                }}
+              >
                 Check your email
               </h2>
-              <p style={{ fontFamily: "'Archivo', sans-serif", fontSize: "14px", color: "var(--ink-dim)", lineHeight: 1.5 }}>
-                We've sent a confirmation link to your email address. Please click it to verify your account.
+              <p
+                style={{
+                  fontFamily: "'Archivo', sans-serif",
+                  fontSize: "14px",
+                  color: "var(--ink-dim)",
+                  lineHeight: 1.5,
+                }}
+              >
+                We've sent a confirmation link to your email address. Please
+                click it to verify your account.
               </p>
             </div>
           ) : isWelcomeBack ? (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "16px", padding: "40px 16px", animation: "fade-in 500ms ease forwards, slide-up 500ms ease forwards" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+                gap: "16px",
+                padding: "40px 16px",
+                animation:
+                  "fade-in 500ms ease forwards, slide-up 500ms ease forwards",
+              }}
+            >
               <style>{`
                 @keyframes slide-up {
                   from { transform: translateY(10px); }
                   to { transform: translateY(0); }
                 }
-              `}</style>
-              <CheckCircle2 size={48} color="var(--gold)" style={{ animation: "scale-in 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards" }} />
-              <style>{`
                 @keyframes scale-in {
                   from { transform: scale(0.5); opacity: 0; }
                   to { transform: scale(1); opacity: 1; }
                 }
               `}</style>
-              <h2 style={{ fontFamily: "'Pilcrow Rounded', sans-serif", fontSize: "24px", color: "var(--ink)", fontWeight: 500, fontStyle: "italic" }}>
+              <CheckCircle2
+                size={48}
+                color="var(--gold)"
+                style={{
+                  animation:
+                    "scale-in 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards",
+                }}
+              />
+              <h2
+                style={{
+                  fontFamily: "'Pilcrow Rounded', sans-serif",
+                  fontSize: "24px",
+                  color: "var(--ink)",
+                  fontWeight: 500,
+                  fontStyle: "italic",
+                }}
+              >
                 Welcome, {welcomeName}!
               </h2>
+            </div>
+          ) : isGoodbye ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+                gap: "16px",
+                padding: "40px 16px",
+                animation:
+                  "fade-in 500ms ease forwards, slide-up 500ms ease forwards",
+              }}
+            >
+              <style>{`
+                @keyframes slide-up {
+                  from { transform: translateY(10px); }
+                  to { transform: translateY(0); }
+                }
+                @keyframes scale-in {
+                  from { transform: scale(0.5); opacity: 0; }
+                  to { transform: scale(1); opacity: 1; }
+                }
+              `}</style>
+              <LogOut
+                size={48}
+                color="var(--gold)"
+                style={{
+                  animation:
+                    "scale-in 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards",
+                }}
+              />
+              <h2
+                style={{
+                  fontFamily: "'Pilcrow Rounded', sans-serif",
+                  fontSize: "24px",
+                  color: "var(--ink)",
+                  fontWeight: 500,
+                  fontStyle: "italic",
+                  margin: 0,
+                }}
+              >
+                Sorry to see you leave!
+              </h2>
+              <p
+                style={{
+                  fontFamily: "'Archivo', sans-serif",
+                  fontSize: "13.5px",
+                  color: "var(--ink-dim)",
+                  lineHeight: 1.5,
+                  margin: 0,
+                }}
+              >
+                You have been signed out safely. See you soon!
+              </p>
             </div>
           ) : (
             <LoginForm
@@ -151,5 +300,13 @@ export default function Login() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={null}>
+      <LoginContent />
+    </Suspense>
   );
 }
