@@ -69,13 +69,14 @@ export function Sidebar({
 
   return (
     <>
-      {/* Mobile Overlay */}
-      {isMobileOpen && (
-        <div
-          className={styles.mobileOverlay}
-          onClick={() => setIsMobileOpen(false)}
-        />
-      )}
+      {/* Overlay */}
+      <div
+        className={`${styles.overlay} ${isExpanded ? styles.expanded : ''} ${isMobileOpen ? styles.mobileOpen : ''}`}
+        onClick={() => {
+          setIsMobileOpen(false);
+          setIsExpanded(false);
+        }}
+      />
 
       <aside
         className={`${styles.sidebar} ${

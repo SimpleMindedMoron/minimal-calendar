@@ -107,6 +107,7 @@ function LoginContent() {
     <div
       className={styles.appShell}
       style={{
+        padding: "16px",
         minHeight: "100vh",
         alignItems: "center",
         justifyContent: "center",
@@ -116,8 +117,12 @@ function LoginContent() {
       }}
     >
       <div
-        className={styles.page}
-        style={{ maxWidth: "400px", width: "100%" }}
+        style={{ 
+          display: "flex",
+          flexDirection: "column",
+          maxWidth: "400px", 
+          width: "100%" 
+        }}
       >
         <div
           className={`${styles.letterhead} animate-in`}

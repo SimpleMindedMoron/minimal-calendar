@@ -56,9 +56,7 @@ export default function Home() {
   // Fetch user + rooms
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 1024) {
-        setIsSidebarExpanded(true);
-      } else {
+      if (window.innerWidth <= 1024) {
         setIsSidebarExpanded(false);
       }
       if (window.innerWidth > 768) {
@@ -300,7 +298,7 @@ export default function Home() {
   }
 
   return (
-    <div className={`${styles.appShell} ${isSidebarExpanded ? styles.shellExpanded : styles.shellCollapsed}`}>
+    <div className={styles.appShell}>
       {/* Mobile Hamburger */}
       <button 
         className={styles.mobileHamburger}

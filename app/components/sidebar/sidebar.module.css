@@ -4,13 +4,13 @@
   left: 0;
   bottom: 0;
   height: 100vh;
-  z-index: 90;
+  z-index: 200;
   background: var(--surface);
   border-right: 2px solid var(--rule);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: width 240ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 4px 0px 0px 0px var(--shadow);
   user-select: none;
   overflow: visible;
@@ -24,36 +24,47 @@
   width: 250px;
 }
 
-.mobileOverlay {
-  display: none;
+.overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 85;
-  backdrop-filter: blur(2px);
+  z-index: 190;
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+@media (min-width: 769px) {
+  .overlay.expanded {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    width: 250px;
+  .overlay.mobileOpen {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar, .collapsed, .expanded {
+    width: 250px !important;
     transform: translateX(-100%);
     box-shadow: none;
   }
   .sidebar.mobileOpen {
-    transform: translateX(0);
-    box-shadow: 4px 0px 16px 0px rgba(0,0,0,0.1);
-  }
-  .mobileOverlay {
-    display: block;
+    transform: translateX(0) !important;
+    box-shadow: 4px 0px 16px 0px rgba(0,0,0,0.1) !important;
   }
   .toggleBtn {
     display: none !important;
   }
   /* Inside drawer always expanded style */
-  .brandText { opacity: 1; transform: translateX(0); pointer-events: auto; }
-  .sectionHeader { opacity: 1; }
-  .itemLabel { opacity: 1; transform: translateX(0); pointer-events: auto; }
-  .userInfo { opacity: 1; transform: translateX(0); pointer-events: auto; }
+  .brandText { opacity: 1 !important; transform: translateX(0) !important; pointer-events: auto !important; }
+  .sectionHeader { opacity: 1 !important; }
+  .itemLabel { opacity: 1 !important; transform: translateX(0) !important; pointer-events: auto !important; }
+  .userInfo { opacity: 1 !important; transform: translateX(0) !important; pointer-events: auto !important; }
 }
 
 /* Header & Toggle */
