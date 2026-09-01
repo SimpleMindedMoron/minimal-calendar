@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { format, addDays, startOfDay } from "date-fns";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { LogOut, Plus, Settings, ChevronDown, UserPlus, Users } from "lucide-react";
+import { LogOut, Plus, Settings, ChevronDown, UserPlus, Users, Menu } from "lucide-react";
 import { CalendarPanel } from "./components/calendar-panel/calendar-panel";
 import { EventDialog } from "./components/event-dialog/event-dialog";
 import { RoomDialog } from "./components/room-dialog/room-dialog";
@@ -39,6 +39,8 @@ export default function Home() {
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUpcomingExpanded, setIsUpcomingExpanded] = useState(false);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   // Calendar state
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -53,6 +55,19 @@ export default function Home() {
 
   // Fetch user + rooms
   useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1024) {
+        setIsSidebarExpanded(true);
+      } else {
+        setIsSidebarExpanded(false);
+      }
+      if (window.innerWidth > 768) {
+        setIsMobileOpen(false);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
     void (async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
@@ -66,6 +81,8 @@ export default function Home() {
         }
       }
     })();
+
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleOnboardingComplete = async () => {
@@ -283,7 +300,16 @@ export default function Home() {
   }
 
   return (
-    <div className={styles.appShell}>
+    <div className={`${styles.appShell} ${isSidebarExpanded ? styles.shellExpanded : styles.shellCollapsed}`}>
+      {/* Mobile Hamburger */}
+      <button 
+        className={styles.mobileHamburger}
+        onClick={() => setIsMobileOpen(true)}
+        aria-label="Open menu"
+      >
+        <Menu size={20} />
+      </button>
+
       <Sidebar
         rooms={rooms}
         activeRoom={activeRoom}
@@ -293,6 +319,10 @@ export default function Home() {
         onSignOut={() => setIsSignOutModalOpen(true)}
         userName={userName}
         userEmail={userEmail}
+        isExpanded={isSidebarExpanded}
+        setIsExpanded={setIsSidebarExpanded}
+        isMobileOpen={isMobileOpen}
+        setIsMobileOpen={setIsMobileOpen}
       />
       <div className={styles.page}>
         <div className={`${styles.letterhead} animate-in`} style={{ animationDelay: "100ms" }}>

@@ -7,12 +7,50 @@
   min-height: 100vh;
   position: relative;
   animation: pageFadeIn 500ms ease forwards;
-  transition: padding-left 240ms ease;
+  transition: padding-left 240ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shellExpanded {
+  padding-left: 274px; /* 250px sidebar + 24px gap */
+}
+
+.shellCollapsed {
+  padding-left: 92px; /* 68px sidebar + 24px gap */
+}
+
+.mobileHamburger {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 80;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 0px 0px var(--rule);
+  transition: all 0.15s ease;
+}
+
+.mobileHamburger:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--rule);
 }
 
 @media (max-width: 768px) {
   .appShell {
-    padding: 24px 14px 16px 80px;
+    padding: 24px 16px 16px;
+    padding-top: 80px;
+  }
+  .shellExpanded, .shellCollapsed {
+    padding-left: 16px;
+  }
+  .mobileHamburger {
+    display: flex;
   }
 }
 
@@ -481,10 +519,7 @@
 }
 
 @media (max-width: 768px) {
-  .appShell {
-    padding: 24px 16px 16px;
-    padding-top: 80px;
-  }
+  /* We already handled .appShell at the top */
 
   .cornerBrand {
     top: 16px;

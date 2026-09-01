@@ -1,4 +1,4 @@
-# Minimal Shared Calendar
+# Align Shared Calendar
 
 A high-performance, multi-tenant shared calendar application built for study groups, cohorts, and teams. Users can create private rooms, invite peers via unique UUIDs, and manage shared schedules with granular access control.
 

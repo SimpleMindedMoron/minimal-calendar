@@ -23,6 +23,10 @@ type Props = {
   onSignOut: () => void;
   userName?: string;
   userEmail?: string;
+  isExpanded: boolean;
+  setIsExpanded: (val: boolean) => void;
+  isMobileOpen: boolean;
+  setIsMobileOpen: (val: boolean) => void;
 };
 
 export function Sidebar({
@@ -34,8 +38,11 @@ export function Sidebar({
   onSignOut,
   userName,
   userEmail,
+  isExpanded,
+  setIsExpanded,
+  isMobileOpen,
+  setIsMobileOpen,
 }: Props) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [hoveredTooltip, setHoveredTooltip] = useState<{
     text: string;
     top: number;
@@ -62,10 +69,18 @@ export function Sidebar({
 
   return (
     <>
+      {/* Mobile Overlay */}
+      {isMobileOpen && (
+        <div
+          className={styles.mobileOverlay}
+          onClick={() => setIsMobileOpen(false)}
+        />
+      )}
+
       <aside
         className={`${styles.sidebar} ${
           isExpanded ? styles.expanded : styles.collapsed
-        }`}
+        } ${isMobileOpen ? styles.mobileOpen : ""}`}
         aria-label="Application Sidebar"
       >
         {/* Header & Logo */}
