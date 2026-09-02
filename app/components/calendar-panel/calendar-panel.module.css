@@ -334,7 +334,7 @@
   flex-direction: column;
   gap: 0;
   width: 222px;
-  z-index: 100;
+  z-index: 30;
   box-shadow: 4px 4px 0px 0px var(--shadow);
   animation: dropdown-in 0.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
