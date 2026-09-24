@@ -1,17 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import webpush from "web-push";
 
-webpush.setVapidDetails(
-  "mailto:align-notifications@align.app",
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
-);
+// Lazy-init VAPID so it runs at request time, not at build-time module evaluation.
+let vapidInitialised = false;
+function initVapid() {
+  if (vapidInitialised) return;
+  webpush.setVapidDetails(
+    "mailto:align-notifications@align.app",
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+    process.env.VAPID_PRIVATE_KEY!
+  );
+  vapidInitialised = true;
+}
 
 // In-memory store — for production you'd store in Supabase keyed by user_id
-// We use a Map: endpoint -> subscription
 const subscriptions = new Map<string, webpush.PushSubscription>();
 
 export async function POST(req: NextRequest) {
+  initVapid();
+
   const body = await req.json();
   const { action, subscription } = body as {
     action: "subscribe" | "unsubscribe";
