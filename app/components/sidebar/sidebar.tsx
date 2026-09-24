@@ -10,6 +10,8 @@ import {
   LogOut,
   Plus,
   Hash,
+  Bell,
+  BellOff,
 } from "lucide-react";
 import type { Room } from "../../types/calendar";
 import styles from "./sidebar.module.css";
@@ -27,6 +29,10 @@ type Props = {
   setIsExpanded: (val: boolean) => void;
   isMobileOpen: boolean;
   setIsMobileOpen: (val: boolean) => void;
+  isSubscribed?: boolean;
+  isNotifSupported?: boolean;
+  isNotifLoading?: boolean;
+  onToggleNotifications?: () => void;
 };
 
 export function Sidebar({
@@ -42,6 +48,10 @@ export function Sidebar({
   setIsExpanded,
   isMobileOpen,
   setIsMobileOpen,
+  isSubscribed = false,
+  isNotifSupported = false,
+  isNotifLoading = false,
+  onToggleNotifications,
 }: Props) {
   const [hoveredTooltip, setHoveredTooltip] = useState<{
     text: string;
@@ -138,7 +148,6 @@ export function Sidebar({
                 onClick={() => onSelectRoom(personalRoom.id)}
                 onMouseEnter={(e) => handleMouseEnter("Personal Calendar", e)}
                 onMouseLeave={handleMouseLeave}
-                title="Personal Calendar"
               >
                 <div className={styles.itemIcon}>
                   <Calendar size={18} />
@@ -160,7 +169,6 @@ export function Sidebar({
                   onClick={() => onSelectRoom(room.id)}
                   onMouseEnter={(e) => handleMouseEnter(room.name, e)}
                   onMouseLeave={handleMouseLeave}
-                  title={room.name}
                 >
                   <div className={styles.itemIcon}>
                     <Hash size={18} />
@@ -177,7 +185,6 @@ export function Sidebar({
               onClick={onOpenManageRooms}
               onMouseEnter={(e) => handleMouseEnter("Create or Join Space", e)}
               onMouseLeave={handleMouseLeave}
-              title="Create or Join Space"
             >
               <div className={styles.itemIcon}>
                 <Plus size={18} />
@@ -189,6 +196,39 @@ export function Sidebar({
 
         {/* Footer Section */}
         <div className={styles.sidebarFooter}>
+          {/* Notifications Toggle */}
+          {isNotifSupported && (
+            <button
+              type="button"
+              className={`${styles.navItem} ${isSubscribed ? styles.notifActive : ""}`}
+              onClick={onToggleNotifications}
+              disabled={isNotifLoading}
+              onMouseEnter={(e) =>
+                handleMouseEnter(
+                  isSubscribed ? "Notifications On" : "Enable Notifications",
+                  e
+                )
+              }
+              onMouseLeave={handleMouseLeave}
+              aria-label={isSubscribed ? "Disable event notifications" : "Enable event notifications"}
+            >
+              <div className={styles.itemIcon}>
+                {isSubscribed ? (
+                  <Bell size={18} className={styles.bellActive} />
+                ) : (
+                  <BellOff size={18} />
+                )}
+              </div>
+              <span className={styles.itemLabel}>
+                {isNotifLoading
+                  ? "Please wait..."
+                  : isSubscribed
+                  ? "Notifications On"
+                  : "Enable Notifications"}
+              </span>
+            </button>
+          )}
+
           {/* Manage Account (Dedicated) */}
           <button
             type="button"
@@ -196,7 +236,6 @@ export function Sidebar({
             onClick={onOpenManageAccount}
             onMouseEnter={(e) => handleMouseEnter("Manage Account", e)}
             onMouseLeave={handleMouseLeave}
-            title="Manage Account"
           >
             <div className={styles.itemIcon}>
               <User size={18} />
@@ -211,7 +250,6 @@ export function Sidebar({
             onClick={onSignOut}
             onMouseEnter={(e) => handleMouseEnter("Sign Out", e)}
             onMouseLeave={handleMouseLeave}
-            title="Sign Out"
           >
             <div className={styles.itemIcon}>
               <LogOut size={18} />
@@ -229,7 +267,6 @@ export function Sidebar({
                 handleMouseEnter(`Account: ${userName || userEmail}`, e)
               }
               onMouseLeave={handleMouseLeave}
-              title={`Account: ${userName || userEmail}`}
             >
               <div className={styles.userAvatar}>{initial}</div>
               <div className={styles.userInfo}>

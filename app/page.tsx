@@ -20,6 +20,7 @@ import { Sidebar } from "./components/sidebar/sidebar";
 import styles from "./page.module.css";
 import { supabase } from "../lib/supabase";
 import type { CalendarEvent, EventType, Room } from "./types/calendar";
+import { useNotifications } from "./hooks/useNotifications";
 
 export default function Home() {
   const router = useRouter();
@@ -52,6 +53,18 @@ export default function Home() {
   const [upcomingEvents, setUpcomingEvents] = useState<CalendarEvent[]>([]);
   const [allEventDates, setAllEventDates] = useState<string[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [allFutureEvents, setAllFutureEvents] = useState<CalendarEvent[]>([]);
+
+  // Notifications
+  const { isSupported: isNotifSupported, isSubscribed, isLoading: isNotifLoading, subscribe, unsubscribe } = useNotifications(allFutureEvents);
+
+  const handleToggleNotifications = async () => {
+    if (isSubscribed) {
+      await unsubscribe();
+    } else {
+      await subscribe();
+    }
+  };
 
   // Fetch user + rooms
   useEffect(() => {
@@ -183,9 +196,27 @@ export default function Home() {
     setAllEventDates([...new Set(all.map((e) => e.event_date))]);
   }, [activeRoom, rooms]);
 
+  // Fetch all future events for notification scheduling (up to 60 days)
+  const fetchAllFutureEvents = useCallback(async () => {
+    if (rooms.length === 0) { setAllFutureEvents([]); return; }
+    const today = startOfDay(new Date());
+    const fromDate = format(today, "yyyy-MM-dd");
+    const toDate = format(addDays(today, 60), "yyyy-MM-dd");
+    const { data, error } = await supabase
+      .from("events")
+      .select("*")
+      .gte("event_date", fromDate)
+      .lt("event_date", toDate)
+      .in("calendar_id", rooms.map((r) => r.id))
+      .order("event_date")
+      .order("event_time");
+    if (error) { console.error("Error fetching future events:", error); return; }
+    setAllFutureEvents((data ?? []) as CalendarEvent[]);
+  }, [rooms]);
+
   useEffect(() => {
-    if (userId) { void fetchEvents(); void fetchUpcomingEvents(); }
-  }, [fetchEvents, fetchUpcomingEvents, userId]);
+    if (userId) { void fetchEvents(); void fetchUpcomingEvents(); void fetchAllFutureEvents(); }
+  }, [fetchEvents, fetchUpcomingEvents, fetchAllFutureEvents, userId]);
 
   const handleAddEvent = async (title: string, time: string, type: EventType, date: string, roomId: string, description: string) => {
     if (!userId) return false;
@@ -199,7 +230,7 @@ export default function Home() {
       created_by: userId,
     }]);
     if (error) { console.error("Error adding event:", error); alert("Failed to add event"); return false; }
-    await Promise.all([fetchEvents(), fetchUpcomingEvents()]);
+    await Promise.all([fetchEvents(), fetchUpcomingEvents(), fetchAllFutureEvents()]);
     setRefreshTrigger(prev => prev + 1);
     return true;
   };
@@ -208,7 +239,7 @@ export default function Home() {
     const { error } = await supabase.from("events").delete().eq("id", id);
     if (error) { console.error("Error deleting event:", error); alert("Failed to delete event"); }
     else {
-      await Promise.all([fetchEvents(), fetchUpcomingEvents()]);
+      await Promise.all([fetchEvents(), fetchUpcomingEvents(), fetchAllFutureEvents()]);
       setRefreshTrigger(prev => prev + 1);
     }
   };
@@ -321,6 +352,10 @@ export default function Home() {
         setIsExpanded={setIsSidebarExpanded}
         isMobileOpen={isMobileOpen}
         setIsMobileOpen={setIsMobileOpen}
+        isSubscribed={isSubscribed}
+        isNotifSupported={isNotifSupported}
+        isNotifLoading={isNotifLoading}
+        onToggleNotifications={handleToggleNotifications}
       />
       <div className={styles.page}>
         <div className={`${styles.letterhead} animate-in`} style={{ animationDelay: "100ms" }}>

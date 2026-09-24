@@ -391,3 +391,34 @@
 .dangerNavItem:hover .itemIcon {
   color: #ff4d4d;
 }
+
+@media (max-width: 768px) {
+  .floatingTooltip {
+    display: none !important;
+  }
+}
+
+/* Notification bell active state */
+.notifActive {
+  background: rgba(203, 184, 158, 0.12);
+  border-color: rgba(203, 184, 158, 0.4);
+  color: var(--ink);
+}
+
+.notifActive .itemIcon {
+  color: var(--gold);
+}
+
+.bellActive {
+  animation: bellPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes bellPulse {
+  0%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(-8deg); }
+  20% { transform: rotate(8deg); }
+  30% { transform: rotate(-4deg); }
+  40% { transform: rotate(4deg); }
+  50% { transform: rotate(0deg); }
+}
+

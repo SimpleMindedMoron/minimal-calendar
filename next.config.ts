@@ -3,7 +3,9 @@ import withPWAInit from "@ducanh2912/next-pwa";
 
 const withPWA = withPWAInit({
   dest: "public",
-  disable: process.env.NODE_ENV === "development",
+  customWorkerSrc: "worker",
+  // Keep enabled in both dev and prod so push notifications work
+  disable: false,
 });
 
 const nextConfig: NextConfig = {
