@@ -34,6 +34,3 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   return NextResponse.json({ count: subscriptions.size });
 }
-
-// Exported for use by the send-notifications route
-export { subscriptions, webpush };
