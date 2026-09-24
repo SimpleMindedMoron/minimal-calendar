@@ -3,37 +3,10 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { CalendarEvent } from "../types/calendar";
 
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
+// ─── LocalStorage helpers ───────────────────────────────────────────────────
 
-async function sendPushNotification(
-  subscription: PushSubscription,
-  title: string,
-  message: string,
-  url?: string
-) {
-  try {
-    await fetch("/api/notifications/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subscription: JSON.parse(JSON.stringify(subscription)), title, message, url }),
-    });
-  } catch (err) {
-    console.error("Failed to send push notification:", err);
-  }
-}
-
-// Keys for localStorage
-const NOTIF_SUBSCRIPTION_KEY = "align_push_subscription";
-const NOTIF_SENT_KEY = "align_notifications_sent"; // Set of "eventId:timing" already sent
+const NOTIF_ENABLED_KEY = "align_notif_enabled";
+const NOTIF_SENT_KEY = "align_notifications_sent";
 
 function getSentSet(): Set<string> {
   try {
@@ -47,108 +20,115 @@ function getSentSet(): Set<string> {
 function markSent(key: string) {
   const set = getSentSet();
   set.add(key);
-  // Prune old entries (keep only last 200)
-  const arr = Array.from(set).slice(-200);
-  localStorage.setItem(NOTIF_SENT_KEY, JSON.stringify(arr));
+  localStorage.setItem(NOTIF_SENT_KEY, JSON.stringify(Array.from(set).slice(-200)));
 }
 
 function wasAlreadySent(key: string): boolean {
   return getSentSet().has(key);
 }
 
+// ─── Notification display ────────────────────────────────────────────────────
+
+async function showNotification(title: string, body: string) {
+  if (Notification.permission !== "granted") return;
+
+  // Prefer SW notification — it renders even if the tab isn't focused
+  if ("serviceWorker" in navigator) {
+    try {
+      const reg = await Promise.race<ServiceWorkerRegistration | null>([
+        navigator.serviceWorker.ready,
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), 2000)),
+      ]);
+      if (reg) {
+        await reg.showNotification(title, {
+          body,
+          icon: "/icons/icon-192x192.png",
+          badge: "/icons/icon-192x192.png",
+          tag: "align-event",
+        });
+        return;
+      }
+    } catch {
+      // fall through to direct API
+    }
+  }
+
+  // Fallback: direct Notification API (works when tab is in focus)
+  new Notification(title, {
+    body,
+    icon: "/icons/icon-192x192.png",
+  });
+}
+
+// ─── Hook ────────────────────────────────────────────────────────────────────
+
 export function useNotifications(events: CalendarEvent[]) {
   const [isSupported, setIsSupported] = useState(false);
-  const [subscription, setSubscription] = useState<PushSubscription | null>(null);
+  const [isSubscribed, setIsSubscribed] = useState(false);
   const [permission, setPermission] = useState<NotificationPermission>("default");
   const [isLoading, setIsLoading] = useState(false);
   const schedulerRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  // Initialize: check support and restore saved subscription
+  // On mount — check support and restore persisted state
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
+    if (!("Notification" in window)) return;
 
     setIsSupported(true);
-    setPermission(Notification.permission);
+    const currentPerm = Notification.permission;
+    setPermission(currentPerm);
 
-    // Try to restore active subscription
-    void (async () => {
-      try {
-        const reg = await navigator.serviceWorker.ready;
-        const existing = await reg.pushManager.getSubscription();
-        if (existing) {
-          setSubscription(existing);
-        }
-      } catch {
-        // SW not ready yet
-      }
-    })();
+    // Restore "enabled" from localStorage only if permission is still granted
+    if (currentPerm === "granted") {
+      const saved = localStorage.getItem(NOTIF_ENABLED_KEY);
+      if (saved === "true") setIsSubscribed(true);
+    } else {
+      // Permission was revoked by user — clean up saved state
+      localStorage.removeItem(NOTIF_ENABLED_KEY);
+    }
   }, []);
 
-  // Subscribe to push
+  // ── Subscribe ──────────────────────────────────────────────────────────────
   const subscribe = useCallback(async (): Promise<boolean> => {
     if (!isSupported) return false;
     setIsLoading(true);
 
     try {
+      // Request browser permission
       const perm = await Notification.requestPermission();
       setPermission(perm);
+
       if (perm !== "granted") {
+        // User denied — nothing more we can do
         setIsLoading(false);
         return false;
       }
 
-      const reg = await navigator.serviceWorker.ready;
-      const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-      if (!vapidKey) throw new Error("VAPID public key not configured");
-
-      const sub = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        applicationServerKey: urlBase64ToUint8Array(vapidKey) as any,
-      });
-
-      setSubscription(sub);
-
-      // Register with our server
-      await fetch("/api/notifications/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "subscribe", subscription: JSON.parse(JSON.stringify(sub)) }),
-      });
-
+      // Mark enabled and update state
+      localStorage.setItem(NOTIF_ENABLED_KEY, "true");
+      setIsSubscribed(true);
       setIsLoading(false);
       return true;
     } catch (err) {
-      console.error("Failed to subscribe:", err);
+      console.error("[Align] Failed to enable notifications:", err);
       setIsLoading(false);
       return false;
     }
   }, [isSupported]);
 
-  // Unsubscribe
+  // ── Unsubscribe ────────────────────────────────────────────────────────────
   const unsubscribe = useCallback(async () => {
-    if (!subscription) return;
-    setIsLoading(true);
-    try {
-      await fetch("/api/notifications/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "unsubscribe", subscription: JSON.parse(JSON.stringify(subscription)) }),
-      });
-      await subscription.unsubscribe();
-      setSubscription(null);
-    } catch (err) {
-      console.error("Failed to unsubscribe:", err);
-    }
-    setIsLoading(false);
-  }, [subscription]);
+    localStorage.removeItem(NOTIF_ENABLED_KEY);
+    setIsSubscribed(false);
+    schedulerRef.current.forEach(clearTimeout);
+    schedulerRef.current = [];
+  }, []);
 
-  // Schedule notifications for upcoming events
+  // ── Schedule notifications for events ─────────────────────────────────────
   const scheduleEventNotifications = useCallback(() => {
-    if (!subscription || permission !== "granted") return;
+    if (!isSubscribed || permission !== "granted") return;
 
-    // Clear any pending timers
+    // Clear stale timers before rescheduling
     schedulerRef.current.forEach(clearTimeout);
     schedulerRef.current = [];
 
@@ -157,57 +137,48 @@ export function useNotifications(events: CalendarEvent[]) {
     events.forEach((event) => {
       if (!event.event_date || !event.event_time) return;
 
-      // Parse event datetime in local time
       const [year, month, day] = event.event_date.split("-").map(Number);
       const [hour, minute] = event.event_time.split(":").map(Number);
-      const eventMs = new Date(year, month - 1, day, hour, minute, 0).getTime();
 
-      // Compute notification times
-      const notificationTimes: { timing: string; label: string; fireAt: number }[] = [
+      const notificationTimes = [
         {
           timing: "3day",
-          label: "3 days",
-          // Fire at 9:00 AM local time, 3 days before the event
+          // Fire at 09:00 local time, 3 days before the event
           fireAt: new Date(year, month - 1, day - 3, 9, 0, 0).getTime(),
+          label: `in 3 days`,
         },
         {
           timing: "day-of",
+          // Fire at 09:00 on the day of the event (or 2h before if event < 09:00)
+          fireAt: new Date(year, month - 1, day, hour > 2 ? Math.min(9, hour - 2) : 7, 0, 0).getTime(),
           label: "today",
-          // Fire at 9:00 AM on the day of the event (or event time - 2hr if event is before 9am)
-          fireAt: new Date(year, month - 1, day, Math.min(9, hour > 2 ? hour - 2 : 0), 0, 0).getTime(),
         },
       ];
 
       notificationTimes.forEach(({ timing, label, fireAt }) => {
         const key = `${event.id}:${timing}`;
-
-        // Don't re-send already sent notifications
         if (wasAlreadySent(key)) return;
+        if (fireAt <= now) return; // Already past
 
-        // Don't schedule past notifications
-        if (fireAt <= now) return;
-
-        // Only schedule up to 24h in advance (browser timer limitation for precision)
         const delay = fireAt - now;
-        if (delay > 24 * 60 * 60 * 1000) return; // Will be picked up in next daily check
+        // Only schedule within the next 24h — hourly re-runs catch the rest
+        if (delay > 24 * 60 * 60 * 1000) return;
 
         const timer = setTimeout(async () => {
-          if (wasAlreadySent(key)) return; // Double-check
+          if (wasAlreadySent(key)) return; // Guard against duplicates
           markSent(key);
-          await sendPushNotification(
-            subscription,
-            "📅 Upcoming Event",
-            `"${event.title}" is happening ${label}${label === "today" ? "" : " — " + event.event_date}`,
-            "/"
+          await showNotification(
+            "📅 Upcoming Event — Align",
+            `"${event.title}" is happening ${label}${label === "today" ? "" : ` — ${event.event_date}`}`
           );
         }, delay);
 
         schedulerRef.current.push(timer);
       });
     });
-  }, [subscription, permission, events]);
+  }, [isSubscribed, permission, events]);
 
-  // Re-run scheduler whenever events or subscription changes
+  // Re-run scheduler when events or subscription state changes
   useEffect(() => {
     scheduleEventNotifications();
     return () => {
@@ -215,21 +186,12 @@ export function useNotifications(events: CalendarEvent[]) {
     };
   }, [scheduleEventNotifications]);
 
-  // Daily re-check: reschedule every hour to catch new events and events > 24h away
+  // Hourly re-check — catches events that move into the 24h scheduling window
   useEffect(() => {
-    if (!subscription || permission !== "granted") return;
-    const interval = setInterval(() => {
-      scheduleEventNotifications();
-    }, 60 * 60 * 1000); // every hour
+    if (!isSubscribed || permission !== "granted") return;
+    const interval = setInterval(scheduleEventNotifications, 60 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [subscription, permission, scheduleEventNotifications]);
+  }, [isSubscribed, permission, scheduleEventNotifications]);
 
-  return {
-    isSupported,
-    isSubscribed: !!subscription,
-    permission,
-    isLoading,
-    subscribe,
-    unsubscribe,
-  };
+  return { isSupported, isSubscribed, permission, isLoading, subscribe, unsubscribe };
 }
