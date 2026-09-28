@@ -360,9 +360,8 @@ export function InviteDialog({ isOpen, onClose, activeRoom, rooms }: Props) {
                       <div className={styles.toggleGroup}>
                         <button
                           type="button"
-                          className={`${styles.toggleBtn} ${
-                            accessMode === "anyone" ? styles.toggleBtnActive : ""
-                          }`}
+                          className={`${styles.toggleBtn} ${accessMode === "anyone" ? styles.toggleBtnActive : ""
+                            }`}
                           onClick={() => setAccessMode("anyone")}
                         >
                           <Globe size={13} />
@@ -371,9 +370,8 @@ export function InviteDialog({ isOpen, onClose, activeRoom, rooms }: Props) {
 
                         <button
                           type="button"
-                          className={`${styles.toggleBtn} ${
-                            accessMode === "restricted" ? styles.toggleBtnActive : ""
-                          }`}
+                          className={`${styles.toggleBtn} ${accessMode === "restricted" ? styles.toggleBtnActive : ""
+                            }`}
                           onClick={() => setAccessMode("restricted")}
                         >
                           <Lock size={13} />
@@ -410,13 +408,6 @@ export function InviteDialog({ isOpen, onClose, activeRoom, rooms }: Props) {
               </div>
 
               <div className={styles.actions}>
-                <button
-                  type="button"
-                  className={styles.cancelBtn}
-                  onClick={() => setView("main")}
-                >
-                  Back
-                </button>
                 <button
                   type="button"
                   className={styles.doneButton}
